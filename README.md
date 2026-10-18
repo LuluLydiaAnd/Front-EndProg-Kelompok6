@@ -10,7 +10,7 @@
 
 535250091 - Dimas Pradana Siddharta Halim
 
-## Link repo lama yang terpisah :
+## Link repo lama yang terpisah (history commit lengkap) :
 
 UTS : https://github.com/LuluLydiaAnd/BabiGuling-Kelompok6
 
