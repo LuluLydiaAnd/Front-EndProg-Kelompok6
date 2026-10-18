@@ -1,5 +1,5 @@
 # Front-EndProgramming - Kelompok6
-# Link repo lama dibawah :
+# Link repo UTS dibawah :
 ## Anggota Kelompok 6 :
 535250053 - Wilbert Alan Muljadi
 
