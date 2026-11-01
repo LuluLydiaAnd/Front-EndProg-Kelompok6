@@ -5,14 +5,16 @@
 }
 
 :root {
-  --red-brick: #a93226;
-  --red-brick-dark: #7b241c;
-  --brown-dark: #3e2723;
-  --brown-soft: #8d6e63;
-  --bg-light: #fefaf5;
-  --bg-soft: #faf0e3;
-  --text-dark: #3e2723;
-  --text-gray: #7a5c4d;
+  --bg-dark: #1f0b08;
+  --bg-darker: #160705;
+  --red: #a93226;
+  --red-dark: #7b241c;
+  --red-light: #e2574c;
+  --pink: #e8a598;
+  --text-light: #f6e9e2;
+  --text-muted: #c9b3aa;
+  --border: rgba(255, 255, 255, 0.1);
+  --glass: rgba(255, 255, 255, 0.06);
 }
 
 html {
@@ -26,8 +28,8 @@ body {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: var(--bg-light);
-  color: var(--text-dark);
+  background: var(--bg-dark);
+  color: var(--text-light);
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -39,18 +41,19 @@ h3 {
 }
 
 .bg-brand-nav {
-  background: #61140d;
-  padding: 0.9rem 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(62, 39, 35, 0.15);
+  padding: 0.9rem 0;
+  background: rgba(22, 7, 5, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
 }
 
 .bg-brand-nav .navbar-brand {
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   color: #fff;
 }
 
@@ -58,24 +61,39 @@ h3 {
   color: #fff;
 }
 
+.bg-brand-nav .navbar-nav {
+  gap: 4px;
+}
+
 .bg-brand-nav .navbar-nav .nav-link {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 500;
-  color: #fff !important;
-  padding: 0.5rem 1.2rem !important;
-  transition: opacity 0.25s ease;
+  color: var(--text-muted) !important;
+  padding: 0.45rem 1rem !important;
+  border-radius: 30px;
+  transition: 0.25s ease;
 }
 
 .bg-brand-nav .navbar-nav .nav-link:hover {
-  opacity: 0.85;
+  color: #fff !important;
+  background: var(--glass);
 }
 
 .bg-brand-nav .navbar-nav .nav-link.active {
-  font-weight: 700;
+  color: #fff !important;
+  font-weight: 600;
 }
 
 .bg-brand-nav .navbar-nav .nav-link.login-link {
+  color: #fff !important;
   font-weight: 600;
+  background: var(--red);
+  margin-left: 0.5rem;
+  box-shadow: 0 6px 18px rgba(169, 50, 38, 0.4);
+}
+
+.bg-brand-nav .navbar-nav .nav-link.login-link:hover {
+  background: var(--red-dark);
 }
 
 .bg-brand-nav .navbar-toggler {
@@ -90,54 +108,83 @@ h3 {
 }
 
 .banner-section {
-  background: #ffece6;
-  padding: 4rem 0 4.5rem;
-  border-bottom: 1px solid #ecdfd1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-darker);
+  padding: 5rem 0 5.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.banner-section::before {
+  content: "";
+  position: absolute;
+  top: -150px;
+  left: -150px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(169, 50, 38, 0.35), transparent 70%);
+  pointer-events: none;
+}
+
+.banner-section .container {
+  position: relative;
 }
 
 .banner-eyebrow {
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--brown-soft);
+  color: var(--pink);
   margin-bottom: 1rem;
 }
 
 .banner-title {
-  font-size: 2.6rem;
+  font-size: 3rem;
   font-weight: 700;
-  line-height: 1.15;
-  color: var(--text-dark);
-  margin-bottom: 1.2rem;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 1.3rem;
 }
 
 .banner-title em {
-  color: var(--red-brick);
-  font-style: normal;
+  color: var(--red-light);
+  font-style: italic;
 }
 
 .banner-lead {
-  font-size: 0.95rem;
-  color: var(--text-gray);
-  line-height: 1.75;
+  font-size: 0.98rem;
+  color: var(--text-muted);
+  line-height: 1.8;
   max-width: 540px;
   margin-bottom: 1.6rem;
 }
 
+.banner-lead em {
+  color: var(--pink);
+}
+
 .banner-img {
   width: 100%;
-  max-width: 320px;
+  max-width: 360px;
   height: auto;
-  object-fit: contain;
-  border-radius: 16px;
-  box-shadow: 0 12px 32px rgba(62, 39, 35, 0.15);
+  object-fit: cover;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.04), 0 24px 60px rgba(169, 50, 38, 0.35);
+  transform: rotate(2deg);
+  transition: transform 0.5s ease;
+}
+
+.banner-img:hover {
+  transform: rotate(0deg) scale(1.02);
 }
 
 .banner-widgets {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   margin-top: 1.5rem;
 }
 
@@ -145,62 +192,61 @@ h3 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #fff;
-  color: var(--brown-dark);
-  font-size: 0.85rem;
+  background: var(--glass);
+  color: var(--text-light);
+  font-size: 0.86rem;
   font-weight: 600;
   padding: 0.6rem 1.2rem;
   border-radius: 30px;
-  border: 1px solid #ecdfd1;
+  border: 1px solid var(--border);
   text-decoration: none;
   transition: 0.3s ease;
-  box-shadow: 0 4px 10px rgba(62, 39, 35, 0.05);
 }
 
 .widget-btn:hover {
-  background: var(--bg-soft);
-  border-color: var(--brown-soft);
-  color: var(--red-brick);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
   transform: translateY(-2px);
 }
 
 .widget-highlight {
-  background: var(--red-brick);
+  background: var(--red);
+  border-color: var(--red);
   color: #fff;
-  border-color: var(--red-brick);
+  box-shadow: 0 6px 18px rgba(169, 50, 38, 0.45);
 }
 
 .widget-highlight:hover {
-  background: var(--red-brick-dark);
-  color: #fff;
-  border-color: var(--red-brick-dark);
+  background: var(--red-dark);
+  border-color: var(--red-dark);
 }
 
 @media (max-width: 991.98px) {
   .bg-brand-nav .navbar-collapse {
-    background: #fff;
+    background: var(--bg-darker);
+    border: 1px solid var(--border);
     margin-top: 0.7rem;
-    padding: 0.8rem 1rem;
-    border-radius: 12px;
-    box-shadow: 0 12px 32px rgba(62, 39, 35, 0.18);
+    padding: 0.8rem;
+    border-radius: 16px;
   }
 
   .bg-brand-nav .navbar-nav .nav-link {
-    color: var(--text-dark) !important;
-    padding: 0.7rem 0.5rem !important;
+    padding: 0.7rem 1rem !important;
   }
 
-  .bg-brand-nav .navbar-nav .nav-link.active {
-    color: var(--red-brick) !important;
+  .bg-brand-nav .navbar-nav .nav-link.login-link {
+    margin: 0.4rem 0 0;
+    text-align: center;
   }
 
   .banner-section {
-    padding: 3rem 0;
+    padding: 3.5rem 0;
     text-align: center;
   }
 
   .banner-title {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
   .banner-lead {
@@ -213,7 +259,7 @@ h3 {
   }
 
   .banner-img {
-    max-width: 240px;
-    margin-top: 1rem;
+    max-width: 260px;
+    margin-top: 1.5rem;
   }
 }
