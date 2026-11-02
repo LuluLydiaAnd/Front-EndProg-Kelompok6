@@ -11,6 +11,7 @@ type MenuItem = {
 const menu: MenuItem[] = [
   { label: "Home", href: "#home" },
   { label: "Galeri", href: "#galeri" },
+  { label: "FAQ", href: "#faq" },
   { label: "Postingan", href: "#postingan" },
   { label: "Resto Favorit", href: "#resto" },
   { label: "Contact", href: "#kontak" },
