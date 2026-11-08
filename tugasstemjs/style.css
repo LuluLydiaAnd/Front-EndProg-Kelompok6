@@ -1,0 +1,44 @@
+body{
+    font-family: sans-serif;
+    text-align: center;
+    background-color: #efffb6;
+    margin: 0;
+}
+
+header{
+    padding: 30px;
+    text-align: center;
+    background-color: aqua;
+}
+
+.kotak {
+    border: 2px solid black;
+    width: 300px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+}
+
+.input-WH {
+    margin-bottom: 10px;
+}
+
+input {
+    width: 80%;
+}
+
+#boxHasil {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid gray;
+}
+
+footer{
+    padding: 20px;
+    text-align: center;
+    background-color: azure;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
