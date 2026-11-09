@@ -44,3 +44,10 @@ next-env.d.ts
 
 .env
 generated/
+
+# Prisma AI Agent Skills
+.agents/
+.claude/
+.cursor/
+.devin/
+AGENTS.md
