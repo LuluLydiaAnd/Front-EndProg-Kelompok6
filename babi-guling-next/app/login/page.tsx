@@ -102,13 +102,6 @@ export default function LoginPage() {
               <Link href="/register">Daftar</Link>
             </p>
 
-            <hr />
-
-            <small className="text-muted">
-              Demo admin: admin@babiguling.com
-              <br />
-              Password: admin123
-            </small>
           </div>
         </div>
       </div>
