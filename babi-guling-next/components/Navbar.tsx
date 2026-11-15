@@ -13,6 +13,7 @@ const menu: MenuItem[] = [
   { label: "Galeri", href: "#galeri" },
   { label: "Postingan", href: "#postingan" },
   { label: "Resto Favorit", href: "#resto" },
+  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#kontak" },
 ];
 
