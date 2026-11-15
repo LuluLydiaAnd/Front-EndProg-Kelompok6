@@ -9,7 +9,7 @@ type Widget = {
 
 const widgets: Widget[] = [
   { label: "FAQ", href: "#faq", icon: "bx bx-help-circle" },
-  { label: "Contact", href: "#contact", icon: "bx bx-envelope", highlight: true },
+  { label: "Contact", href: "#kontak", icon: "bx bx-envelope", highlight: true },
 ];
 
 export default function Banner() {
