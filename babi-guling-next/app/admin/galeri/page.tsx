@@ -1,5 +1,6 @@
 import AdminCrud from "@/components/AdminCrud";
 
+// nampilin halaman admin untuk mengelola galeri foto
 export default function KelolaGaleriPage() {
   return (
     <AdminCrud

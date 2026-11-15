@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./Gallery.module.css";
 
+// tipe kategori foto yang tersedia di galeri
 type Kategori = "proses" | "sajian" | "upacara";
 
 type Foto = {
@@ -12,6 +13,7 @@ type Foto = {
   kategori: Kategori;
 };
 
+// daftar foto beserta judul, lokasi file, dan kategorinya
 const fotoList: Foto[] = [
   { src: "/galeri/sejarah-babi-guling-1.jpeg", judul: "Pemanggangan babi di atas bara api", kategori: "proses" },
   { src: "/galeri/base-genep-final.jpg", judul: "Bumbu base genep", kategori: "proses" },
@@ -27,6 +29,7 @@ const fotoList: Foto[] = [
   { src: "/galeri/nascam.jpg", judul: "Nasi campur khas Bali", kategori: "sajian" },
 ];
 
+// daftar pilihan filter untuk menampilkan foto berdasarkan kategori
 const filterList: { label: string; value: Kategori | "semua" }[] = [
   { label: "Semua", value: "semua" },
   { label: "Proses", value: "proses" },
@@ -35,19 +38,24 @@ const filterList: { label: string; value: Kategori | "semua" }[] = [
 ];
 
 export default function Gallery() {
+  // menyimpan kategori filter yang dipilih dan posisi foto yang sedang dibuka
   const [filter, setFilter] = useState<Kategori | "semua">("semua");
   const [aktif, setAktif] = useState<number | null>(null);
 
+  // menampilkan semua foto atau hanya foto sesuai kategori yang dipilih
   const fotoTampil = filter === "semua" ? fotoList : fotoList.filter((f) => f.kategori === filter);
 
+  // menghitung jumlah foto untuk setiap kategori filter
   const jumlah = (value: Kategori | "semua") =>
     value === "semua" ? fotoList.length : fotoList.filter((f) => f.kategori === value).length;
 
+  // berpindah ke foto sebelumnya atau berikutnya
   const geser = (arah: number) => {
     if (aktif === null) return;
     setAktif((aktif + arah + fotoTampil.length) % fotoTampil.length);
   };
 
+  // mengatur tombol keyboard dan mencegah halaman ikut bergulir saat lightbox terbuka
   useEffect(() => {
     if (aktif === null) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -64,8 +72,10 @@ export default function Gallery() {
   });
 
   return (
+    // bagian utama halaman galeri
     <section id="galeri" className={styles.section}>
       <div className="container">
+        {/* judul dan deskripsi galeri */}
         <div className={styles.head}>
           <div>
             <p className={styles.label}>Galeri</p>
@@ -78,6 +88,7 @@ export default function Gallery() {
           </p>
         </div>
 
+        {/* tombol filter untuk memilih kategori foto */}
         <div className={styles.filter}>
           {filterList.map((f) => (
             <button
@@ -91,6 +102,7 @@ export default function Gallery() {
           ))}
         </div>
 
+        {/* menampilkan kumpulan foto sesuai filter yang dipilih */}
         <div className={styles.grid}>
           {fotoTampil.map((foto, i) => (
             <figure
@@ -105,22 +117,29 @@ export default function Gallery() {
                 sizes="(max-width: 768px) 50vw, 25vw"
                 className={styles.img}
               />
+              {/* nomor urut foto */}
               <span className={styles.nomor}>{String(i + 1).padStart(2, "0")}</span>
+              {/* kategori dan judul foto */}
               <figcaption className={styles.caption}>
                 <span className={styles.tag}>{foto.kategori}</span>
                 <p>{foto.judul}</p>
               </figcaption>
+              {/* ikon untuk menandakan foto bisa diperbesar */}
               <i className={`bx bx-expand-alt ${styles.zoom}`}></i>
             </figure>
           ))}
         </div>
       </div>
 
+      {/* lightbox untuk menampilkan foto dalam ukuran besar */}
       {aktif !== null && (
         <div className={styles.lightbox} onClick={() => setAktif(null)}>
+          {/* tombol untuk menutup lightbox */}
           <button className={`${styles.lbBtn} ${styles.lbClose}`} onClick={() => setAktif(null)}>
             <i className="bx bx-x"></i>
           </button>
+
+          {/* tombol untuk melihat foto sebelumnya */}
           <button
             className={`${styles.lbBtn} ${styles.lbPrev}`}
             onClick={(e) => {
@@ -131,6 +150,7 @@ export default function Gallery() {
             <i className="bx bx-chevron-left"></i>
           </button>
 
+          {/* konten foto besar dan informasi foto */}
           <div className={styles.lbContent} onClick={(e) => e.stopPropagation()}>
             <div className={styles.lbImgWrap}>
               <Image
@@ -149,6 +169,7 @@ export default function Gallery() {
             </div>
           </div>
 
+          {/* tombol untuk melihat foto berikutnya */}
           <button
             className={`${styles.lbBtn} ${styles.lbNext}`}
             onClick={(e) => {

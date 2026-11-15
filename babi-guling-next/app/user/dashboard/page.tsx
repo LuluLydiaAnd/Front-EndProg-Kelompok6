@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 type SessionUser = { name: string | null; email: string; role: string };
 
+// memantau perubahan data session
 function subscribe() {
   return () => {};
 }
@@ -12,6 +13,7 @@ function subscribe() {
 export default function UserDashboardPage() {
   const router = useRouter();
 
+  // mengambil data pengguna dari session storage
   const raw = useSyncExternalStore(
     subscribe,
     () => sessionStorage.getItem("user"),
@@ -19,7 +21,7 @@ export default function UserDashboardPage() {
   );
   const user: SessionUser | null = raw ? JSON.parse(raw) : null;
 
-  // Redirect kalau belum login atau kalau yang login admin
+  // mengarahkan pengguna jika belum login atau yang login adalah admin
   useEffect(() => {
     const data = sessionStorage.getItem("user");
     if (!data) {
@@ -31,11 +33,13 @@ export default function UserDashboardPage() {
     }
   }, [router]);
 
+  // menghapus sesi pengguna saat logout
   function handleLogout() {
     sessionStorage.removeItem("user");
     router.push("/login");
   }
 
+  // menyembunyikan halaman jika pengguna belum login atau berperan sebagai admin
   if (!user || user.role === "admin") return null;
 
   return (

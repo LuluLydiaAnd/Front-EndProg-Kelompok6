@@ -1,5 +1,6 @@
 import AdminCrud from "@/components/AdminCrud";
 
+// nampilin halaman admin untuk mengelola postingan artikel
 export default function KelolaPostinganPage() {
   return (
     <AdminCrud

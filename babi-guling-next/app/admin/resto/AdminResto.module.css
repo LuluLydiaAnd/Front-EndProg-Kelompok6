@@ -28,6 +28,7 @@
   font-size: 1.2rem;
 }
 
+/* bagian awal atau welcome */
 .welcome {
   padding: 2.5rem;
   margin-bottom: 2rem;
@@ -60,6 +61,7 @@
   font-size: 0.95rem;
 }
 
+/* Bagian form */
 .formPanel {
   padding: 2rem;
   margin-bottom: 3rem;
@@ -185,6 +187,7 @@
   cursor: not-allowed;
 }
 
+/* bagian daftar restoran */
 .listSection {
   margin-top: 1rem;
 }
@@ -206,6 +209,7 @@
   font-weight: 600;
 }
 
+/* tabel restoran */
 .tableWrapper {
   width: 100%;
   overflow-x: auto;
@@ -268,6 +272,7 @@
   font-size: 1rem;
 }
 
+/* button buat action */
 .actionGroup {
   display: flex;
   gap: 0.5rem;
@@ -313,6 +318,7 @@
   cursor: not-allowed;
 }
 
+/* tampilan pas data kosong */
 .emptyState {
   padding: 3rem 1rem;
   border: 1px dashed #D9BE9B;
@@ -340,6 +346,7 @@
   font-size: 0.9rem;
 }
 
+/* tampilan buat layar HP */
 @media (max-width: 767px) {
   .restoPage {
     padding-top: 2rem;

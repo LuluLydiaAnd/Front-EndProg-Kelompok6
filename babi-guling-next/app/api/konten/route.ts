@@ -4,6 +4,7 @@ import { mkdir, writeFile, unlink } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
 
+// lokasi penyimpanan foto postingan
 const UPLOAD_DIR = path.join(
   process.cwd(),
   "public",
@@ -11,14 +12,17 @@ const UPLOAD_DIR = path.join(
   "postingan"
 );
 
+// batas ukuran foto maksimal 5 mb
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
+// daftar format foto yang diperbolehkan
 const ALLOWED_TYPES: Record<string, string> = {
   "image/jpeg": ".jpg",
   "image/png": ".png",
   "image/webp": ".webp",
 };
 
+// daftar kategori yang bisa dipilih untuk postingan
 const daftarKategori = [
   "Promotions",
   "Reccomendation",
@@ -28,13 +32,14 @@ const daftarKategori = [
 
 type KategoriPostingan = (typeof daftarKategori)[number];
 
+// mengecek apakah kategori sesuai dengan daftar yang tersedia
 function validasiKategori(
   kategori: string
 ): kategori is KategoriPostingan {
   return daftarKategori.includes(kategori as KategoriPostingan);
 }
 
-
+// memvalidasi dan menyimpan foto ke folder upload
 async function uploadFoto(file: File): Promise<string> {
   const extension = ALLOWED_TYPES[file.type];
 
@@ -50,8 +55,10 @@ async function uploadFoto(file: File): Promise<string> {
     throw new Error("File foto kosong.");
   }
 
+  // membuat folder jika belum tersedia
   await mkdir(UPLOAD_DIR, { recursive: true });
 
+  // membuat nama file unik agar tidak bentrok
   const fileName = `${randomUUID()}${extension}`;
   const filePath = path.join(UPLOAD_DIR, fileName);
 
@@ -62,8 +69,9 @@ async function uploadFoto(file: File): Promise<string> {
   return `/uploads/postingan/${fileName}`;
 }
 
-
+// menghapus foto dari folder upload
 async function hapusFoto(image: string) {
+  // memastikan yang dihapus hanya foto dari folder postingan
   if (!image.startsWith("/uploads/postingan/")) {
     return;
   }
@@ -78,7 +86,7 @@ async function hapusFoto(image: string) {
   }
 }
 
-//GET
+// GET: mengambil semua data postingan
 export async function GET() {
   try {
     const postingan = await prisma.konten.findMany({
@@ -101,11 +109,12 @@ export async function GET() {
   }
 }
 
-//POST
+// POST: menambahkan postingan baru
 export async function POST(request: Request) {
   let uploadedImage = "";
 
   try {
+    // mengambil data yang dikirim melalui form
     const formData = await request.formData();
 
     const title = formData.get("title");
@@ -113,6 +122,7 @@ export async function POST(request: Request) {
     const kategoriForm = formData.get("kategori");
     const imageFile = formData.get("imageFile");
 
+    // memastikan judul dan isi postingan sudah diisi
     if (
       typeof title !== "string" ||
       typeof description !== "string" ||
@@ -125,7 +135,7 @@ export async function POST(request: Request) {
       );
     }
 
-  
+    // menggunakan kategori informations jika kategori tidak dipilih
     let kategori: KategoriPostingan = "Informations";
 
     if (kategoriForm !== null) {
@@ -142,10 +152,12 @@ export async function POST(request: Request) {
       kategori = kategoriForm;
     }
 
+    // menyimpan foto jika pengguna mengunggah file
     if (imageFile && typeof imageFile !== "string") {
       uploadedImage = await uploadFoto(imageFile);
     }
 
+    // menyimpan data postingan ke database
     const postingan = await prisma.konten.create({
       data: {
         jenis: "postingan",
@@ -158,6 +170,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(postingan, { status: 201 });
   } catch (error) {
+    // menghapus foto jika proses penambahan postingan gagal
     if (uploadedImage) {
       await hapusFoto(uploadedImage);
     }
@@ -176,11 +189,12 @@ export async function POST(request: Request) {
   }
 }
 
-// PUT: Mengedit postingan
+// PUT: mengedit postingan yang sudah ada
 export async function PUT(request: Request) {
   let uploadedImage = "";
 
   try {
+    // mengambil data postingan yang akan diedit
     const formData = await request.formData();
 
     const id = Number(formData.get("id"));
@@ -189,6 +203,7 @@ export async function PUT(request: Request) {
     const kategoriForm = formData.get("kategori");
     const imageFile = formData.get("imageFile");
 
+    // memvalidasi id, judul, dan isi postingan
     if (
       !Number.isInteger(id) ||
       id <= 0 ||
@@ -203,6 +218,7 @@ export async function PUT(request: Request) {
       );
     }
 
+    // mencari postingan yang akan diedit
     const existingPost = await prisma.konten.findFirst({
       where: {
         id,
@@ -217,6 +233,7 @@ export async function PUT(request: Request) {
       );
     }
 
+    // mempertahankan kategori lama jika kategori tidak dikirim
     let kategori: KategoriPostingan = existingPost.kategori;
 
     if (kategoriForm !== null) {
@@ -233,11 +250,12 @@ export async function PUT(request: Request) {
       kategori = kategoriForm;
     }
 
-
+    // mengunggah foto baru jika ada foto yang dipilih
     if (imageFile && typeof imageFile !== "string") {
       uploadedImage = await uploadFoto(imageFile);
     }
 
+    // memperbarui data postingan di database
     const postingan = await prisma.konten.update({
       where: {
         id,
@@ -246,18 +264,18 @@ export async function PUT(request: Request) {
         title: title.trim(),
         description: description.trim(),
         kategori,
-   
         image: uploadedImage || existingPost.image,
       },
     });
 
-
+    // menghapus foto lama jika berhasil diganti dengan foto baru
     if (uploadedImage && existingPost.image) {
       await hapusFoto(existingPost.image);
     }
 
     return NextResponse.json(postingan);
   } catch (error) {
+    // menghapus foto baru jika proses edit gagal
     if (uploadedImage) {
       await hapusFoto(uploadedImage);
     }
@@ -276,12 +294,14 @@ export async function PUT(request: Request) {
   }
 }
 
-//DELETE
+// DELETE: menghapus postingan berdasarkan id
 export async function DELETE(request: Request) {
   try {
+    // mengambil id postingan dari request
     const body = await request.json();
     const id = Number(body.id);
 
+    // memastikan id yang dikirim valid
     if (!Number.isInteger(id) || id <= 0) {
       return NextResponse.json(
         { message: "ID postingan tidak valid" },
@@ -289,6 +309,7 @@ export async function DELETE(request: Request) {
       );
     }
 
+    // mencari postingan sebelum dihapus
     const postingan = await prisma.konten.findFirst({
       where: {
         id,
@@ -303,12 +324,14 @@ export async function DELETE(request: Request) {
       );
     }
 
+    // menghapus data postingan dari database
     await prisma.konten.delete({
       where: {
         id,
       },
     });
 
+    // menghapus foto yang terkait dengan postingan
     if (postingan.image) {
       await hapusFoto(postingan.image);
     }

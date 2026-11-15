@@ -1,16 +1,19 @@
 "use client";
 
+// import hook react, tipe form, gambar, link, dan navigasi
 import { useEffect, useState, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+// tipe kategori yang tersedia untuk postingan
 type KategoriPostingan =
   | "Promotions"
   | "Reccomendation"
   | "Informations"
   | "Other";
 
+// struktur data untuk setiap item
 type Item = {
   id: number;
   title: string;
@@ -19,6 +22,7 @@ type Item = {
   kategori?: KategoriPostingan;
 };
 
+// properti yang bisa diatur saat menggunakan komponen
 type Props = {
   storageKey: string;
   apiEndpoint?: string;
@@ -32,8 +36,10 @@ type Props = {
   showCategory?: boolean;
 };
 
+// tipe popup yang digunakan dalam pengelolaan data
 type PopupType = "success" | "delete" | "error" | "confirm";
 
+// daftar kategori beserta nama yang ditampilkan
 const daftarKategori: {
   value: KategoriPostingan;
   label: string;
@@ -44,6 +50,7 @@ const daftarKategori: {
   { value: "Other", label: "Lainnya" },
 ];
 
+// mengubah nilai kategori menjadi nama yang ditampilkan
 function namaKategori(kategori?: string) {
   const hasil = daftarKategori.find(
     (item) => item.value === kategori
@@ -52,6 +59,7 @@ function namaKategori(kategori?: string) {
   return hasil?.label || "Informasi";
 }
 
+// komponen utama untuk tambah, edit, dan hapus data
 export default function AdminCrud({
   storageKey,
   apiEndpoint,
@@ -66,6 +74,7 @@ export default function AdminCrud({
 }: Props) {
   const router = useRouter();
 
+  // menyimpan daftar data, dari localstorage jika tidak menggunakan api
   const [items, setItems] = useState<Item[]>(() => {
     if (typeof window === "undefined" || apiEndpoint) return [];
 
@@ -78,9 +87,11 @@ export default function AdminCrud({
     }
   });
 
+  // menyimpan id data yang sedang diedit dan file gambar yang dipilih
   const [editingId, setEditingId] = useState<number | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
+  // mengatur tampilan dan isi pesan popup
   const [popup, setPopup] = useState<{
     show: boolean;
     message: string;
@@ -91,8 +102,10 @@ export default function AdminCrud({
     type: "success",
   });
 
+  // menyimpan id data yang akan dihapus
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
+  // menyimpan nilai input pada form
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -100,7 +113,7 @@ export default function AdminCrud({
     kategori: "Informations" as KategoriPostingan,
   });
 
-  // Memeriksa hak akses admin
+  // memeriksa hak akses admin
   useEffect(() => {
     const user = JSON.parse(
       sessionStorage.getItem("user") || "null"
@@ -111,7 +124,7 @@ export default function AdminCrud({
     }
   }, [router]);
 
-  // Mengambil data dari API
+  // mengambil data dari api jika endpoint tersedia
   useEffect(() => {
     if (!apiEndpoint) return;
 
@@ -144,6 +157,7 @@ export default function AdminCrud({
     getItems();
   }, [apiEndpoint]);
 
+  // memperbarui daftar data dan menyimpan ke localstorage jika diperlukan
   function saveItems(updated: Item[]) {
     setItems(updated);
 
@@ -152,6 +166,7 @@ export default function AdminCrud({
     }
   }
 
+  // memproses form untuk menambah atau memperbarui data
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -160,6 +175,7 @@ export default function AdminCrud({
 
     if (!cleanTitle || !cleanDescription) return;
 
+    // membatasi ukuran gambar maksimal 5 mb
     if (uploadImage && imageFile && imageFile.size > 5 * 1024 * 1024) {
       setPopup({
         show: true,
@@ -173,6 +189,7 @@ export default function AdminCrud({
       if (apiEndpoint) {
         let response: Response;
 
+        // mengirim data menggunakan formdata jika gambar diunggah sebagai file
         if (uploadImage) {
           const formData = new FormData();
 
@@ -196,6 +213,7 @@ export default function AdminCrud({
             body: formData,
           });
         } else {
+          // mengirim data dalam format json jika tidak mengunggah file
           response = await fetch(apiEndpoint, {
             method: editingId !== null ? "PUT" : "POST",
             headers: {
@@ -211,6 +229,7 @@ export default function AdminCrud({
           });
         }
 
+        // menampilkan pesan jika api gagal menyimpan data
         if (!response.ok) {
           let errorMessage = "Gagal menyimpan data. Silakan coba lagi.";
 
@@ -218,7 +237,7 @@ export default function AdminCrud({
             const errorData = await response.json();
             errorMessage = errorData.message || errorMessage;
           } catch {
-            // Gunakan pesan default jika respons bukan JSON.
+            // gunakan pesan default jika respons bukan json.
           }
 
           throw new Error(errorMessage);
@@ -226,6 +245,7 @@ export default function AdminCrud({
 
         const savedItem: Item = await response.json();
 
+        // memperbarui data yang diedit atau menambahkan data baru ke daftar
         if (editingId !== null) {
           setItems((prev) =>
             prev.map((item) =>
@@ -236,6 +256,7 @@ export default function AdminCrud({
           setItems((prev) => [savedItem, ...prev]);
         }
       } else {
+        // mengelola data secara lokal jika tidak menggunakan api
         if (editingId !== null) {
           saveItems(
             items.map((item) =>
@@ -262,6 +283,7 @@ export default function AdminCrud({
         }
       }
 
+      // menampilkan pesan sesuai hasil penyimpanan
       setPopup({
         show: true,
         message:
@@ -286,6 +308,7 @@ export default function AdminCrud({
     }
   }
 
+  // mengosongkan form dan mengakhiri mode edit
   function resetForm() {
     setForm({
       title: "",
@@ -298,6 +321,7 @@ export default function AdminCrud({
     setEditingId(null);
   }
 
+  // mengisi form dengan data yang dipilih untuk diedit
   function handleEdit(item: Item) {
     setForm({
       title: item.title,
@@ -309,13 +333,14 @@ export default function AdminCrud({
     setImageFile(null);
     setEditingId(item.id);
 
+    // mengarahkan tampilan kembali ke bagian atas halaman
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   }
 
-  // Menampilkan popup konfirmasi sebelum menghapus
+  // menampilkan popup konfirmasi sebelum menghapus
   function handleDelete(id: number) {
     setDeleteTarget(id);
 
@@ -326,7 +351,7 @@ export default function AdminCrud({
     });
   }
 
-  // Menghapus data setelah pengguna menekan tombol Hapus
+  // menghapus data setelah pengguna menekan tombol hapus
   async function confirmDelete() {
     if (deleteTarget === null) return;
 
@@ -342,6 +367,7 @@ export default function AdminCrud({
           body: JSON.stringify({ id }),
         });
 
+        // memeriksa apakah api berhasil menghapus data
         if (!response.ok) {
           let errorMessage = "Gagal menghapus data.";
 
@@ -349,7 +375,7 @@ export default function AdminCrud({
             const errorData = await response.json();
             errorMessage = errorData.message || errorMessage;
           } catch {
-            // Gunakan pesan default jika respons bukan JSON.
+            // gunakan pesan default jika respons bukan json.
           }
 
           throw new Error(errorMessage);
@@ -357,9 +383,11 @@ export default function AdminCrud({
 
         setItems((prev) => prev.filter((item) => item.id !== id));
       } else {
+        // menghapus data dari daftar lokal
         saveItems(items.filter((item) => item.id !== id));
       }
 
+      // mengosongkan form jika data yang dihapus sedang diedit
       if (editingId === id) {
         resetForm();
       }
@@ -387,6 +415,7 @@ export default function AdminCrud({
     }
   }
 
+  // menutup popup dan membersihkan target penghapusan
   function closePopup() {
     setPopup({
       show: false,
@@ -399,11 +428,13 @@ export default function AdminCrud({
 
   return (
     <main className="admin-page admin-crud-page py-5">
+      {/* tautan untuk kembali ke dashboard admin */}
       <Link href="/admin" className="admin-menu-link admin-crud-back">
         <i className="bx bx-arrow-back"></i>
         Kembali ke Dashboard
       </Link>
 
+      {/* judul dan deskripsi halaman pengelolaan */}
       <div className="admin-welcome admin-crud-welcome">
         <div>
           <span className="admin-eyebrow">PENGELOLAAN WEBSITE</span>
@@ -416,6 +447,7 @@ export default function AdminCrud({
         </div>
       </div>
 
+      {/* form untuk menambah atau mengedit data */}
       <div className="admin-crud-panel admin-crud-form">
         <div className="admin-crud-form-heading">
           <div>
@@ -433,6 +465,7 @@ export default function AdminCrud({
 
         <form onSubmit={handleSubmit}>
           <div className="admin-crud-fields">
+            {/* input untuk judul data */}
             <div className="admin-crud-field">
               <label className="form-label">{titleLabel}</label>
               <input
@@ -446,6 +479,7 @@ export default function AdminCrud({
               />
             </div>
 
+            {/* pilihan kategori jika fitur kategori diaktifkan */}
             {showCategory && (
               <div className="admin-crud-field">
                 <label className="form-label">Kategori Postingan</label>
@@ -469,6 +503,7 @@ export default function AdminCrud({
               </div>
             )}
 
+            {/* input untuk deskripsi data */}
             <div className="admin-crud-field admin-crud-field-wide">
               <label className="form-label">{descriptionLabel}</label>
               <textarea
@@ -483,6 +518,7 @@ export default function AdminCrud({
               />
             </div>
 
+            {/* input gambar bisa berupa unggahan file atau url */}
             {showImage && (
               <div className="admin-crud-field admin-crud-field-wide">
                 <label className="form-label">{imageLabel}</label>
@@ -503,6 +539,7 @@ export default function AdminCrud({
                       Format JPG, JPEG, PNG, atau WebP. Maksimal 5 MB.
                     </small>
 
+                    {/* menampilkan nama file yang dipilih */}
                     {imageFile && (
                       <p className="admin-crud-file-name">
                         <i className="bx bx-image"></i>
@@ -510,6 +547,7 @@ export default function AdminCrud({
                       </p>
                     )}
 
+                    {/* menampilkan gambar lama saat mengedit data */}
                     {editingId !== null && form.image && !imageFile && (
                       <div className="admin-crud-current-image">
                         <Image
@@ -542,6 +580,7 @@ export default function AdminCrud({
             )}
           </div>
 
+          {/* tombol untuk menyimpan data atau membatalkan edit */}
           <div className="admin-crud-form-actions">
             <button className="btn btn-danger" type="submit">
               <i className="bx bx-save"></i>
@@ -561,6 +600,7 @@ export default function AdminCrud({
         </form>
       </div>
 
+      {/* judul dan jumlah data yang tersimpan */}
       <div className="admin-crud-list-heading">
         <div>
           <span className="admin-eyebrow">KONTEN WEBSITE</span>
@@ -570,6 +610,7 @@ export default function AdminCrud({
         <span className="admin-count">{items.length} data</span>
       </div>
 
+      {/* menampilkan pesan jika belum ada data */}
       {items.length === 0 ? (
         <div className="admin-empty admin-crud-empty">
           <i className="bx bx-folder-open"></i>
@@ -577,9 +618,11 @@ export default function AdminCrud({
           <p>Gunakan form di atas untuk menambahkan data baru.</p>
         </div>
       ) : (
+        // menampilkan setiap data dalam bentuk kartu
         <div className="admin-crud-grid">
           {items.map((item) => (
             <div className="admin-crud-item admin-crud-card" key={item.id}>
+              {/* menampilkan gambar jika tersedia */}
               {showImage && item.image && (
                 <div className="admin-crud-image-wrapper">
                   <Image
@@ -594,6 +637,7 @@ export default function AdminCrud({
               )}
 
               <div className="admin-crud-card-content">
+                {/* menampilkan kategori pada kartu postingan */}
                 {showCategory && (
                   <span className="badge bg-warning text-dark admin-crud-category">
                     {namaKategori(item.kategori)}
@@ -604,6 +648,7 @@ export default function AdminCrud({
                 <p>{item.description}</p>
               </div>
 
+              {/* tombol untuk mengedit atau menghapus data */}
               <div className="admin-crud-card-actions">
                 <button
                   className="btn btn-sm btn-outline-light"
@@ -626,7 +671,7 @@ export default function AdminCrud({
         </div>
       )}
 
-      {/* Popup custom untuk berhasil, gagal, dan konfirmasi hapus */}
+      {/* popup custom untuk berhasil, gagal, dan konfirmasi hapus */}
       {popup.show && (
         <div className="admin-popup-overlay">
           <div
@@ -649,6 +694,7 @@ export default function AdminCrud({
               ></i>
             </div>
 
+            {/* judul popup menyesuaikan jenis pesan */}
             <h3 id="admin-popup-title">
               {popup.type === "confirm"
                 ? "Hapus Data?"
@@ -661,6 +707,7 @@ export default function AdminCrud({
 
             <p>{popup.message}</p>
 
+            {/* tombol popup berbeda untuk konfirmasi dan pesan biasa */}
             {popup.type === "confirm" ? (
               <div className="admin-popup-actions">
                 <button type="button" onClick={closePopup}>

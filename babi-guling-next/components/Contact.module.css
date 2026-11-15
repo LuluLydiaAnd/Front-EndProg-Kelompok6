@@ -1,3 +1,4 @@
+/* mengatur tampilan utama section kontak */
 .section {
   position: relative;
   background: var(--cream-warm);
@@ -6,6 +7,7 @@
   overflow: hidden;
 }
 
+/* menambahkan dekorasi lingkaran gradasi di pojok section */
 .section::before {
   content: "";
   position: absolute;
@@ -18,6 +20,7 @@
   pointer-events: none;
 }
 
+/* mengatur posisi dan ukuran bagian judul */
 .head {
   position: relative;
   text-align: center;
@@ -25,6 +28,7 @@
   margin: 0 auto 2.5rem;
 }
 
+/* label kecil di atas judul */
 .label {
   display: inline-block;
   font-size: 0.72rem;
@@ -35,6 +39,7 @@
   margin-bottom: 0.6rem;
 }
 
+/* judul utama section */
 .title {
   font-size: 2.6rem;
   font-weight: 700;
@@ -43,17 +48,20 @@
   color: var(--heading);
 }
 
+/* memberi warna dan gaya miring pada sebagian judul */
 .title span {
   color: var(--caramel);
   font-style: italic;
 }
 
+/* deskripsi singkat di bawah judul */
 .desc {
   font-size: 0.95rem;
   line-height: 1.7;
   margin: 0;
 }
 
+/* membungkus kartu informasi dan form kontak */
 .wrap {
   position: relative;
   display: grid;
@@ -65,7 +73,7 @@
   box-shadow: 0 20px 50px rgba(62, 36, 21, 0.1);
 }
 
-/* kartu info */
+/* kartu info kontak */
 .info {
   position: relative;
   overflow: hidden;
@@ -78,6 +86,7 @@
   padding: 2rem 1.6rem;
 }
 
+/* pola dekoratif pada latar kartu info */
 .info::before {
   content: "";
   position: absolute;
@@ -87,6 +96,7 @@
   pointer-events: none;
 }
 
+/* menjaga konten kartu tetap berada di atas dekorasi */
 .infoTop,
 .infoList,
 .quote {
@@ -94,24 +104,28 @@
   z-index: 1;
 }
 
+/* judul pada bagian atas kartu info */
 .infoTop h3 {
   color: var(--cream);
   font-size: 1.5rem;
   margin: 0 0 0.3rem;
 }
 
+/* deskripsi singkat kartu info */
 .infoTop p {
   font-size: 0.88rem;
   color: rgba(251, 244, 232, 0.7);
   margin: 0;
 }
 
+/* menyusun daftar informasi kontak secara vertikal */
 .infoList {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* tampilan setiap item informasi kontak */
 .infoItem {
   display: flex;
   align-items: center;
@@ -125,12 +139,14 @@
   transition: 0.25s ease;
 }
 
+/* efek saat item kontak berbentuk link diarahkan kursor */
 a.infoItem:hover {
   background: rgba(251, 244, 232, 0.14);
   color: var(--cream);
   transform: translateX(4px);
 }
 
+/* kotak ikon pada setiap informasi kontak */
 .infoIcon {
   flex-shrink: 0;
   width: 42px;
@@ -143,11 +159,13 @@ a.infoItem:hover {
   font-size: 1.3rem;
 }
 
+/* mengatur area teks informasi kontak */
 .infoText {
   flex: 1;
   min-width: 0;
 }
 
+/* label kecil pada informasi kontak */
 .infoText small {
   display: block;
   font-size: 0.7rem;
@@ -156,6 +174,7 @@ a.infoItem:hover {
   color: rgba(251, 244, 232, 0.6);
 }
 
+/* teks utama informasi kontak */
 .infoText p {
   margin: 0;
   font-size: 0.88rem;
@@ -165,6 +184,7 @@ a.infoItem:hover {
   white-space: nowrap;
 }
 
+/* tombol untuk menyalin informasi */
 .copyBtn {
   flex-shrink: 0;
   width: 34px;
@@ -180,27 +200,32 @@ a.infoItem:hover {
   transition: 0.2s ease;
 }
 
+/* efek hover pada tombol salin */
 .copyBtn:hover {
   background: var(--kunyit);
   color: var(--heading);
 }
 
+/* mengatur ukuran dan transisi ikon panah */
 .arrow {
   font-size: 1.3rem;
   transition: 0.25s ease;
 }
 
+/* bagian kutipan di bawah kartu info */
 .quote {
   margin-top: auto;
   padding-top: 1.2rem;
   border-top: 1px dashed rgba(251, 244, 232, 0.2);
 }
 
+/* ikon pada bagian kutipan */
 .quote i {
   font-size: 1.6rem;
   color: var(--kunyit);
 }
 
+/* teks kutipan dengan gaya tulisan miring */
 .quote p {
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
@@ -210,6 +235,7 @@ a.infoItem:hover {
   color: rgba(251, 244, 232, 0.9);
 }
 
+/* dekorasi ikon berukuran besar di kartu info */
 .infoDeco {
   position: absolute;
   right: -20px;
@@ -220,11 +246,12 @@ a.infoItem:hover {
   transform: rotate(-12deg);
 }
 
-/* form */
+/* kartu yang menampung form kontak */
 .formCard {
   padding: 2rem 2rem 1.8rem;
 }
 
+/* label untuk pilihan topik dan input */
 .formLabel {
   font-size: 0.85rem;
   font-weight: 700;
@@ -232,6 +259,7 @@ a.infoItem:hover {
   margin-bottom: 0.7rem;
 }
 
+/* menyusun pilihan topik agar bisa berpindah baris */
 .topik {
   display: flex;
   flex-wrap: wrap;
@@ -239,6 +267,7 @@ a.infoItem:hover {
   margin-bottom: 1.6rem;
 }
 
+/* tombol pilihan topik pesan */
 .topikBtn {
   display: inline-flex;
   align-items: center;
@@ -254,11 +283,13 @@ a.infoItem:hover {
   transition: 0.25s ease;
 }
 
+/* efek hover pada pilihan topik */
 .topikBtn:hover {
   border-color: var(--caramel);
   color: var(--heading);
 }
 
+/* tampilan pilihan topik yang sedang aktif */
 .topikActive,
 .topikActive:hover {
   background: var(--heading);
@@ -266,11 +297,12 @@ a.infoItem:hover {
   color: var(--cream);
 }
 
-/* input dengan floating label */
+/* membungkus input dan label mengambang */
 .field {
   position: relative;
 }
 
+/* tampilan dasar input dan textarea */
 .field input,
 .field textarea {
   width: 100%;
@@ -284,6 +316,7 @@ a.infoItem:hover {
   transition: 0.25s ease;
 }
 
+/* mengatur ukuran dan area teks pesan */
 .field textarea {
   resize: vertical;
   min-height: 140px;
@@ -291,6 +324,7 @@ a.infoItem:hover {
   padding-top: 1.6rem;
 }
 
+/* posisi awal label pada input */
 .field label {
   position: absolute;
   left: 1rem;
@@ -301,6 +335,7 @@ a.infoItem:hover {
   transition: 0.2s ease;
 }
 
+/* memindahkan label ke atas saat input aktif atau sudah terisi */
 .field input:focus + label,
 .field input:not(:placeholder-shown) + label,
 .field textarea:focus + label,
@@ -312,6 +347,7 @@ a.infoItem:hover {
   color: var(--caramel);
 }
 
+/* mengatur posisi ikon di dalam field */
 .field > i {
   position: absolute;
   right: 1rem;
@@ -322,6 +358,7 @@ a.infoItem:hover {
   transition: 0.25s ease;
 }
 
+/* memberi penanda visual saat input atau textarea aktif */
 .field input:focus,
 .field textarea:focus {
   background: #fff;
@@ -329,16 +366,19 @@ a.infoItem:hover {
   box-shadow: 0 0 0 4px rgba(181, 84, 28, 0.1);
 }
 
+/* mengubah warna ikon saat input aktif */
 .field input:focus ~ i {
   color: var(--caramel);
 }
 
+/* memberi efek goyang saat field mengalami error */
 .fieldError input,
 .fieldError textarea {
   border-color: #C0392B;
   animation: goyang 0.35s ease;
 }
 
+/* menampilkan pesan kesalahan di bawah field */
 .errText {
   display: inline-block;
   margin-top: 5px;
@@ -347,23 +387,27 @@ a.infoItem:hover {
   color: #C0392B;
 }
 
+/* mengatur posisi bagian bawah area pesan */
 .areaBottom {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
+/* teks penghitung karakter */
 .counter {
   margin-top: 5px;
   font-size: 0.75rem;
   color: var(--text-soft);
 }
 
+/* memberi peringatan pada penghitung karakter */
 .counterWarn {
   color: #C0392B;
   font-weight: 700;
 }
 
+/* garis indikator progres penulisan */
 .progress {
   height: 3px;
   background: var(--line);
@@ -372,6 +416,7 @@ a.infoItem:hover {
   overflow: hidden;
 }
 
+/* bagian progres yang terisi */
 .progress span {
   display: block;
   height: 100%;
@@ -379,6 +424,7 @@ a.infoItem:hover {
   transition: width 0.2s ease;
 }
 
+/* menyusun tombol aksi pada form */
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -386,6 +432,7 @@ a.infoItem:hover {
   margin-top: 1.6rem;
 }
 
+/* gaya dasar tombol whatsapp dan email */
 .btnWa,
 .btnMail {
   display: inline-flex;
@@ -399,6 +446,7 @@ a.infoItem:hover {
   transition: 0.25s ease;
 }
 
+/* tombol untuk menghubungi melalui whatsapp */
 .btnWa {
   background: var(--caramel);
   border: 1.5px solid var(--caramel);
@@ -406,29 +454,33 @@ a.infoItem:hover {
   box-shadow: 0 8px 20px rgba(181, 84, 28, 0.28);
 }
 
+/* efek hover pada tombol whatsapp */
 .btnWa:hover {
   background: var(--caramel-dark);
   border-color: var(--caramel-dark);
   transform: translateY(-2px);
 }
 
+/* tombol untuk menghubungi melalui email */
 .btnMail {
   background: transparent;
   border: 1.5px solid var(--line);
   color: var(--heading);
 }
 
+/* efek hover pada tombol email */
 .btnMail:hover {
   border-color: var(--heading);
   transform: translateY(-2px);
 }
 
+/* mengatur ukuran ikon pada kedua tombol aksi */
 .btnWa i,
 .btnMail i {
   font-size: 1.2rem;
 }
 
-/* toast */
+/* notifikasi kecil yang muncul di bagian bawah layar */
 .toast {
   position: fixed;
   left: 50%;
@@ -450,16 +502,19 @@ a.infoItem:hover {
   transition: 0.35s ease;
 }
 
+/* menampilkan toast dengan transisi */
 .toastShow {
   opacity: 1;
   transform: translate(-50%, 0);
 }
 
+/* mengatur tampilan ikon pada toast */
 .toast i {
   color: var(--kunyit);
   font-size: 1.1rem;
 }
 
+/* animasi goyang untuk menandai input yang bermasalah */
 @keyframes goyang {
   0%,
   100% {
@@ -473,6 +528,7 @@ a.infoItem:hover {
   }
 }
 
+/* menyesuaikan tata letak untuk layar tablet */
 @media (max-width: 991.98px) {
   .wrap {
     grid-template-columns: 1fr;
@@ -483,6 +539,7 @@ a.infoItem:hover {
   }
 }
 
+/* menyesuaikan tampilan untuk layar ponsel */
 @media (max-width: 575.98px) {
   .section {
     padding: 3.5rem 0 4rem;

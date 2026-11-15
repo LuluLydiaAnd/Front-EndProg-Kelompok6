@@ -1,3 +1,4 @@
+/*section utama dan dekorasi */
 .section {
   position: relative;
   background: var(--cream-warm);
@@ -6,6 +7,7 @@
   overflow: hidden;
 }
 
+/* dekorasi lingkaran gradasi di pojok kanan atas */
 .section::before {
   content: "";
   position: absolute;
@@ -18,6 +20,7 @@
   pointer-events: none;
 }
 
+/*judul dan deskripsi galeri*/
 .head {
   position: relative;
   display: flex;
@@ -27,6 +30,7 @@
   margin-bottom: 2rem;
 }
 
+/* label kecil di atas judul */
 .label {
   display: inline-block;
   font-size: 0.72rem;
@@ -37,6 +41,7 @@
   margin-bottom: 0.6rem;
 }
 
+/* judul utama galeri */
 .title {
   font-size: 2.6rem;
   font-weight: 700;
@@ -45,11 +50,13 @@
   color: var(--heading);
 }
 
+/* memberi warna dan gaya miring pada sebagian judul */
 .title span {
   color: var(--caramel);
   font-style: italic;
 }
 
+/* teks penjelasan di samping judul */
 .desc {
   max-width: 360px;
   color: var(--text);
@@ -58,6 +65,9 @@
   margin: 0;
 }
 
+/*tombol filter kategori*/
+
+/* wadah seluruh tombol filter */
 .filter {
   position: relative;
   display: inline-flex;
@@ -70,6 +80,7 @@
   border-radius: 40px;
 }
 
+/* tampilan dasar tombol filter */
 .filterBtn {
   display: inline-flex;
   align-items: center;
@@ -85,11 +96,13 @@
   transition: 0.25s ease;
 }
 
+/* efek saat tombol filter diarahkan kursor */
 .filterBtn:hover {
   color: var(--heading);
   background: var(--glass);
 }
 
+/* tampilan tombol filter yang sedang aktif */
 .filterActive,
 .filterActive:hover {
   background: var(--caramel);
@@ -97,6 +110,7 @@
   box-shadow: 0 6px 16px rgba(181, 84, 28, 0.25);
 }
 
+/* label kecil untuk jumlah atau penanda kategori */
 .badge {
   font-size: 0.7rem;
   background: rgba(181, 84, 28, 0.12);
@@ -104,10 +118,14 @@
   border-radius: 20px;
 }
 
+/* menyesuaikan warna badge pada filter aktif */
 .filterActive .badge {
   background: rgba(255, 255, 255, 0.25);
 }
 
+/*grid dan item galeri*/
+
+/* menyusun foto menjadi tiga kolom */
 .grid {
   position: relative;
   display: grid;
@@ -115,6 +133,7 @@
   gap: 16px;
 }
 
+/* wadah setiap foto galeri */
 .item {
   position: relative;
   margin: 0;
@@ -127,11 +146,13 @@
   animation: muncul 0.5s ease both;
 }
 
+/* mengatur foto agar memenuhi wadah */
 .img {
   object-fit: cover;
   transition: transform 0.6s ease, filter 0.6s ease;
 }
 
+/* lapisan gradasi supaya teks di atas foto tetap terbaca */
 .item::after {
   content: "";
   position: absolute;
@@ -141,15 +162,18 @@
   transition: opacity 0.4s ease;
 }
 
+/* memperbesar foto dan meningkatkan saturasi saat diarahkan kursor */
 .item:hover .img {
   transform: scale(1.08);
   filter: saturate(1.1);
 }
 
+/* memperkuat gradasi ketika foto diarahkan kursor */
 .item:hover::after {
   opacity: 1;
 }
 
+/* nomor urut foto di pojok kiri atas */
 .nomor {
   position: absolute;
   top: 14px;
@@ -162,6 +186,7 @@
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
 
+/* tombol zoom yang muncul saat foto diarahkan kursor */
 .zoom {
   position: absolute;
   top: 12px;
@@ -180,11 +205,13 @@
   transition: 0.3s ease;
 }
 
+/* menampilkan tombol zoom saat foto diarahkan kursor */
 .item:hover .zoom {
   opacity: 1;
   transform: scale(1);
 }
 
+/* wadah judul dan keterangan di bagian bawah foto */
 .caption {
   position: absolute;
   left: 16px;
@@ -195,6 +222,7 @@
   transition: transform 0.4s ease;
 }
 
+/* teks keterangan foto */
 .caption p {
   margin: 6px 0 0;
   font-size: 0.92rem;
@@ -203,10 +231,12 @@
   color: #fff;
 }
 
+/* menggeser keterangan ke posisi normal saat hover */
 .item:hover .caption {
   transform: translateY(0);
 }
 
+/* label kategori yang tampil di atas foto */
 .tag {
   display: inline-block;
   font-size: 0.65rem;
@@ -219,6 +249,9 @@
   border-radius: 20px;
 }
 
+/*lightbox untuk foto besar*/
+
+/* latar gelap yang menutupi halaman saat foto dibuka */
 .lightbox {
   position: fixed;
   inset: 0;
@@ -233,11 +266,13 @@
   animation: fade 0.3s ease;
 }
 
+/* wadah konten foto yang diperbesar */
 .lbContent {
   width: min(900px, 100%);
   animation: muncul 0.35s ease;
 }
 
+/* membatasi ukuran foto di dalam lightbox */
 .lbImgWrap {
   position: relative;
   width: 100%;
@@ -246,10 +281,12 @@
   overflow: hidden;
 }
 
+/* menampilkan foto tanpa memotong bagian gambar */
 .lbImg {
   object-fit: contain;
 }
 
+/* baris informasi foto dan jumlah foto */
 .lbInfo {
   display: flex;
   justify-content: space-between;
@@ -258,6 +295,7 @@
   margin-top: 1rem;
 }
 
+/* judul foto pada lightbox */
 .lbJudul {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
@@ -265,12 +303,14 @@
   color: var(--cream);
 }
 
+/* informasi urutan foto yang sedang dibuka */
 .lbCount {
   margin: 0;
   font-size: 0.85rem;
   color: var(--line);
 }
 
+/* tombol navigasi untuk berpindah foto */
 .lbBtn {
   flex-shrink: 0;
   width: 46px;
@@ -286,17 +326,22 @@
   transition: 0.25s ease;
 }
 
+/* mengubah warna tombol navigasi saat hover */
 .lbBtn:hover {
   background: var(--caramel);
   border-color: var(--caramel);
 }
 
+/* posisi tombol untuk menutup lightbox */
 .lbClose {
   position: absolute;
   top: 20px;
   right: 20px;
 }
 
+/*animasi*/
+
+/* animasi elemen muncul dari bawah */
 @keyframes muncul {
   from {
     opacity: 0;
@@ -308,6 +353,7 @@
   }
 }
 
+/* animasi perubahan transparansi */
 @keyframes fade {
   from {
     opacity: 0;
@@ -317,13 +363,17 @@
   }
 }
 
+/*tampilan tablet*/
+
 @media (max-width: 991.98px) {
+  /* menyusun judul dan deskripsi secara vertikal */
   .head {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
 
+  /* mengubah galeri menjadi dua kolom */
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -335,29 +385,37 @@
   }
 }
 
+/*tampilan hp*/
+
 @media (max-width: 575.98px) {
+  /* mengurangi jarak atas dan bawah pada layar kecil */
   .section {
     padding: 3.5rem 0 4rem;
   }
 
+  /* mengecilkan ukuran judul */
   .title {
     font-size: 2rem;
   }
 
+  /* merapatkan jarak antarfoto */
   .grid {
     gap: 10px;
   }
 
+  /* memindahkan tombol navigasi lightbox ke bagian bawah */
   .lbPrev,
   .lbNext {
     position: absolute;
     bottom: 24px;
   }
 
+  /* mengatur posisi tombol foto sebelumnya */
   .lbPrev {
     left: calc(50% - 56px);
   }
 
+  /* mengatur posisi tombol foto berikutnya */
   .lbNext {
     right: calc(50% - 56px);
   }

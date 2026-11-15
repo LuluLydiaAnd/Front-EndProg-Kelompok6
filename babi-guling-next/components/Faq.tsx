@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "./Faq.module.css";
 
+// tipe data untuk kategori dan pertanyaan faq
 type Kategori = "umum" | "bumbu" | "budaya" | "website";
 
 type Pertanyaan = {
@@ -12,6 +13,7 @@ type Pertanyaan = {
   kategori: Kategori;
 };
 
+// daftar pertanyaan dan jawaban yang ditampilkan di halaman faq
 const faqList: Pertanyaan[] = [
   {
     id: 1,
@@ -92,6 +94,7 @@ const faqList: Pertanyaan[] = [
   },
 ];
 
+// daftar kategori untuk tombol filter beserta ikon dan jumlah pertanyaan
 const kategoriList: { label: string; value: Kategori | "semua"; icon: string }[] = [
   { label: "Semua", value: "semua", icon: "bx bx-grid-alt" },
   { label: "Umum", value: "umum", icon: "bx bx-info-circle" },
@@ -100,6 +103,7 @@ const kategoriList: { label: string; value: Kategori | "semua"; icon: string }[]
   { label: "Website", value: "website", icon: "bx bx-globe" },
 ];
 
+// kumpulan fakta menarik yang ditampilkan secara bergantian
 const faktaList: string[] = [
   "Kata 'genep' dalam base genep berarti lengkap, karena bumbunya memang berisi banyak rempah.",
   "Nama 'guling' berasal dari cara memasaknya: babi diputar atau diguling di atas bara api.",
@@ -108,6 +112,7 @@ const faktaList: string[] = [
   "Babi guling sering hadir di upacara odalan, pernikahan, dan perayaan keluarga di Bali.",
 ];
 
+// menyorot kata yang cocok dengan pencarian di teks pertanyaan atau jawaban
 function Sorot({ teks, kata }: { teks: string; kata: string }) {
   if (!kata.trim()) return <>{teks}</>;
   const aman = kata.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -128,12 +133,14 @@ function Sorot({ teks, kata }: { teks: string; kata: string }) {
 }
 
 export default function Faq() {
+  // menyimpan kategori aktif, kata pencarian, pertanyaan terbuka, feedback, dan fakta
   const [kategori, setKategori] = useState<Kategori | "semua">("semua");
   const [cari, setCari] = useState("");
   const [terbuka, setTerbuka] = useState<number[]>([1]);
   const [vote, setVote] = useState<Record<number, "ya" | "tidak">>({});
   const [fakta, setFakta] = useState(0);
 
+  // memfilter pertanyaan berdasarkan kategori dan kata yang dicari
   const kata = cari.trim().toLowerCase();
   const hasil = faqList.filter((f) => {
     const cocokKategori = kategori === "semua" || f.kategori === kategori;
@@ -142,33 +149,41 @@ export default function Faq() {
     return cocokKategori && cocokCari;
   });
 
+  // menghitung jumlah pertanyaan sesuai kategori
   const jumlah = (value: Kategori | "semua") =>
     value === "semua" ? faqList.length : faqList.filter((f) => f.kategori === value).length;
 
+  // mengecek apakah semua pertanyaan yang ditemukan sedang terbuka
   const semuaTerbuka = hasil.length > 0 && hasil.every((f) => terbuka.includes(f.id));
 
+  // membuka atau menutup satu pertanyaan berdasarkan id
   const toggle = (id: number) => {
     setTerbuka(terbuka.includes(id) ? terbuka.filter((x) => x !== id) : [...terbuka, id]);
   };
 
+  // membuka semua hasil atau menutup semuanya sekaligus
   const toggleSemua = () => {
     setTerbuka(semuaTerbuka ? [] : hasil.map((f) => f.id));
   };
 
+  // memilih fakta lain secara acak tanpa mengulang fakta yang sedang tampil
   const faktaLain = () => {
     let baru = fakta;
     while (baru === fakta) baru = Math.floor(Math.random() * faktaList.length);
     setFakta(baru);
   };
 
+  // mengembalikan pencarian dan kategori ke kondisi awal
   const reset = () => {
     setCari("");
     setKategori("semua");
   };
 
   return (
+    // bagian utama halaman faq
     <section id="faq" className={styles.section}>
       <div className="container">
+        {/* judul halaman dan kolom pencarian */}
         <div className={styles.head}>
           <p className={styles.label}>FAQ</p>
           <h2 className={styles.title}>
@@ -195,6 +210,7 @@ export default function Faq() {
           </div>
         </div>
 
+        {/* tombol filter untuk setiap kategori pertanyaan */}
         <div className={styles.chips}>
           {kategoriList.map((k) => (
             <button
@@ -210,6 +226,7 @@ export default function Faq() {
         </div>
 
         <div className="row g-4">
+          {/* daftar pertanyaan dan jawaban di sisi utama */}
           <div className="col-lg-8">
             <div className={styles.listHead}>
               <p>
@@ -223,6 +240,7 @@ export default function Faq() {
               )}
             </div>
 
+            {/* menampilkan pesan jika tidak ada pertanyaan yang cocok */}
             {hasil.length === 0 ? (
               <div className={styles.kosong}>
                 <i className="bx bx-search-alt"></i>
@@ -231,6 +249,7 @@ export default function Faq() {
                 <button onClick={reset}>Reset pencarian</button>
               </div>
             ) : (
+              // menampilkan daftar pertanyaan yang sudah difilter
               <div className={styles.list}>
                 {hasil.map((f, i) => {
                   const buka = terbuka.includes(f.id);
@@ -250,6 +269,7 @@ export default function Faq() {
                         </span>
                       </button>
 
+                      {/* jawaban dan tombol feedback untuk setiap pertanyaan */}
                       <div className={styles.answerWrap}>
                         <div className={styles.answer}>
                           <p>
@@ -282,8 +302,10 @@ export default function Faq() {
             )}
           </div>
 
+          {/* panel samping untuk fakta menarik dan kontak */}
           <div className="col-lg-4">
             <div className={styles.side}>
+              {/* kartu fakta yang bisa diganti secara acak */}
               <div className={styles.factCard}>
                 <div className={styles.factHead}>
                   <span>
@@ -303,6 +325,7 @@ export default function Faq() {
                 </div>
               </div>
 
+              {/* ajakan untuk menghubungi pengelola website */}
               <div className={styles.askCard}>
                 <i className={`bx bx-message-square-dots ${styles.askIcon}`}></i>
                 <h3>Masih ada pertanyaan?</h3>

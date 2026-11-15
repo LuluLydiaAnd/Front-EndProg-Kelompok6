@@ -6,18 +6,22 @@ import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const router = useRouter();
+
+  // menyimpan data input dan status pendaftaran
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // menjalankan proses pendaftaran saat form dikirim
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
+      // mengirim data pendaftaran ke api register
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -26,15 +30,18 @@ export default function RegisterPage() {
 
       const data = await res.json();
 
+      // menampilkan pesan jika pendaftaran gagal
       if (!res.ok) {
         setError(data.error);
         return;
       }
 
+      // mengarahkan pengguna ke halaman login setelah berhasil daftar
       router.push("/login");
     } catch {
       setError("Terjadi kesalahan, coba lagi.");
     } finally {
+      // mengakhiri status loading setelah proses selesai
       setLoading(false);
     }
   }
@@ -49,6 +56,7 @@ export default function RegisterPage() {
               Buat akun baru
             </p>
 
+            {/* form untuk memasukkan data akun baru */}
             <form onSubmit={handleRegister}>
               <div className="mb-3">
                 <label className="form-label">Nama</label>
@@ -83,6 +91,7 @@ export default function RegisterPage() {
                 />
               </div>
 
+              {/* menampilkan pesan error jika ada */}
               {error && <p className="text-danger">{error}</p>}
 
               <button className="btn btn-danger w-100" disabled={loading}>
@@ -90,6 +99,7 @@ export default function RegisterPage() {
               </button>
             </form>
 
+            {/* menyediakan link ke halaman login */}
             <p className="text-center mt-3 mb-0">
               Sudah punya akun?{" "}
               <Link href="/login">Login</Link>

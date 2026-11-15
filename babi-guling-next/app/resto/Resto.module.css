@@ -1,14 +1,17 @@
+/* mengatur tampilan utama halaman restoran */
 .container {
   background-color: #fbf6ee;
   min-height: 100vh;
   padding: 4rem 2rem;
 }
 
+/* mengatur lebar konten agar berada di tengah */
 .wrapper {
   max-width: 1200px;
   margin: 0 auto;
 }
 
+/* mengatur judul utama halaman */
 .title {
   text-align: center;
   font-size: 2.5rem;
@@ -17,18 +20,21 @@
   margin-bottom: 0.5rem;
 }
 
+/* mengatur teks deskripsi di bawah judul */
 .subtitle {
   text-align: center;
   color: #555;
   margin-bottom: 3rem;
 }
 
+/* mengatur susunan kartu restoran dalam bentuk grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
 }
 
+/* mengatur tampilan setiap kartu restoran */
 .card {
   background: #ffffff;
   border-radius: 12px;
@@ -37,10 +43,12 @@
   transition: transform 0.2s ease;
 }
 
+/* memberi efek kartu sedikit naik saat diarahkan kursor */
 .card:hover {
   transform: translateY(-5px);
 }
 
+/* mengatur posisi nama restoran dan rating */
 .cardHeader {
   display: flex;
   justify-content: space-between;
@@ -48,6 +56,7 @@
   margin-bottom: 1rem;
 }
 
+/* mengatur tampilan nama restoran */
 .restoName {
   font-family: serif;
   font-weight: bold;
@@ -56,6 +65,7 @@
   flex: 1;
 }
 
+/* mengatur tampilan label rating restoran */
 .ratingBadge {
   background: #ffd700;
   color: #1d0c09;
@@ -66,12 +76,14 @@
   margin-left: 1rem;
 }
 
+/* mengatur tampilan alamat restoran */
 .location {
   color: #666;
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
+/* mengatur garis pemisah informasi restoran dan tombol */
 .divider {
   border: 0;
   height: 1px;
@@ -79,12 +91,14 @@
   margin: 1rem 0;
 }
 
+/* mengatur posisi tombol suka dan komentar */
 .actions {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
 }
 
+/* menyamakan ukuran dan tampilan dasar kedua tombol */
 .likeBtn, .commentBtn {
   flex: 1;
   padding: 0.5rem;
@@ -95,15 +109,18 @@
   transition: background 0.2s ease;
 }
 
+/* mengatur warna tombol suka */
 .likeBtn {
   background: #fff0f0;
   color: #d32f2f;
 }
 
+/* mengubah warna tombol suka saat diarahkan kursor */
 .likeBtn:hover {
   background: #ffe0e0;
 }
 
+/* mengatur warna tombol komentar */
 .commentBtn {
   background: #f0f4ff;
   color: #1976d2;

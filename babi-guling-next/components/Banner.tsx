@@ -1,5 +1,7 @@
+// import komponen image dari next.js
 import Image from "next/image";
 
+// tipe data untuk tombol navigasi pada banner
 type Widget = {
   label: string;
   href: string;
@@ -7,16 +9,19 @@ type Widget = {
   highlight?: boolean;
 };
 
+// daftar tombol yang ditampilkan pada banner
 const widgets: Widget[] = [
   { label: "FAQ", href: "#faq", icon: "bx bx-help-circle" },
   { label: "Contact", href: "#kontak", icon: "bx bx-envelope", highlight: true },
 ];
 
+// komponen banner sebagai bagian pembuka halaman utama
 export default function Banner() {
   return (
     <section id="home" className="banner-section">
       <div className="container">
         <div className="row align-items-center g-4">
+          {/* menampilkan teks pengenalan babi guling */}
           <div className="col-lg-7">
             <p className="banner-eyebrow">
               SEJAK RIBUAN TAHUN • WARISAN KULINER BALI
@@ -35,6 +40,7 @@ export default function Banner() {
               ritual keagamaan, hingga perayaan besar masyarakat Bali.
             </p>
 
+            {/* menampilkan tombol navigasi ke faq dan kontak */}
             <div className="banner-widgets">
               {widgets.map((w) => (
                 <a
@@ -51,6 +57,7 @@ export default function Banner() {
             </div>
           </div>
 
+          {/* menampilkan ilustrasi babi guling di sisi banner */}
           <div className="col-lg-5 text-center">
             <Image
               src="/Babi_Guling.png"

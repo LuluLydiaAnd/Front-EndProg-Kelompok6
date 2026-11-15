@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+// daftar menu yang tersedia di dashboard admin
 const menus = [
   {
     title: "Kelola Galeri",
@@ -31,9 +32,11 @@ const menus = [
 export default function AdminPage() {
   const router = useRouter();
 
+  // mengecek apakah pengguna yang masuk punya role admin
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user") || "null");
 
+    // kalau bukan admin atau belum login, arahkan ke halaman login
     if (!user || user.role !== "admin") {
       router.replace("/login");
     }
@@ -43,6 +46,7 @@ export default function AdminPage() {
     <main className="admin-page py-5">
       <div className="container">
 
+        {/* bagian sambutan dashboard admin */}
         <div className="admin-welcome mb-5">
           <div className="admin-dashboard-top">
             <span className="admin-eyebrow">ADMIN PANEL</span>
@@ -63,6 +67,7 @@ export default function AdminPage() {
           </div>
         </div>
 
+        {/* judul bagian dan jumlah menu yang tersedia */}
         <div className="admin-section-heading mb-4">
           <div>
             <h2 className="admin-section-title">Kelola Website</h2>
@@ -73,9 +78,11 @@ export default function AdminPage() {
           <span className="admin-total-menu">3 Menu</span>
         </div>
 
+        {/* menampilkan setiap menu dalam bentuk kartu */}
         <div className="row g-4">
           {menus.map((menu) => (
             <div className="col-md-6 col-xl-4" key={menu.href}>
+              {/* mengarahkan admin ke halaman sesuai menu yang dipilih */}
               <Link href={menu.href} className="admin-menu-card">
                 <div className="admin-card-top">
                   <div className="admin-menu-icon">
@@ -99,7 +106,6 @@ export default function AdminPage() {
             </div>
           ))}
         </div>
-
       </div>
     </main>
   );

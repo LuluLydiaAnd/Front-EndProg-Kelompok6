@@ -9,6 +9,7 @@ import {
 } from "@/app/actions/resto";
 import styles from "./AdminResto.module.css";
 
+// tipe data yang dipakai untuk restoran
 type Restoran = {
   id: number;
   nama: string;
@@ -17,6 +18,7 @@ type Restoran = {
   likesCount: number;
 };
 
+// jenis popup yang bisa ditampilin
 type PopupType = "success" | "delete" | "error" | "confirm";
 
 export default function RestoClient({
@@ -24,10 +26,12 @@ export default function RestoClient({
 }: {
   restoranList: Restoran[];
 }) {
+  // menyimpan id restoran yang sedang diedit
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({ nama: "", alamat: "" });
   const [isPending, startTransition] = useTransition();
 
+  // menyimpan status, pesan, dan jenis popup
   const [popup, setPopup] = useState<{
     show: boolean;
     message: string;
@@ -38,12 +42,15 @@ export default function RestoClient({
     type: "success",
   });
 
+  // menyimpan id restoran yang akan dihapus
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
+  // menampilkan popup sesuai pesan dan jenisnya
   function showPopup(message: string, type: PopupType) {
     setPopup({ show: true, message, type });
   }
 
+  // menutup popup dan mereset target hapus
   function closePopup() {
     setPopup({
       show: false,
@@ -53,34 +60,43 @@ export default function RestoClient({
     setDeleteTarget(null);
   }
 
+  // mengosongkan form dan keluar dari mode edit
   function resetForm() {
     setForm({ nama: "", alamat: "" });
     setEditingId(null);
   }
 
+  // menangani form saat tambah atau edit restoran
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    // menghapus spasi di awal dan akhir input
     const nama = form.nama.trim();
     const alamat = form.alamat.trim();
 
+    // mengecek agar nama dan alamat tidak kosong
     if (!nama || !alamat) {
       showPopup("Nama dan alamat restoran wajib diisi.", "error");
       return;
     }
 
+    // menjalankan proses penyimpanan
     startTransition(async () => {
       try {
+        // kalau ada id, data restoran akan diperbarui
         if (editingId !== null) {
           await updateRestoran(editingId, nama, alamat);
           showPopup("Data restoran berhasil diperbarui!", "success");
         } else {
+          // kalau tidak ada id, restoran baru akan ditambahkan
           await tambahRestoran(nama, alamat);
           showPopup("Data restoran berhasil ditambahkan!", "success");
         }
 
+        // mereset form setelah proses berhasil
         resetForm();
       } catch (error) {
+        // menampilkan pesan kalau penyimpanan gagal
         console.error("Gagal menyimpan restoran:", error);
         showPopup(
           error instanceof Error
@@ -92,6 +108,7 @@ export default function RestoClient({
     });
   }
 
+  // memasukkan data restoran yang dipilih ke form edit
   function handleEdit(resto: Restoran) {
     setForm({
       nama: resto.nama,
@@ -100,17 +117,20 @@ export default function RestoClient({
 
     setEditingId(resto.id);
 
+    // menggulir halaman ke atas agar form terlihat
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   }
 
+  // menampilkan konfirmasi sebelum restoran dihapus
   function handleDelete(id: number) {
     setDeleteTarget(id);
     showPopup("Yakin mau menghapus restoran ini?", "confirm");
   }
 
+  // menjalankan penghapusan setelah dikonfirmasi
   function confirmDelete() {
     if (deleteTarget === null) return;
 
@@ -120,6 +140,7 @@ export default function RestoClient({
       try {
         await hapusRestoran(id);
 
+        // mereset form kalau restoran yang dihapus sedang diedit
         if (editingId === id) {
           resetForm();
         }
@@ -127,6 +148,7 @@ export default function RestoClient({
         setDeleteTarget(null);
         showPopup("Restoran berhasil dihapus!", "delete");
       } catch (error) {
+        // menampilkan pesan kalau penghapusan gagal
         console.error("Gagal menghapus restoran:", error);
 
         setDeleteTarget(null);
@@ -147,6 +169,7 @@ export default function RestoClient({
         Kembali ke Dashboard
       </Link>
 
+      {/* bagian sambutan halaman admin */}
       <section className={styles.welcome}>
         <span className={styles.eyebrow}>PENGELOLAAN WEBSITE</span>
         <h1>Kelola Restoran</h1>
@@ -155,6 +178,7 @@ export default function RestoClient({
         </p>
       </section>
 
+      {/* form untuk menambah atau mengedit restoran */}
       <section className={styles.formPanel}>
         <div className={styles.formHeading}>
           <div>
@@ -216,6 +240,7 @@ export default function RestoClient({
                   : "Tambah Restoran"}
             </button>
 
+            {/* tombol batal hanya muncul saat mode edit */}
             {editingId !== null && (
               <button
                 className={styles.cancelBtn}
@@ -230,6 +255,7 @@ export default function RestoClient({
         </form>
       </section>
 
+      {/* bagian daftar restoran yang tersimpan */}
       <section className={styles.listSection}>
         <div className={styles.listHeading}>
           <div>
@@ -237,11 +263,13 @@ export default function RestoClient({
             <h2>Daftar Restoran</h2>
           </div>
 
+          {/* menampilkan jumlah data restoran */}
           <span className={styles.count}>
             {restoranList.length} data
           </span>
         </div>
 
+        {/* menampilkan pesan kalau belum ada data restoran */}
         {restoranList.length === 0 ? (
           <div className={styles.emptyState}>
             <i className="bx bx-store-alt"></i>
@@ -249,6 +277,7 @@ export default function RestoClient({
             <p>Tambahkan data restoran melalui form di atas.</p>
           </div>
         ) : (
+          // menampilkan data restoran dalam bentuk tabel
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <thead>
@@ -262,6 +291,7 @@ export default function RestoClient({
               </thead>
 
               <tbody>
+                {/* menampilkan setiap restoran dari daftar */}
                 {restoranList.map((resto) => (
                   <tr key={resto.id}>
                     <td className={styles.restaurantName}>
@@ -283,6 +313,7 @@ export default function RestoClient({
 
                     <td>
                       <div className={styles.actionGroup}>
+                        {/* tombol untuk mengedit restoran */}
                         <button
                           type="button"
                           className={styles.editBtn}
@@ -293,6 +324,7 @@ export default function RestoClient({
                           Edit
                         </button>
 
+                        {/* tombol untuk menghapus restoran */}
                         <button
                           type="button"
                           className={styles.deleteBtn}
@@ -312,7 +344,7 @@ export default function RestoClient({
         )}
       </section>
 
-      {/* Popup custom */}
+      {/* popup custom */}
       {popup.show && (
         <div className="admin-popup-overlay">
           <div
@@ -347,6 +379,7 @@ export default function RestoClient({
 
             <p>{popup.message}</p>
 
+            {/* tombol popup menyesuaikan jenis pesannya */}
             {popup.type === "confirm" ? (
               <div className="admin-popup-actions">
                 <button
