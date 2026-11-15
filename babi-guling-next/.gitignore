@@ -52,3 +52,5 @@ generated/
 .cursor/
 .devin/
 AGENTS.md
+/lib/generated/prism
+
