@@ -1,5 +1,17 @@
 import Image from "next/image";
 
+type Widget = {
+  label: string;
+  href: string;
+  icon: string;
+  highlight?: boolean;
+};
+
+const widgets: Widget[] = [
+  { label: "FAQ", href: "#faq", icon: "bx bx-help-circle" },
+  { label: "Contact", href: "#kontak", icon: "bx bx-envelope", highlight: true },
+];
+
 export default function Banner() {
   return (
     <section id="home" className="banner-section">
@@ -17,10 +29,26 @@ export default function Banner() {
             </h1>
 
             <p className="banner-lead">
-              Hidangan tradisional Bali berupa babi muda utuh yang diisi bumbu <em>base genep</em>,
-              lalu dipanggang sambil diputar di atas bara api hingga matang merata. Menjadi bagian
-              dari upacara adat, ritual keagamaan, hingga perayaan besar masyarakat Bali.
+              Hidangan tradisional Bali berupa babi muda utuh yang diisi bumbu{" "}
+              <em>base genep</em>, lalu dipanggang sambil diputar di atas bara
+              api hingga matang merata. Menjadi bagian dari upacara adat,
+              ritual keagamaan, hingga perayaan besar masyarakat Bali.
             </p>
+
+            <div className="banner-widgets">
+              {widgets.map((w) => (
+                <a
+                  key={w.label}
+                  href={w.href}
+                  className={
+                    "widget-btn" +
+                    (w.highlight ? " widget-highlight" : "")
+                  }
+                >
+                  <i className={w.icon}></i> {w.label}
+                </a>
+              ))}
+            </div>
           </div>
 
           <div className="col-lg-5 text-center">

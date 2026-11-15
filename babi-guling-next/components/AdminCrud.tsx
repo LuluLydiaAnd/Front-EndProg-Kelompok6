@@ -5,68 +5,132 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+type KategoriPostingan =
+  | "Promotions"
+  | "Reccomendation"
+  | "Informations"
+  | "Other";
+
 type Item = {
   id: number;
   title: string;
   description: string;
   image: string;
+  kategori?: KategoriPostingan;
 };
 
 type Props = {
   storageKey: string;
+  apiEndpoint?: string;
   title: string;
   description: string;
   titleLabel?: string;
   descriptionLabel?: string;
   imageLabel?: string;
   showImage?: boolean;
+  uploadImage?: boolean;
+  showCategory?: boolean;
 };
+
+const daftarKategori: {
+  value: KategoriPostingan;
+  label: string;
+}[] = [
+  { value: "Informations", label: "Informasi" },
+  { value: "Reccomendation", label: "Rekomendasi" },
+  { value: "Promotions", label: "Promosi" },
+  { value: "Other", label: "Lainnya" },
+];
+
+function namaKategori(kategori?: string) {
+  const hasil = daftarKategori.find(
+    (item) => item.value === kategori
+  );
+
+  return hasil?.label || "Informasi";
+}
 
 export default function AdminCrud({
   storageKey,
+  apiEndpoint,
   title,
   description,
   titleLabel = "Judul",
   descriptionLabel = "Deskripsi",
   imageLabel = "URL Gambar",
   showImage = false,
+  uploadImage = false,
+  showCategory = false,
 }: Props) {
   const router = useRouter();
-  
+
   const [items, setItems] = useState<Item[]>(() => {
-    if (typeof window === "undefined") return [];
+    if (typeof window === "undefined" || apiEndpoint) return [];
 
     try {
-        return JSON.parse(
+      return JSON.parse(
         localStorage.getItem(storageKey) || "[]"
-        ) as Item[];
+      ) as Item[];
     } catch {
-        return [];
+      return [];
     }
-    });
+  });
+
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
   const [form, setForm] = useState({
     title: "",
     description: "",
     image: "",
+    kategori: "Informations" as KategoriPostingan,
   });
 
- useEffect(() => {
-  const user = JSON.parse(
-    sessionStorage.getItem("user") || "null"
-  );
+  // Memeriksa hak akses admin
+  useEffect(() => {
+    const user = JSON.parse(
+      sessionStorage.getItem("user") || "null"
+    );
 
-  if (!user || user.role !== "admin") {
-    router.replace("/login");
-  }
-}, [router]);
+    if (!user || user.role !== "admin") {
+      router.replace("/login");
+    }
+  }, [router]);
+
+  // Mengambil data dari API
+  useEffect(() => {
+    if (!apiEndpoint) return;
+
+    async function getItems() {
+      try {
+        const response = await fetch(apiEndpoint!, {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data");
+        }
+
+        const data = await response.json();
+        setItems(data);
+      } catch (error) {
+        console.error("Gagal mengambil data:", error);
+        alert("Gagal mengambil data.");
+      }
+    }
+
+    getItems();
+  }, [apiEndpoint]);
 
   function saveItems(updated: Item[]) {
     setItems(updated);
-    localStorage.setItem(storageKey, JSON.stringify(updated));
+
+    if (!apiEndpoint) {
+      localStorage.setItem(storageKey, JSON.stringify(updated));
+    }
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const cleanTitle = form.title.trim();
@@ -74,30 +138,117 @@ export default function AdminCrud({
 
     if (!cleanTitle || !cleanDescription) return;
 
-    if (editingId !== null) {
-      saveItems(
-        items.map((item) =>
-          item.id === editingId
-            ? { ...item, ...form, title: cleanTitle, description: cleanDescription }
-            : item
-        )
-      );
-    } else {
-      const newItem: Item = {
-        id: Date.now(),
-        title: cleanTitle,
-        description: cleanDescription,
-        image: form.image.trim(),
-      };
-
-      saveItems([...items, newItem]);
+    if (uploadImage && imageFile && imageFile.size > 5 * 1024 * 1024) {
+      alert("Ukuran foto maksimal 5 MB.");
+      return;
     }
 
-    resetForm();
+    try {
+      if (apiEndpoint) {
+        let response: Response;
+
+        if (uploadImage) {
+          const formData = new FormData();
+
+          formData.append("title", cleanTitle);
+          formData.append("description", cleanDescription);
+
+          if (showCategory) {
+            formData.append("kategori", form.kategori);
+          }
+
+          if (editingId !== null) {
+            formData.append("id", String(editingId));
+          }
+
+          if (imageFile) {
+            formData.append("imageFile", imageFile);
+          }
+
+          response = await fetch(apiEndpoint, {
+            method: editingId !== null ? "PUT" : "POST",
+            body: formData,
+          });
+        } else {
+          response = await fetch(apiEndpoint, {
+            method: editingId !== null ? "PUT" : "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...(editingId !== null && { id: editingId }),
+              title: cleanTitle,
+              description: cleanDescription,
+              image: form.image.trim(),
+              ...(showCategory && { kategori: form.kategori }),
+            }),
+          });
+        }
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Gagal menyimpan data");
+        }
+
+        const savedItem: Item = await response.json();
+
+        if (editingId !== null) {
+          setItems((prev) =>
+            prev.map((item) =>
+              item.id === editingId ? savedItem : item
+            )
+          );
+        } else {
+          setItems((prev) => [savedItem, ...prev]);
+        }
+      } else {
+        if (editingId !== null) {
+          saveItems(
+            items.map((item) =>
+              item.id === editingId
+                ? {
+                    ...item,
+                    ...form,
+                    title: cleanTitle,
+                    description: cleanDescription,
+                  }
+                : item
+            )
+          );
+        } else {
+          const newItem: Item = {
+            id: Date.now(),
+            title: cleanTitle,
+            description: cleanDescription,
+            image: form.image.trim(),
+            ...(showCategory && { kategori: form.kategori }),
+          };
+
+          saveItems([...items, newItem]);
+        }
+      }
+
+      resetForm();
+    } catch (error) {
+      console.error("Gagal menyimpan data:", error);
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Gagal menyimpan data. Silakan coba lagi."
+      );
+    }
   }
 
   function resetForm() {
-    setForm({ title: "", description: "", image: "" });
+    setForm({
+      title: "",
+      description: "",
+      image: "",
+      kategori: "Informations",
+    });
+
+    setImageFile(null);
     setEditingId(null);
   }
 
@@ -105,18 +256,60 @@ export default function AdminCrud({
     setForm({
       title: item.title,
       description: item.description,
-      image: item.image,
+      image: item.image || "",
+      kategori: item.kategori || "Informations",
     });
+
+    setImageFile(null);
     setEditingId(item.id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }
 
-  function handleDelete(id: number) {
-    if (window.confirm("Yakin mau menghapus data ini?")) {
-      saveItems(items.filter((item) => item.id !== id));
-      if (editingId === id) resetForm();
+  async function handleDelete(id: number) {
+    if (!window.confirm("Yakin mau menghapus data ini?")) {
+      return;
+    }
+
+    try {
+      if (apiEndpoint) {
+        const response = await fetch(apiEndpoint, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Gagal menghapus data");
+        }
+
+        setItems((prev) =>
+          prev.filter((item) => item.id !== id)
+        );
+      } else {
+        saveItems(items.filter((item) => item.id !== id));
+      }
+
+      if (editingId === id) {
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Gagal menghapus data:", error);
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Gagal menghapus data."
+      );
     }
   }
+
   return (
     <main className="container admin-page py-5">
       <Link href="/admin" className="admin-menu-link mb-4">
@@ -136,6 +329,7 @@ export default function AdminCrud({
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">{titleLabel}</label>
+
             <input
               className="form-control"
               value={form.title}
@@ -148,6 +342,7 @@ export default function AdminCrud({
 
           <div className="mb-3">
             <label className="form-label">{descriptionLabel}</label>
+
             <textarea
               className="form-control"
               rows={4}
@@ -159,18 +354,94 @@ export default function AdminCrud({
             />
           </div>
 
+          {showCategory && (
+            <div className="mb-3">
+              <label className="form-label">
+                Kategori Postingan
+              </label>
+
+              <select
+                className="form-select"
+                value={form.kategori}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    kategori: e.target.value as KategoriPostingan,
+                  })
+                }
+                required
+              >
+                {daftarKategori.map((kategori) => (
+                  <option
+                    key={kategori.value}
+                    value={kategori.value}
+                  >
+                    {kategori.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {showImage && (
             <div className="mb-3">
               <label className="form-label">{imageLabel}</label>
-              <input
-                type="url"
-                className="form-control"
-                placeholder="https://contoh.com/gambar.jpg"
-                value={form.image}
-                onChange={(e) =>
-                  setForm({ ...form, image: e.target.value })
-                }
-              />
+
+              {uploadImage ? (
+                <>
+                  <input
+                    type="file"
+                    className="form-control"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      setImageFile(file);
+                    }}
+                  />
+
+                  <small className="text-secondary d-block mt-2">
+                    Format JPG, JPEG, PNG, atau WebP. Maksimal 5 MB.
+                  </small>
+
+                  {imageFile && (
+                    <p className="mt-2 mb-0">
+                      Foto dipilih: {imageFile.name}
+                    </p>
+                  )}
+
+                  {editingId !== null && form.image && !imageFile && (
+                    <div className="mt-3">
+                      <p>Foto saat ini:</p>
+
+                      <Image
+                        src={form.image}
+                        alt="Foto postingan saat ini"
+                        width={200}
+                        height={130}
+                        unoptimized
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+
+                      <p className="small mt-1">
+                        Pilih foto baru jika ingin menggantinya.
+                      </p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <input
+                  type="url"
+                  className="form-control"
+                  placeholder="https://contoh.com/gambar.jpg"
+                  value={form.image}
+                  onChange={(e) =>
+                    setForm({ ...form, image: e.target.value })
+                  }
+                />
+              )}
             </div>
           )}
 
@@ -207,16 +478,24 @@ export default function AdminCrud({
             <div className="col-md-6" key={item.id}>
               <div className="admin-crud-item">
                 {showImage && item.image && (
-                <div className="admin-crud-image-wrapper">
+                  <div className="admin-crud-image-wrapper">
                     <Image
-                    src={item.image}
-                    alt={item.title}
-                    width={600}
-                    height={400}
-                    className="admin-crud-image"
-                    unoptimized
+                      src={item.image}
+                      alt={item.title}
+                      width={600}
+                      height={400}
+                      className="admin-crud-image"
+                      unoptimized
                     />
-                </div>
+                  </div>
+                )}
+
+                {showCategory && (
+                  <p className="mb-2">
+                    <span className="badge bg-warning text-dark">
+                      {namaKategori(item.kategori)}
+                    </span>
+                  </p>
                 )}
 
                 <h3>{item.title}</h3>
@@ -229,6 +508,7 @@ export default function AdminCrud({
                   >
                     Edit
                   </button>
+
                   <button
                     className="btn btn-sm btn-outline-danger"
                     onClick={() => handleDelete(item.id)}
