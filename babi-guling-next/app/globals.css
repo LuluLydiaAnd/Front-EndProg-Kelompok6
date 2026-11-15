@@ -5,16 +5,30 @@
 }
 
 :root {
-  --bg-dark: #1f0b08;
-  --bg-darker: #160705;
-  --red: #a93226;
-  --red-dark: #7b241c;
-  --red-light: #e2574c;
-  --pink: #e8a598;
-  --text-light: #f6e9e2;
-  --text-muted: #c9b3aa;
-  --border: rgba(255, 255, 255, 0.1);
-  --glass: rgba(255, 255, 255, 0.06);
+  /* palet babi guling */
+  --cream: #FBF4E8;      /* nasi & kertas bungkus */
+  --cream-warm: #F3E6D0; /* background section */
+  --surface: #FFFAF2;    /* card */
+  --caramel: #B5541C;    /* kulit babi guling garing */
+  --caramel-dark: #8E3F12;
+  --heading: #3E2415;    /* cokelat kayu bakar */
+  --text: #6B4A35;
+  --text-soft: #8A6A52;
+  --kunyit: #D98E04;     /* base genep */
+  --leaf: #5E7D3A;       /* daun pisang */
+  --line: #E2CBAA;
+
+  /* nama variabel lama tetap ada biar komponen lain gak rusak */
+  --bg-dark: var(--cream);
+  --bg-darker: var(--cream-warm);
+  --red: var(--caramel);
+  --red-dark: var(--caramel-dark);
+  --red-light: var(--caramel);
+  --pink: var(--leaf);
+  --text-light: var(--text);
+  --text-muted: var(--text-soft);
+  --border: var(--line);
+  --glass: rgba(181, 84, 28, 0.08);
 }
 
 html {
@@ -28,8 +42,8 @@ body {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: var(--bg-dark);
-  color: var(--text-light);
+  background: var(--cream);
+  color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -38,6 +52,7 @@ h1,
 h2,
 h3 {
   font-family: Georgia, "Times New Roman", serif;
+  color: var(--heading);
 }
 
 .bg-brand-nav {
@@ -45,20 +60,20 @@ h3 {
   top: 0;
   z-index: 100;
   padding: 0.9rem 0;
-  background: rgba(22, 7, 5, 0.8);
+  background: rgba(251, 244, 232, 0.92);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line);
 }
 
 .bg-brand-nav .navbar-brand {
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
   font-size: 1.35rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .bg-brand-nav .navbar-brand:hover {
-  color: #fff;
+  color: var(--caramel);
 }
 
 .bg-brand-nav .navbar-nav {
@@ -68,38 +83,38 @@ h3 {
 .bg-brand-nav .navbar-nav .nav-link {
   font-size: 0.92rem;
   font-weight: 500;
-  color: var(--text-muted) !important;
+  color: var(--text) !important;
   padding: 0.45rem 1rem !important;
   border-radius: 30px;
   transition: 0.25s ease;
 }
 
 .bg-brand-nav .navbar-nav .nav-link:hover {
-  color: #fff !important;
+  color: var(--heading) !important;
   background: var(--glass);
 }
 
 .bg-brand-nav .navbar-nav .nav-link.active {
-  color: #fff !important;
+  color: var(--caramel) !important;
   font-weight: 600;
 }
 
 .bg-brand-nav .navbar-nav .nav-link.login-link {
   color: #fff !important;
   font-weight: 600;
-  background: var(--red);
+  background: var(--caramel);
   margin-left: 0.5rem;
-  box-shadow: 0 6px 18px rgba(169, 50, 38, 0.4);
+  box-shadow: 0 6px 16px rgba(181, 84, 28, 0.25);
 }
 
 .bg-brand-nav .navbar-nav .nav-link.login-link:hover {
-  background: var(--red-dark);
+  background: var(--caramel-dark);
 }
 
 .bg-brand-nav .navbar-toggler {
   border: none;
   font-size: 1.6rem;
-  color: #fff;
+  color: var(--heading);
   padding: 0.2rem 0.4rem;
 }
 
@@ -110,9 +125,9 @@ h3 {
 .banner-section {
   position: relative;
   overflow: hidden;
-  background: var(--bg-darker);
+  background: linear-gradient(180deg, var(--cream-warm) 0%, var(--cream) 100%);
   padding: 5rem 0 5.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line);
 }
 
 .banner-section::before {
@@ -123,7 +138,7 @@ h3 {
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(169, 50, 38, 0.35), transparent 70%);
+  background: radial-gradient(circle, rgba(217, 142, 4, 0.18), transparent 70%);
   pointer-events: none;
 }
 
@@ -136,7 +151,7 @@ h3 {
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--pink);
+  color: var(--leaf);
   margin-bottom: 1rem;
 }
 
@@ -144,25 +159,25 @@ h3 {
   font-size: 3rem;
   font-weight: 700;
   line-height: 1.1;
-  color: #fff;
+  color: var(--heading);
   margin-bottom: 1.3rem;
 }
 
 .banner-title em {
-  color: var(--red-light);
+  color: var(--caramel);
   font-style: italic;
 }
 
 .banner-lead {
   font-size: 0.98rem;
-  color: var(--text-muted);
+  color: var(--text);
   line-height: 1.8;
   max-width: 540px;
   margin-bottom: 1.6rem;
 }
 
 .banner-lead em {
-  color: var(--pink);
+  color: var(--caramel);
 }
 
 .banner-img {
@@ -171,8 +186,8 @@ h3 {
   height: auto;
   object-fit: cover;
   border-radius: 24px;
-  border: 1px solid var(--border);
-  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.04), 0 24px 60px rgba(169, 50, 38, 0.35);
+  border: 1px solid var(--line);
+  box-shadow: 0 0 0 8px var(--surface), 0 20px 45px rgba(62, 36, 21, 0.18);
   transform: rotate(2deg);
   transition: transform 0.5s ease;
 }
@@ -192,40 +207,41 @@ h3 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--glass);
-  color: var(--text-light);
+  background: var(--surface);
+  color: var(--heading);
   font-size: 0.86rem;
   font-weight: 600;
   padding: 0.6rem 1.2rem;
   border-radius: 30px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
   text-decoration: none;
   transition: 0.3s ease;
 }
 
 .widget-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #fff;
+  background: var(--cream-warm);
+  border-color: #D4B48A;
+  color: var(--heading);
   transform: translateY(-2px);
 }
 
 .widget-highlight {
-  background: var(--red);
-  border-color: var(--red);
+  background: var(--caramel);
+  border-color: var(--caramel);
   color: #fff;
-  box-shadow: 0 6px 18px rgba(169, 50, 38, 0.45);
+  box-shadow: 0 6px 16px rgba(181, 84, 28, 0.25);
 }
 
 .widget-highlight:hover {
-  background: var(--red-dark);
-  border-color: var(--red-dark);
+  background: var(--caramel-dark);
+  border-color: var(--caramel-dark);
+  color: #fff;
 }
 
 @media (max-width: 991.98px) {
   .bg-brand-nav .navbar-collapse {
-    background: var(--bg-darker);
-    border: 1px solid var(--border);
+    background: var(--surface);
+    border: 1px solid var(--line);
     margin-top: 0.7rem;
     padding: 0.8rem;
     border-radius: 16px;
