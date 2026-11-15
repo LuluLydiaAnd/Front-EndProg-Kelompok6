@@ -10,22 +10,21 @@ type Foto = {
   src: string;
   judul: string;
   kategori: Kategori;
-  ukuran?: "besar" | "tinggi" | "lebar";
 };
 
 const fotoList: Foto[] = [
-  { src: "/galeri/sejarah-babi-guling-1.jpeg", judul: "Pemanggangan babi di atas bara api", kategori: "proses", ukuran: "besar" },
+  { src: "/galeri/sejarah-babi-guling-1.jpeg", judul: "Pemanggangan babi di atas bara api", kategori: "proses" },
   { src: "/galeri/base-genep-final.jpg", judul: "Bumbu base genep", kategori: "proses" },
-  { src: "/galeri/lengkap1.jpg", judul: "Sajian lengkap babi guling", kategori: "sajian", ukuran: "tinggi" },
+  { src: "/galeri/lengkap1.jpg", judul: "Sajian lengkap babi guling", kategori: "sajian" },
   { src: "/galeri/upacara.jpg", judul: "Upacara adat Bali", kategori: "upacara" },
   { src: "/galeri/babipiring.jpg", judul: "Irisan babi guling di piring", kategori: "proses" },
-  { src: "/galeri/dishfull.jpg", judul: "Nasi campur babi guling", kategori: "sajian", ukuran: "lebar" },
+  { src: "/galeri/dishfull.jpg", judul: "Nasi campur babi guling", kategori: "sajian" },
   { src: "/galeri/babimatah.jpg", judul: "Babi guling dengan sambal matah", kategori: "sajian" },
   { src: "/galeri/persembahanbabi.jpg", judul: "Persembahan tradisi Ngusaba Sumbu", kategori: "upacara" },
-  { src: "/galeri/usabasumbu.jpeg", judul: "Ritual Usaba Sumbu", kategori: "upacara", ukuran: "tinggi" },
-  { src: "/galeri/anekasam.jpg", judul: "Babi guling & aneka sambal", kategori: "sajian", ukuran: "lebar" },
+  { src: "/galeri/usabasumbu.jpeg", judul: "Ritual Usaba Sumbu", kategori: "upacara" },
+  { src: "/galeri/anekasam.jpg", judul: "Babi guling & aneka sambal", kategori: "sajian" },
   { src: "/galeri/lawarkrispi.jpg", judul: "Kulit krispi, lawar, & sate", kategori: "sajian" },
-  { src: "/galeri/nascam.jpg", judul: "Nasi campur khas Bali", kategori: "sajian", ukuran: "lebar" },
+  { src: "/galeri/nascam.jpg", judul: "Nasi campur khas Bali", kategori: "sajian" },
 ];
 
 const filterList: { label: string; value: Kategori | "semua" }[] = [
@@ -96,7 +95,7 @@ export default function Gallery() {
           {fotoTampil.map((foto, i) => (
             <figure
               key={foto.src}
-              className={`${styles.item} ${foto.ukuran ? styles[foto.ukuran] : ""}`}
+              className={styles.item}
               onClick={() => setAktif(i)}
             >
               <Image

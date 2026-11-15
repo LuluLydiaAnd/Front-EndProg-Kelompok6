@@ -4,16 +4,21 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-const publicMenu = [
+type MenuItem = {
+  label: string;
+  href: string;
+};
+
+const publicMenu: MenuItem[] = [
   { label: "Home", href: "/" },
-  { label: "Galeri", href: "/galeri" },
-  { label: "FAQ", href: "/faq" },
+  { label: "Galeri", href: "/#galeri" },
+  { label: "FAQ", href: "/#faq" },
   { label: "Postingan", href: "/postingan" },
   { label: "Resto Favorit", href: "/resto" },
-  { label: "Contact", href: "/kontak" },
+  { label: "Contact", href: "/#kontak" },
 ];
 
-const adminMenu = [
+const adminMenu: MenuItem[] = [
   { label: "Dashboard", href: "/admin" },
   { label: "Kelola Galeri", href: "/admin/galeri" },
   { label: "Kelola Postingan", href: "/admin/postingan" },
@@ -58,10 +63,7 @@ export default function Navbar() {
             {menus.map((item) => (
               <li className="nav-item" key={item.href}>
                 <Link
-                  className={
-                    "nav-link" +
-                    (pathname === item.href ? " active" : "")
-                  }
+                  className={"nav-link" + (pathname === item.href ? " active" : "")}
                   href={item.href}
                   onClick={() => setOpen(false)}
                 >
@@ -72,10 +74,7 @@ export default function Navbar() {
 
             {isAdmin ? (
               <li className="nav-item ms-lg-2">
-                <button
-                  className="btn btn-outline-danger"
-                  onClick={handleLogout}
-                >
+                <button className="btn btn-outline-danger" onClick={handleLogout}>
                   Logout
                 </button>
               </li>

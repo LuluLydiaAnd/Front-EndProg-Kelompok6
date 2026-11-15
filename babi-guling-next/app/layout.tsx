@@ -8,11 +8,7 @@ export const metadata: Metadata = {
   title: "Babi Guling - Ensiklopedia & Rekomendasi Kuliner Bali",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
       <body>
