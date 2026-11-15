@@ -13,6 +13,12 @@ enum Jenis {
   resto
 }
 
+enum KategoriPostingan {
+  Reccomendation
+  Promotions
+  Lainnya
+}
+
 model Konten {
   id          Int      @id @default(autoincrement())
   jenis       Jenis
@@ -21,4 +27,5 @@ model Konten {
   image       String   @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  kategori    KategoriPostingan?
 }
