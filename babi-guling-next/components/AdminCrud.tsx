@@ -310,143 +310,152 @@ export default function AdminCrud({
     }
   }
 
+ 
   return (
-    <main className="container admin-page py-5">
-      <Link href="/admin" className="admin-menu-link mb-4">
+    <main className="admin-page admin-crud-page py-5">
+      <Link href="/admin" className="admin-menu-link admin-crud-back">
         <i className="bx bx-arrow-back"></i>
         Kembali ke Dashboard
       </Link>
 
-      <div className="admin-welcome mb-4">
-        <span className="admin-eyebrow">PENGELOLAAN WEBSITE</span>
-        <h1>{title}</h1>
-        <p>{description}</p>
+      <div className="admin-welcome admin-crud-welcome">
+        <div>
+          <span className="admin-eyebrow">PENGELOLAAN WEBSITE</span>
+          <h1>{title}</h1>
+          <p>{description}</p>
+        </div>
+        <div className="admin-crud-welcome-icon">
+          <i className={showCategory ? "bx bx-news" : "bx bx-images"}></i>
+        </div>
       </div>
 
-      <div className="admin-crud-panel mb-4">
-        <h2>{editingId !== null ? "Edit Data" : "Tambah Data"}</h2>
+      <div className="admin-crud-panel admin-crud-form">
+        <div className="admin-crud-form-heading">
+          <div>
+            <span className="admin-eyebrow">
+              {editingId !== null ? "PERBARUI INFORMASI" : "DATA BARU"}
+            </span>
+            <h2>{editingId !== null ? "Edit Data" : "Tambah Data"}</h2>
+            <p>Lengkapi informasi berikut untuk mengelola konten website.</p>
+          </div>
+          <div className="admin-crud-form-icon">
+            <i className="bx bx-edit-alt"></i>
+          </div>
+        </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">{titleLabel}</label>
-
-            <input
-              className="form-control"
-              value={form.title}
-              onChange={(e) =>
-                setForm({ ...form, title: e.target.value })
-              }
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">{descriptionLabel}</label>
-
-            <textarea
-              className="form-control"
-              rows={4}
-              value={form.description}
-              onChange={(e) =>
-                setForm({ ...form, description: e.target.value })
-              }
-              required
-            />
-          </div>
-
-          {showCategory && (
-            <div className="mb-3">
-              <label className="form-label">
-                Kategori Postingan
-              </label>
-
-              <select
-                className="form-select"
-                value={form.kategori}
+          <div className="admin-crud-fields">
+            <div className="admin-crud-field">
+              <label className="form-label">{titleLabel}</label>
+              <input
+                className="form-control"
+                placeholder={`Masukkan ${titleLabel.toLowerCase()}`}
+                value={form.title}
                 onChange={(e) =>
-                  setForm({
-                    ...form,
-                    kategori: e.target.value as KategoriPostingan,
-                  })
+                  setForm({ ...form, title: e.target.value })
                 }
                 required
-              >
-                {daftarKategori.map((kategori) => (
-                  <option
-                    key={kategori.value}
-                    value={kategori.value}
-                  >
-                    {kategori.label}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
-          )}
 
-          {showImage && (
-            <div className="mb-3">
-              <label className="form-label">{imageLabel}</label>
-
-              {uploadImage ? (
-                <>
-                  <input
-                    type="file"
-                    className="form-control"
-                    accept="image/jpeg,image/png,image/webp"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0] || null;
-                      setImageFile(file);
-                    }}
-                  />
-
-                  <small className="text-secondary d-block mt-2">
-                    Format JPG, JPEG, PNG, atau WebP. Maksimal 5 MB.
-                  </small>
-
-                  {imageFile && (
-                    <p className="mt-2 mb-0">
-                      Foto dipilih: {imageFile.name}
-                    </p>
-                  )}
-
-                  {editingId !== null && form.image && !imageFile && (
-                    <div className="mt-3">
-                      <p>Foto saat ini:</p>
-
-                      <Image
-                        src={form.image}
-                        alt="Foto postingan saat ini"
-                        width={200}
-                        height={130}
-                        unoptimized
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                      />
-
-                      <p className="small mt-1">
-                        Pilih foto baru jika ingin menggantinya.
-                      </p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <input
-                  type="url"
-                  className="form-control"
-                  placeholder="https://contoh.com/gambar.jpg"
-                  value={form.image}
+            {showCategory && (
+              <div className="admin-crud-field">
+                <label className="form-label">Kategori Postingan</label>
+                <select
+                  className="form-select"
+                  value={form.kategori}
                   onChange={(e) =>
-                    setForm({ ...form, image: e.target.value })
+                    setForm({
+                      ...form,
+                      kategori: e.target.value as KategoriPostingan,
+                    })
                   }
-                />
-              )}
-            </div>
-          )}
+                  required
+                >
+                  {daftarKategori.map((kategori) => (
+                    <option key={kategori.value} value={kategori.value}>
+                      {kategori.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-          <div className="d-flex gap-2 flex-wrap">
+            <div className="admin-crud-field admin-crud-field-wide">
+              <label className="form-label">{descriptionLabel}</label>
+              <textarea
+                className="form-control"
+                rows={4}
+                placeholder={`Masukkan ${descriptionLabel.toLowerCase()}`}
+                value={form.description}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
+                required
+              />
+            </div>
+
+            {showImage && (
+              <div className="admin-crud-field admin-crud-field-wide">
+                <label className="form-label">{imageLabel}</label>
+
+                {uploadImage ? (
+                  <div className="admin-crud-upload">
+                    <input
+                      type="file"
+                      className="form-control"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] || null;
+                        setImageFile(file);
+                      }}
+                    />
+
+                    <small className="text-secondary d-block mt-2">
+                      Format JPG, JPEG, PNG, atau WebP. Maksimal 5 MB.
+                    </small>
+
+                    {imageFile && (
+                      <p className="admin-crud-file-name">
+                        <i className="bx bx-image"></i>
+                        {imageFile.name}
+                      </p>
+                    )}
+
+                    {editingId !== null && form.image && !imageFile && (
+                      <div className="admin-crud-current-image">
+                        <Image
+                          src={form.image}
+                          alt="Foto saat ini"
+                          width={200}
+                          height={130}
+                          unoptimized
+                        />
+                        <div>
+                          <strong>Foto saat ini</strong>
+                          <small>Pilih foto baru jika ingin menggantinya.</small>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <input
+                    type="url"
+                    className="form-control"
+                    placeholder="https://contoh.com/gambar.jpg"
+                    value={form.image}
+                    onChange={(e) =>
+                      setForm({ ...form, image: e.target.value })
+                    }
+                  />
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="admin-crud-form-actions">
             <button className="btn btn-danger" type="submit">
+              <i className="bx bx-save"></i>
               {editingId !== null ? "Simpan Perubahan" : "Tambah Data"}
             </button>
 
@@ -463,59 +472,64 @@ export default function AdminCrud({
         </form>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="admin-section-title mb-0">Daftar Data</h2>
+      <div className="admin-crud-list-heading">
+        <div>
+          <span className="admin-eyebrow">KONTEN WEBSITE</span>
+          <h2 className="admin-section-title">Daftar Data</h2>
+        </div>
         <span className="admin-count">{items.length} data</span>
       </div>
 
       {items.length === 0 ? (
-        <div className="admin-empty">
-          Belum ada data. Gunakan form di atas untuk menambahkan data.
+        <div className="admin-empty admin-crud-empty">
+          <i className="bx bx-folder-open"></i>
+          <h3>Belum Ada Data</h3>
+          <p>Gunakan form di atas untuk menambahkan data baru.</p>
         </div>
       ) : (
-        <div className="row g-3">
+        <div className="admin-crud-grid">
           {items.map((item) => (
-            <div className="col-md-6" key={item.id}>
-              <div className="admin-crud-item">
-                {showImage && item.image && (
-                  <div className="admin-crud-image-wrapper">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      width={600}
-                      height={400}
-                      className="admin-crud-image"
-                      unoptimized
-                    />
-                  </div>
-                )}
+            <div className="admin-crud-item admin-crud-card" key={item.id}>
+              {showImage && item.image && (
+                <div className="admin-crud-image-wrapper">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    width={600}
+                    height={400}
+                    className="admin-crud-image"
+                    unoptimized
+                  />
+                </div>
+              )}
 
+              <div className="admin-crud-card-content">
                 {showCategory && (
-                  <p className="mb-2">
-                    <span className="badge bg-warning text-dark">
-                      {namaKategori(item.kategori)}
-                    </span>
-                  </p>
+                  <span className="badge bg-warning text-dark admin-crud-category">
+                    {namaKategori(item.kategori)}
+                  </span>
                 )}
 
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
+              </div>
 
-                <div className="d-flex gap-2">
-                  <button
-                    className="btn btn-sm btn-outline-light"
-                    onClick={() => handleEdit(item)}
-                  >
-                    Edit
-                  </button>
+              <div className="admin-crud-card-actions">
+                <button
+                  className="btn btn-sm btn-outline-light"
+                  onClick={() => handleEdit(item)}
+                >
+                  <i className="bx bx-edit-alt"></i>
+                  Edit
+                </button>
 
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    Hapus
-                  </button>
-                </div>
+                <button
+                  className="btn btn-sm btn-outline-danger"
+                  onClick={() => handleDelete(item.id)}
+                >
+                  <i className="bx bx-trash"></i>
+                  Hapus
+                </button>
               </div>
             </div>
           ))}

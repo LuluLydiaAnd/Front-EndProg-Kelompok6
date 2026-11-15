@@ -11,11 +11,9 @@ type MenuItem = {
 
 const publicMenu: MenuItem[] = [
   { label: "Home", href: "/" },
-  { label: "Galeri", href: "/#galeri" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "Galeri", href: "/galeri" },
   { label: "Postingan", href: "/postingan" },
   { label: "Resto Favorit", href: "/resto" },
-  { label: "Contact", href: "/#kontak" },
 ];
 
 const adminMenu: MenuItem[] = [

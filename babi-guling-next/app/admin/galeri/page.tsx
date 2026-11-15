@@ -1,4 +1,4 @@
-import AdminCrud from "@/components/AdminCRUD";
+import AdminCrud from "@/components/AdminCrud";
 
 export default function KelolaGaleriPage() {
   return (
