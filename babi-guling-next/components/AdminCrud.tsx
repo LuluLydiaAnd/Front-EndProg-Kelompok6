@@ -6,11 +6,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+type KategoriPostingan =
+  | "Promotions"
+  | "Reccomendation"
+  | "Informations"
+  | "Other";
+
 type Item = {
   id: number;
   title: string;
   description: string;
   image: string;
+  kategori?: KategoriPostingan;
 };
 
 type Props = {
@@ -23,7 +30,26 @@ type Props = {
   imageLabel?: string;
   showImage?: boolean;
   uploadImage?: boolean;
+  showCategory?: boolean;
 };
+
+const daftarKategori: {
+  value: KategoriPostingan;
+  label: string;
+}[] = [
+  { value: "Informations", label: "Informasi" },
+  { value: "Reccomendation", label: "Rekomendasi" },
+  { value: "Promotions", label: "Promosi" },
+  { value: "Other", label: "Lainnya" },
+];
+
+function namaKategori(kategori?: string) {
+  const hasil = daftarKategori.find(
+    (item) => item.value === kategori
+  );
+
+  return hasil?.label || "Informasi";
+}
 
 export default function AdminCrud({
   storageKey,
@@ -35,6 +61,7 @@ export default function AdminCrud({
   imageLabel = "URL Gambar",
   showImage = false,
   uploadImage = false,
+  showCategory = false,
 }: Props) {
   const router = useRouter();
 
@@ -57,6 +84,7 @@ export default function AdminCrud({
     title: "",
     description: "",
     image: "",
+    kategori: "Informations" as KategoriPostingan,
   });
 
   // Memeriksa hak akses admin
@@ -70,13 +98,15 @@ export default function AdminCrud({
     }
   }, [router]);
 
-
+  // Mengambil data dari API
   useEffect(() => {
     if (!apiEndpoint) return;
 
     async function getItems() {
       try {
-        const response = await fetch(apiEndpoint!);
+        const response = await fetch(apiEndpoint!, {
+          cache: "no-store",
+        });
 
         if (!response.ok) {
           throw new Error("Gagal mengambil data");
@@ -124,6 +154,10 @@ export default function AdminCrud({
           formData.append("title", cleanTitle);
           formData.append("description", cleanDescription);
 
+          if (showCategory) {
+            formData.append("kategori", form.kategori);
+          }
+
           if (editingId !== null) {
             formData.append("id", String(editingId));
           }
@@ -147,6 +181,7 @@ export default function AdminCrud({
               title: cleanTitle,
               description: cleanDescription,
               image: form.image.trim(),
+              ...(showCategory && { kategori: form.kategori }),
             }),
           });
         }
@@ -187,6 +222,7 @@ export default function AdminCrud({
             title: cleanTitle,
             description: cleanDescription,
             image: form.image.trim(),
+            ...(showCategory && { kategori: form.kategori }),
           };
 
           saveItems([...items, newItem]);
@@ -205,24 +241,24 @@ export default function AdminCrud({
     }
   }
 
-
   function resetForm() {
     setForm({
       title: "",
       description: "",
       image: "",
+      kategori: "Informations",
     });
 
     setImageFile(null);
     setEditingId(null);
   }
 
-
   function handleEdit(item: Item) {
     setForm({
       title: item.title,
       description: item.description,
-      image: item.image,
+      image: item.image || "",
+      kategori: item.kategori || "Informations",
     });
 
     setImageFile(null);
@@ -233,7 +269,6 @@ export default function AdminCrud({
       behavior: "smooth",
     });
   }
-
 
   async function handleDelete(id: number) {
     if (!window.confirm("Yakin mau menghapus data ini?")) {
@@ -320,6 +355,35 @@ export default function AdminCrud({
             />
           </div>
 
+          {showCategory && (
+            <div className="mb-3">
+              <label className="form-label">
+                Kategori Postingan
+              </label>
+
+              <select
+                className="form-select"
+                value={form.kategori}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    kategori: e.target.value as KategoriPostingan,
+                  })
+                }
+                required
+              >
+                {daftarKategori.map((kategori) => (
+                  <option
+                    key={kategori.value}
+                    value={kategori.value}
+                  >
+                    {kategori.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {showImage && (
             <div className="mb-3">
               <label className="form-label">{imageLabel}</label>
@@ -349,6 +413,7 @@ export default function AdminCrud({
                   {editingId !== null && form.image && !imageFile && (
                     <div className="mt-3">
                       <p>Foto saat ini:</p>
+
                       <Image
                         src={form.image}
                         alt="Foto postingan saat ini"
@@ -360,6 +425,7 @@ export default function AdminCrud({
                           borderRadius: "8px",
                         }}
                       />
+
                       <p className="small mt-1">
                         Pilih foto baru jika ingin menggantinya.
                       </p>
@@ -423,6 +489,14 @@ export default function AdminCrud({
                       unoptimized
                     />
                   </div>
+                )}
+
+                {showCategory && (
+                  <p className="mb-2">
+                    <span className="badge bg-warning text-dark">
+                      {namaKategori(item.kategori)}
+                    </span>
+                  </p>
                 )}
 
                 <h3>{item.title}</h3>

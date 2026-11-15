@@ -7,11 +7,12 @@ export default function KelolaPostinganPage() {
       apiEndpoint="/api/konten"
       title="Kelola Postingan"
       description="Kelola artikel dan informasi kuliner Bali."
-      titleLabel="Judul Artikel"
-      descriptionLabel="Isi Artikel"
+      titleLabel="Judul Postingan"
+      descriptionLabel="Isi Postingan"
       showImage={true}
       uploadImage={true}
       imageLabel="Foto Postingan"
+      showCategory={true}
     />
   );
 }

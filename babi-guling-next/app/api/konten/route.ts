@@ -1,9 +1,9 @@
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { mkdir, writeFile, unlink } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
-
 
 const UPLOAD_DIR = path.join(
   process.cwd(),
@@ -19,6 +19,21 @@ const ALLOWED_TYPES: Record<string, string> = {
   "image/png": ".png",
   "image/webp": ".webp",
 };
+
+const daftarKategori = [
+  "Promotions",
+  "Reccomendation",
+  "Informations",
+  "Other",
+] as const;
+
+type KategoriPostingan = (typeof daftarKategori)[number];
+
+function validasiKategori(
+  kategori: string
+): kategori is KategoriPostingan {
+  return daftarKategori.includes(kategori as KategoriPostingan);
+}
 
 // Menyimpan foto ke folder uploads
 async function uploadFoto(file: File): Promise<string> {
@@ -96,6 +111,7 @@ export async function POST(request: Request) {
 
     const title = formData.get("title");
     const description = formData.get("description");
+    const kategoriForm = formData.get("kategori");
     const imageFile = formData.get("imageFile");
 
     if (
@@ -110,6 +126,23 @@ export async function POST(request: Request) {
       );
     }
 
+    // Jika kategori belum dikirim, gunakan Informasi sebagai default
+    let kategori: KategoriPostingan = "Informations";
+
+    if (kategoriForm !== null) {
+      if (
+        typeof kategoriForm !== "string" ||
+        !validasiKategori(kategoriForm)
+      ) {
+        return NextResponse.json(
+          { message: "Kategori postingan tidak valid" },
+          { status: 400 }
+        );
+      }
+
+      kategori = kategoriForm;
+    }
+
     if (imageFile && typeof imageFile !== "string") {
       uploadedImage = await uploadFoto(imageFile);
     }
@@ -119,6 +152,7 @@ export async function POST(request: Request) {
         jenis: "postingan",
         title: title.trim(),
         description: description.trim(),
+        kategori,
         image: uploadedImage,
       },
     });
@@ -153,6 +187,7 @@ export async function PUT(request: Request) {
     const id = Number(formData.get("id"));
     const title = formData.get("title");
     const description = formData.get("description");
+    const kategoriForm = formData.get("kategori");
     const imageFile = formData.get("imageFile");
 
     if (
@@ -183,6 +218,23 @@ export async function PUT(request: Request) {
       );
     }
 
+    // Jika kategori tidak dikirim, pertahankan kategori sebelumnya
+    let kategori: KategoriPostingan = existingPost.kategori;
+
+    if (kategoriForm !== null) {
+      if (
+        typeof kategoriForm !== "string" ||
+        !validasiKategori(kategoriForm)
+      ) {
+        return NextResponse.json(
+          { message: "Kategori postingan tidak valid" },
+          { status: 400 }
+        );
+      }
+
+      kategori = kategoriForm;
+    }
+
     // Jika admin memilih foto baru
     if (imageFile && typeof imageFile !== "string") {
       uploadedImage = await uploadFoto(imageFile);
@@ -195,6 +247,7 @@ export async function PUT(request: Request) {
       data: {
         title: title.trim(),
         description: description.trim(),
+        kategori,
         // Jika tidak ada foto baru, gunakan foto lama
         image: uploadedImage || existingPost.image,
       },

@@ -1,14 +1,22 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./ArtikelInfo.module.css";
 
+type KategoriPostingan =
+  | "Promotions"
+  | "Recommendation"
+  | "Informations"
+  | "Other";
+
 type Postingan = {
   id: number;
   title: string;
   description: string;
   image: string;
+  kategori: KategoriPostingan;
   createdAt: string;
 };
 
@@ -50,17 +58,29 @@ export default function ArtikelInfo() {
     });
   }
 
+  function formatKategori(kategori: KategoriPostingan) {
+    const namaKategori: Record<KategoriPostingan, string> = {
+      Promotions: "Promosi",
+      Recommendation: "Rekomendasi",
+      Informations: "Informasi",
+      Other: "Lainnya",
+    };
+
+    return namaKategori[kategori] || "Lainnya";
+  }
+
   return (
     <section id="postingan" className={styles.artikelSection}>
       <div className="container">
         <div className={styles.sectionHeader}>
           <p className={styles.eyebrow}>Kabar dan Cerita Kami</p>
+
           <h2 className={styles.sectionTitle}>
-            Artikel <em>& Info</em>
+            Jelajah Rasa<em> & Kuliner Bali</em>
           </h2>
 
           <p className={styles.sectionDescription}>
-            Temukan informasi, rekomendasi, dan berbagai kabar terbaru 
+            Temukan informasi, rekomendasi, dan berbagai kabar terbaru
             seputar kuliner khas Bali.
           </p>
         </div>
@@ -100,10 +120,16 @@ export default function ArtikelInfo() {
                 </div>
 
                 <div className={styles.articleContent}>
-                  <p className={styles.articleDate}>
-                    <i className="bx bx-calendar"></i>
-                    {formatTanggal(post.createdAt)}
-                  </p>
+                  <div className={styles.articleMeta}>
+                    <span className={styles.articleCategory}>
+                      {formatKategori(post.kategori)}
+                    </span>
+
+                    <p className={styles.articleDate}>
+                      <i className="bx bx-calendar"></i>
+                      {formatTanggal(post.createdAt)}
+                    </p>
+                  </div>
 
                   <h3 className={styles.articleTitle}>
                     {post.title}

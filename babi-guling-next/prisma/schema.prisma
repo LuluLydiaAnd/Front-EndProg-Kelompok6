@@ -1,11 +1,3 @@
-enerator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../lib/generated/prisma"
@@ -22,9 +14,10 @@ enum Jenis {
 }
 
 enum KategoriPostingan {
-  Reccomendation
   Promotions
-  Lainnya
+  Reccomendation
+  Informations
+  Other
 }
 
 model Konten {
@@ -33,6 +26,7 @@ model Konten {
   title       String
   description String
   image       String   @default("")
+  kategori    KategoriPostingan @default(Informations)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -72,5 +66,4 @@ model Komentar {
   createdAt  DateTime @default(now())
 
   @@index([restoranId])
-}
 }
