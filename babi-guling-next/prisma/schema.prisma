@@ -42,3 +42,26 @@ enum Role {
   USER
   ADMIN
 }
+
+model Restoran {
+  id         Int        @id @default(autoincrement())
+  nama       String
+  alamat     String
+  deskripsi  String     @default("")
+  rating     Float      @default(4.5)
+  likesCount Int        @default(0)
+  komentar   Komentar[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Komentar {
+  id         Int      @id @default(autoincrement())
+  namaUser   String
+  isi        String
+  restoranId Int
+  restoran   Restoran @relation(fields: [restoranId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@index([restoranId])
+}
