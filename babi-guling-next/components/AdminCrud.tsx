@@ -32,6 +32,8 @@ type Props = {
   showCategory?: boolean;
 };
 
+type PopupType = "success" | "delete" | "error" | "confirm";
+
 const daftarKategori: {
   value: KategoriPostingan;
   label: string;
@@ -79,6 +81,18 @@ export default function AdminCrud({
   const [editingId, setEditingId] = useState<number | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
+  const [popup, setPopup] = useState<{
+    show: boolean;
+    message: string;
+    type: PopupType;
+  }>({
+    show: false,
+    message: "",
+    type: "success",
+  });
+
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -108,14 +122,22 @@ export default function AdminCrud({
         });
 
         if (!response.ok) {
-          throw new Error("Gagal mengambil data");
+          throw new Error("Gagal mengambil data.");
         }
 
         const data = await response.json();
         setItems(data);
       } catch (error) {
         console.error("Gagal mengambil data:", error);
-        alert("Gagal mengambil data.");
+
+        setPopup({
+          show: true,
+          message:
+            error instanceof Error
+              ? error.message
+              : "Gagal mengambil data.",
+          type: "error",
+        });
       }
     }
 
@@ -139,7 +161,11 @@ export default function AdminCrud({
     if (!cleanTitle || !cleanDescription) return;
 
     if (uploadImage && imageFile && imageFile.size > 5 * 1024 * 1024) {
-      alert("Ukuran foto maksimal 5 MB.");
+      setPopup({
+        show: true,
+        message: "Ukuran foto maksimal 5 MB.",
+        type: "error",
+      });
       return;
     }
 
@@ -186,8 +212,16 @@ export default function AdminCrud({
         }
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Gagal menyimpan data");
+          let errorMessage = "Gagal menyimpan data. Silakan coba lagi.";
+
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorMessage;
+          } catch {
+            // Gunakan pesan default jika respons bukan JSON.
+          }
+
+          throw new Error(errorMessage);
         }
 
         const savedItem: Item = await response.json();
@@ -228,15 +262,27 @@ export default function AdminCrud({
         }
       }
 
+      setPopup({
+        show: true,
+        message:
+          editingId !== null
+            ? "Data berhasil diperbarui!"
+            : "Data berhasil ditambahkan!",
+        type: "success",
+      });
+
       resetForm();
     } catch (error) {
       console.error("Gagal menyimpan data:", error);
 
-      alert(
-        error instanceof Error
-          ? error.message
-          : "Gagal menyimpan data. Silakan coba lagi."
-      );
+      setPopup({
+        show: true,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Gagal menyimpan data. Silakan coba lagi.",
+        type: "error",
+      });
     }
   }
 
@@ -269,10 +315,22 @@ export default function AdminCrud({
     });
   }
 
-  async function handleDelete(id: number) {
-    if (!window.confirm("Yakin mau menghapus data ini?")) {
-      return;
-    }
+  // Menampilkan popup konfirmasi sebelum menghapus
+  function handleDelete(id: number) {
+    setDeleteTarget(id);
+
+    setPopup({
+      show: true,
+      message: "Yakin mau menghapus data ini?",
+      type: "confirm",
+    });
+  }
+
+  // Menghapus data setelah pengguna menekan tombol Hapus
+  async function confirmDelete() {
+    if (deleteTarget === null) return;
+
+    const id = deleteTarget;
 
     try {
       if (apiEndpoint) {
@@ -285,13 +343,19 @@ export default function AdminCrud({
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Gagal menghapus data");
+          let errorMessage = "Gagal menghapus data.";
+
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorMessage;
+          } catch {
+            // Gunakan pesan default jika respons bukan JSON.
+          }
+
+          throw new Error(errorMessage);
         }
 
-        setItems((prev) =>
-          prev.filter((item) => item.id !== id)
-        );
+        setItems((prev) => prev.filter((item) => item.id !== id));
       } else {
         saveItems(items.filter((item) => item.id !== id));
       }
@@ -299,18 +363,40 @@ export default function AdminCrud({
       if (editingId === id) {
         resetForm();
       }
+
+      setDeleteTarget(null);
+
+      setPopup({
+        show: true,
+        message: "Data berhasil dihapus!",
+        type: "delete",
+      });
     } catch (error) {
       console.error("Gagal menghapus data:", error);
 
-      alert(
-        error instanceof Error
-          ? error.message
-          : "Gagal menghapus data."
-      );
+      setDeleteTarget(null);
+
+      setPopup({
+        show: true,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Gagal menghapus data.",
+        type: "error",
+      });
     }
   }
 
- 
+  function closePopup() {
+    setPopup({
+      show: false,
+      message: "",
+      type: "success",
+    });
+
+    setDeleteTarget(null);
+  }
+
   return (
     <main className="admin-page admin-crud-page py-5">
       <Link href="/admin" className="admin-menu-link admin-crud-back">
@@ -324,6 +410,7 @@ export default function AdminCrud({
           <h1>{title}</h1>
           <p>{description}</p>
         </div>
+
         <div className="admin-crud-welcome-icon">
           <i className={showCategory ? "bx bx-news" : "bx bx-images"}></i>
         </div>
@@ -338,6 +425,7 @@ export default function AdminCrud({
             <h2>{editingId !== null ? "Edit Data" : "Tambah Data"}</h2>
             <p>Lengkapi informasi berikut untuk mengelola konten website.</p>
           </div>
+
           <div className="admin-crud-form-icon">
             <i className="bx bx-edit-alt"></i>
           </div>
@@ -431,6 +519,7 @@ export default function AdminCrud({
                           height={130}
                           unoptimized
                         />
+
                         <div>
                           <strong>Foto saat ini</strong>
                           <small>Pilih foto baru jika ingin menggantinya.</small>
@@ -477,6 +566,7 @@ export default function AdminCrud({
           <span className="admin-eyebrow">KONTEN WEBSITE</span>
           <h2 className="admin-section-title">Daftar Data</h2>
         </div>
+
         <span className="admin-count">{items.length} data</span>
       </div>
 
@@ -533,6 +623,60 @@ export default function AdminCrud({
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Popup custom untuk berhasil, gagal, dan konfirmasi hapus */}
+      {popup.show && (
+        <div className="admin-popup-overlay">
+          <div
+            className={`admin-popup ${
+              popup.type === "success" ? "success" : "delete"
+            }`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="admin-popup-title"
+          >
+            <div className="admin-popup-icon">
+              <i
+                className={`bx ${
+                  popup.type === "confirm"
+                    ? "bx-help-circle"
+                    : popup.type === "error"
+                      ? "bx-error-circle"
+                      : "bx-check"
+                }`}
+              ></i>
+            </div>
+
+            <h3 id="admin-popup-title">
+              {popup.type === "confirm"
+                ? "Hapus Data?"
+                : popup.type === "error"
+                  ? "Gagal!"
+                  : popup.type === "delete"
+                    ? "Terhapus!"
+                    : "Berhasil!"}
+            </h3>
+
+            <p>{popup.message}</p>
+
+            {popup.type === "confirm" ? (
+              <div className="admin-popup-actions">
+                <button type="button" onClick={closePopup}>
+                  Batal
+                </button>
+
+                <button type="button" onClick={confirmDelete}>
+                  Hapus
+                </button>
+              </div>
+            ) : (
+              <button type="button" onClick={closePopup}>
+                OK
+              </button>
+            )}
+          </div>
         </div>
       )}
     </main>

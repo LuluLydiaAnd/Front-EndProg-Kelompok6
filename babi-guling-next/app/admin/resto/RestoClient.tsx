@@ -17,6 +17,8 @@ type Restoran = {
   likesCount: number;
 };
 
+type PopupType = "success" | "delete" | "error" | "confirm";
+
 export default function RestoClient({
   restoranList,
 }: {
@@ -26,23 +28,68 @@ export default function RestoClient({
   const [form, setForm] = useState({ nama: "", alamat: "" });
   const [isPending, startTransition] = useTransition();
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  const [popup, setPopup] = useState<{
+    show: boolean;
+    message: string;
+    type: PopupType;
+  }>({
+    show: false,
+    message: "",
+    type: "success",
+  });
 
-    startTransition(async () => {
-      if (editingId !== null) {
-        await updateRestoran(editingId, form.nama, form.alamat);
-      } else {
-        await tambahRestoran(form.nama, form.alamat);
-      }
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
-      resetForm();
+  function showPopup(message: string, type: PopupType) {
+    setPopup({ show: true, message, type });
+  }
+
+  function closePopup() {
+    setPopup({
+      show: false,
+      message: "",
+      type: "success",
     });
+    setDeleteTarget(null);
   }
 
   function resetForm() {
     setForm({ nama: "", alamat: "" });
     setEditingId(null);
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const nama = form.nama.trim();
+    const alamat = form.alamat.trim();
+
+    if (!nama || !alamat) {
+      showPopup("Nama dan alamat restoran wajib diisi.", "error");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        if (editingId !== null) {
+          await updateRestoran(editingId, nama, alamat);
+          showPopup("Data restoran berhasil diperbarui!", "success");
+        } else {
+          await tambahRestoran(nama, alamat);
+          showPopup("Data restoran berhasil ditambahkan!", "success");
+        }
+
+        resetForm();
+      } catch (error) {
+        console.error("Gagal menyimpan restoran:", error);
+        showPopup(
+          error instanceof Error
+            ? error.message
+            : "Gagal menyimpan data restoran.",
+          "error"
+        );
+      }
+    });
   }
 
   function handleEdit(resto: Restoran) {
@@ -60,11 +107,37 @@ export default function RestoClient({
   }
 
   function handleDelete(id: number) {
-    if (window.confirm("Yakin mau menghapus restoran ini?")) {
-      startTransition(async () => {
+    setDeleteTarget(id);
+    showPopup("Yakin mau menghapus restoran ini?", "confirm");
+  }
+
+  function confirmDelete() {
+    if (deleteTarget === null) return;
+
+    const id = deleteTarget;
+
+    startTransition(async () => {
+      try {
         await hapusRestoran(id);
-      });
-    }
+
+        if (editingId === id) {
+          resetForm();
+        }
+
+        setDeleteTarget(null);
+        showPopup("Restoran berhasil dihapus!", "delete");
+      } catch (error) {
+        console.error("Gagal menghapus restoran:", error);
+
+        setDeleteTarget(null);
+        showPopup(
+          error instanceof Error
+            ? error.message
+            : "Gagal menghapus restoran.",
+          "error"
+        );
+      }
+    });
   }
 
   return (
@@ -238,6 +311,68 @@ export default function RestoClient({
           </div>
         )}
       </section>
+
+      {/* Popup custom */}
+      {popup.show && (
+        <div className="admin-popup-overlay">
+          <div
+            className={`admin-popup ${
+              popup.type === "success" ? "success" : "delete"
+            }`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="resto-popup-title"
+          >
+            <div className="admin-popup-icon">
+              <i
+                className={`bx ${
+                  popup.type === "confirm"
+                    ? "bx-help-circle"
+                    : popup.type === "error"
+                      ? "bx-error-circle"
+                      : "bx-check"
+                }`}
+              ></i>
+            </div>
+
+            <h3 id="resto-popup-title">
+              {popup.type === "confirm"
+                ? "Hapus Restoran?"
+                : popup.type === "error"
+                  ? "Gagal!"
+                  : popup.type === "delete"
+                    ? "Terhapus!"
+                    : "Berhasil!"}
+            </h3>
+
+            <p>{popup.message}</p>
+
+            {popup.type === "confirm" ? (
+              <div className="admin-popup-actions">
+                <button
+                  type="button"
+                  onClick={closePopup}
+                  disabled={isPending}
+                >
+                  Batal
+                </button>
+
+                <button
+                  type="button"
+                  onClick={confirmDelete}
+                  disabled={isPending}
+                >
+                  {isPending ? "Memproses..." : "Hapus"}
+                </button>
+              </div>
+            ) : (
+              <button type="button" onClick={closePopup}>
+                OK
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
