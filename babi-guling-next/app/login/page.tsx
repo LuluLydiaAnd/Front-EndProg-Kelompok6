@@ -9,49 +9,42 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
 
-    if (
-      email === "admin@babiguling.com" &&
-      password === "admin123"
-    ) {
+    if (email === "admin@babiguling.com" && password === "admin123") {
       sessionStorage.setItem(
         "user",
-        JSON.stringify({
-          name: "Admin",
-          email,
-          role: "admin",
-        })
+        JSON.stringify({ name: "Admin", email, role: "admin" })
       );
-
       router.push("/admin");
       return;
     }
 
-    const accounts = JSON.parse(
-      localStorage.getItem("accounts") || "[]"
-    );
+    setLoading(true);
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const account = accounts.find(
-      (item: { email: string; password: string }) =>
-        item.email === email && item.password === password
-    );
+      const data = await res.json();
 
-    if (account) {
-      sessionStorage.setItem(
-        "user",
-        JSON.stringify({
-          name: account.name,
-          email: account.email,
-          role: "user",
-        })
-      );
+      if (!res.ok) {
+        setError(data.error);
+        return;
+      }
 
-      router.push("/");
-    } else {
-      setError("Email atau password salah.");
+      sessionStorage.setItem("user", JSON.stringify(data));
+      router.push(data.role === "admin" ? "/admin" : "/user/dashboard");
+    } catch {
+      setError("Terjadi kesalahan, coba lagi.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -88,12 +81,10 @@ export default function LoginPage() {
                 />
               </div>
 
-              {error && (
-                <p className="text-danger">{error}</p>
-              )}
+              {error && <p className="text-danger">{error}</p>}
 
-              <button className="btn btn-danger w-100">
-                Login
+              <button className="btn btn-danger w-100" disabled={loading}>
+                {loading ? "Memproses..." : "Login"}
               </button>
             </form>
 
@@ -101,14 +92,6 @@ export default function LoginPage() {
               Belum punya akun?{" "}
               <Link href="/register">Daftar</Link>
             </p>
-
-            <hr />
-
-            <small className="text-muted">
-              Demo admin: admin@babiguling.com
-              <br />
-              Password: admin123
-            </small>
           </div>
         </div>
       </div>
