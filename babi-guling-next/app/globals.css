@@ -713,17 +713,16 @@ body {
   margin-bottom: 0;
 }
 
-
 /* Form pengelolaan admin */
 .admin-crud-panel {
   padding: 1.8rem;
-  border: 1px solid var(--border);
+  border: 1px solid #E2CBAA;
   border-radius: 18px;
-  background: #2a100c;
+  background: #FFFAF2;
 }
 
 .admin-crud-panel h2 {
-  color: #fff;
+  color: #3E2415;
   font-family: inherit;
   font-size: 1.35rem;
   font-weight: 700;
@@ -731,69 +730,40 @@ body {
 }
 
 .admin-crud-panel .form-label {
-  color: var(--text-light);
+  color: #6B4A35;
   font-weight: 600;
 }
 
 .admin-crud-panel .form-control {
-  background: #1f0b08;
-  color: #fff;
-  border: 1px solid #684038;
+  background: #FFFFFF;
+  color: #3E2415;
+  border: 1px solid #E2CBAA;
+  border-radius: 10px;
   padding: 0.75rem;
 }
 
 .admin-crud-panel .form-control:focus {
-  background: #1f0b08;
-  color: #fff;
-  border-color: var(--red-light);
-  box-shadow: 0 0 0 3px rgba(226, 87, 76, 0.15);
+  background: #FFFFFF;
+  color: #3E2415;
+  border-color: #B5541C;
+  box-shadow: 0 0 0 3px rgba(181, 84, 28, 0.15);
 }
 
 .admin-crud-panel .form-control::placeholder {
-  color: var(--text-muted);
+  color: #8A6A52;
 }
 
 .admin-count {
-  color: var(--pink);
+  color: #5E7D3A;
   font-size: 0.9rem;
 }
 
 .admin-empty {
   padding: 2rem;
   text-align: center;
-  border: 1px dashed #684038;
+  border: 1px dashed #E2CBAA;
   border-radius: 16px;
-  color: var(--text-muted);
-}
-
-.admin-crud-item {
-  height: 100%;
-  padding: 1.4rem;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: #2d1915;
-  overflow-wrap: anywhere;
-}
-
-.admin-crud-item h3 {
-  color: #fff;
-  font-family: inherit;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 0.7rem;
-}
-
-.admin-crud-item p {
-  color: var(--text-muted);
-  white-space: pre-wrap;
-}
-
-.admin-crud-image {
-  width: 100%;
-  max-height: 220px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 1rem;
+  color: #8A6A52;
 }
 
 @media (max-width: 575.98px) {
@@ -809,3 +779,62 @@ body {
   background: #FBF4E8;
 }
 
+/* Kartu daftar data admin */
+.admin-crud-item {
+  height: 100%;
+  padding: 1.5rem;
+  border: 1px solid #E2CBAA;
+  border-radius: 18px;
+  background: #FFFAF2;
+  color: #6B4A35;
+  box-shadow: 0 4px 14px rgba(62, 36, 21, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-crud-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(62, 36, 21, 0.09);
+}
+
+.admin-crud-item h3 {
+  color: #3E2415;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.admin-crud-item p {
+  color: #8A6A52;
+  line-height: 1.6;
+}
+
+.admin-crud-item .btn-outline-light {
+  color: #8E3F12;
+  border-color: #B5541C;
+}
+
+.admin-crud-item .btn-outline-light:hover {
+  color: #FFFFFF;
+  background: #B5541C;
+}
+
+/* Tombol form admin */
+.admin-crud-panel .btn-danger {
+  background: #B5541C;
+  border-color: #B5541C;
+}
+
+.admin-crud-panel .btn-danger:hover {
+  background: #8E3F12;
+  border-color: #8E3F12;
+}
+
+.admin-crud-panel .btn-outline-light {
+  color: #8E3F12;
+  border-color: #B5541C;
+}
+
+.admin-crud-panel .btn-outline-light:hover {
+  color: #FFFFFF;
+  background: #B5541C;
+}

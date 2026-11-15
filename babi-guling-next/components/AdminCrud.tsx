@@ -311,7 +311,7 @@ export default function AdminCrud({
   }
 
   return (
-    <main className="container admin-page py-5">
+    <main className="admin-page py-5">
       <Link href="/admin" className="admin-menu-link mb-4">
         <i className="bx bx-arrow-back"></i>
         Kembali ke Dashboard
