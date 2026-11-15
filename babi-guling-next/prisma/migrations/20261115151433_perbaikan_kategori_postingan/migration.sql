@@ -1,33 +1,40 @@
-UPDATE "Konten"
-SET "kategori" = 'Other'
-WHERE "kategori"::text = 'Lainnya';
-
-UPDATE "Konten"
-SET "kategori" = 'Informations'
-WHERE "kategori" IS NULL;
-
 -- AlterEnum
 BEGIN;
 
 CREATE TYPE "KategoriPostingan_new" AS ENUM (
     'Promotions',
-    'Reccomendation',
+    'Recommendation',
     'Informations',
     'Other'
 );
 
+-- Hapus default lama agar tidak menghambat perubahan tipe
+ALTER TABLE "Konten"
+ALTER COLUMN "kategori" DROP DEFAULT;
+
+-- Ubah tipe ENUM sekaligus sesuaikan nilai lama
 ALTER TABLE "Konten"
 ALTER COLUMN "kategori" TYPE "KategoriPostingan_new"
-USING ("kategori"::text::"KategoriPostingan_new");
+USING (
+    CASE
+        WHEN "kategori" IS NULL THEN 'Informations'
+        WHEN "kategori"::text = 'Lainnya' THEN 'Other'
+        ELSE "kategori"::text
+    END
+)::"KategoriPostingan_new";
+
 ALTER TYPE "KategoriPostingan" RENAME TO "KategoriPostingan_old";
+
 ALTER TYPE "KategoriPostingan_new" RENAME TO "KategoriPostingan";
-DROP TYPE "public"."KategoriPostingan_old";
-COMMIT;
+
+DROP TYPE "KategoriPostingan_old";
 
 -- AlterTable
 ALTER TABLE "Konten"
 ALTER COLUMN "kategori" SET NOT NULL,
 ALTER COLUMN "kategori" SET DEFAULT 'Informations';
+
+COMMIT;
 
 -- CreateTable
 CREATE TABLE "Restoran" (
@@ -58,4 +65,7 @@ CREATE TABLE "Komentar" (
 CREATE INDEX "Komentar_restoranId_idx" ON "Komentar"("restoranId");
 
 -- AddForeignKey
-ALTER TABLE "Komentar" ADD CONSTRAINT "Komentar_restoranId_fkey" FOREIGN KEY ("restoranId") REFERENCES "Restoran"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Komentar"
+ADD CONSTRAINT "Komentar_restoranId_fkey"
+FOREIGN KEY ("restoranId") REFERENCES "Restoran"("id")
+ON DELETE CASCADE ON UPDATE CASCADE;
