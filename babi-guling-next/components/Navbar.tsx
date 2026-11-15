@@ -7,10 +7,8 @@ import { usePathname, useRouter } from "next/navigation";
 const publicMenu = [
   { label: "Home", href: "/" },
   { label: "Galeri", href: "/galeri" },
-  { label: "FAQ", href: "/faq" },
   { label: "Postingan", href: "/postingan" },
   { label: "Resto Favorit", href: "/resto" },
-  { label: "Contact", href: "/kontak" },
 ];
 
 const adminMenu = [

@@ -37,7 +37,8 @@ export default function AdminPage() {
   }, [router]);
 
   return (
-    <main className="container py-5 admin-page">
+    <main className="admin-page py-5">
+    <div className="container">
       <div className="admin-welcome mb-5">
         <span className="admin-eyebrow">ADMIN PANEL</span>
         <h1>Dashboard Admin</h1>
@@ -74,6 +75,7 @@ export default function AdminPage() {
             </Link>
           </div>
         ))}
+      </div>
       </div>
     </main>
   );

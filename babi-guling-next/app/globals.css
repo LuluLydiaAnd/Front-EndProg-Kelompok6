@@ -550,7 +550,8 @@ body {
 
 /* navbar khusus admin */
 .bg-brand-nav:has(+ .admin-page) {
-  background: #160705;
+  background: rgba(251, 244, 232, 0.96);
+  border-bottom: 1px solid #E2CBAA;
 }
 
 .bg-brand-nav:has(+ .admin-page) .container {
@@ -560,37 +561,37 @@ body {
 }
 
 .bg-brand-nav:has(+ .admin-page) .btn-outline-danger {
-  border-color: #e2574c;
-  color: #e8a598;
+  border-color: #B5541C;
+  color: #B5541C;
   border-radius: 10px;
   padding: 0.6rem 1.1rem;
 }
 
 .bg-brand-nav:has(+ .admin-page) .btn-outline-danger:hover {
-  background: #a93226;
-  border-color: #a93226;
+  background: #B5541C;
+  border-color: #B5541C;
   color: #fff;
 }
 
-/* Dashboard admin */
+/* Dashboard admin - warm Bali theme */
 .admin-page {
   min-height: calc(100vh - 70px);
   padding-top: 3.5rem !important;
   padding-bottom: 4rem !important;
+  background: #FBF4E8;
 }
 
 .admin-welcome {
-  padding: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at 90% 10%, rgba(169, 50, 38, 0.22), transparent 40%),
-    #2a100c;
+  padding: 2.8rem;
+  border: 1px solid #E2CBAA;
+  border-radius: 24px;
+  background: linear-gradient(120deg, #F3E6D0, #FBEBDD, #F7DCC5);
+  box-shadow: 0 10px 30px rgba(91, 49, 25, 0.06);
 }
 
 .admin-eyebrow {
   display: inline-block;
-  color: var(--pink);
+  color: #5E7D3A;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 3px;
@@ -598,20 +599,21 @@ body {
 }
 
 .admin-welcome h1 {
-  color: #fff;
+  color: #3E2415;
   font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
   margin-bottom: 0.8rem;
 }
 
 .admin-welcome p,
 .admin-section-desc {
-  color: var(--text-muted);
+  color: #8A6A52 !important;
   margin-bottom: 0;
 }
 
 .admin-section-title {
-  color: #fff;
-  font-size: 1.5rem;
+  color: #3E2415;
+  font-size: 1.6rem;
   margin-bottom: 0.4rem;
 }
 
@@ -620,38 +622,39 @@ body {
   flex-direction: column;
   height: 100%;
   min-height: 245px;
-  padding: 1.6rem;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #2d1915;
-  color: var(--text-light);
+  padding: 1.7rem;
+  border-radius: 20px;
+  border: 1px solid #E2CBAA;
+  background: #FFFAF2;
+  color: #3E2415;
   text-decoration: none;
-  transition: transform 0.25s ease, border-color 0.25s ease,
-    background 0.25s ease;
+  box-shadow: 0 8px 24px rgba(91, 49, 25, 0.05);
+  transition: all 0.3s ease;
 }
 
 .admin-menu-card:hover {
-  transform: translateY(-5px);
-  background: #381b15;
-  border-color: rgba(232, 165, 152, 0.5);
-  color: #fff;
+  transform: translateY(-6px);
+  background: #FFF4E5;
+  border-color: #B5541C;
+  box-shadow: 0 14px 30px rgba(181, 84, 28, 0.12);
+  color: #3E2415;
 }
 
 .admin-menu-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   margin-bottom: 1.3rem;
-  border-radius: 14px;
-  background: rgba(169, 50, 38, 0.2);
-  color: var(--pink);
-  font-size: 1.7rem;
+  border-radius: 15px;
+  background: #F3E6D0;
+  color: #B5541C;
+  font-size: 1.8rem;
 }
 
 .admin-menu-card h3 {
-  color: #fff;
+  color: #3E2415;
   font-family: inherit;
   font-size: 1.15rem;
   font-weight: 700;
@@ -659,7 +662,7 @@ body {
 }
 
 .admin-menu-card p {
-  color: var(--text-muted);
+  color: #8A6A52 !important;
   font-size: 0.92rem;
   line-height: 1.7;
   margin-bottom: 1.4rem;
@@ -670,13 +673,18 @@ body {
   align-items: center;
   gap: 0.4rem;
   margin-top: auto;
-  color: var(--pink);
+  color: #B5541C;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .admin-menu-link i {
   font-size: 1.2rem;
+  transition: transform 0.25s ease;
+}
+
+.admin-menu-card:hover .admin-menu-link i {
+  transform: translateX(5px);
 }
 
 @media (max-width: 575.98px) {
@@ -792,5 +800,12 @@ body {
   .admin-crud-panel {
     padding: 1.2rem;
   }
+}
+
+.admin-page {
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  margin: 0;
+  background: #FBF4E8;
 }
 

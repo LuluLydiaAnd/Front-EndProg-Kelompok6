@@ -1,46 +1,26 @@
 import Image from "next/image";
 
-type Widget = {
-  label: string;
-  href: string;
-  icon: string;
-  highlight?: boolean;
-};
-
-const widgets: Widget[] = [
-  { label: "FAQ", href: "#faq", icon: "bx bx-help-circle" },
-  { label: "Contact", href: "#contact", icon: "bx bx-envelope", highlight: true },
-];
-
 export default function Banner() {
   return (
     <section id="home" className="banner-section">
       <div className="container">
         <div className="row align-items-center g-4">
           <div className="col-lg-7">
-            <p className="banner-eyebrow">SEJAK RIBUAN TAHUN • WARISAN KULINER BALI</p>
+            <p className="banner-eyebrow">
+              SEJAK RIBUAN TAHUN • WARISAN KULINER BALI
+            </p>
+
             <h1 className="banner-title">
               Secicip Kelezatan
               <br />
               <em>Babi Guling</em>
             </h1>
+
             <p className="banner-lead">
               Hidangan tradisional Bali berupa babi muda utuh yang diisi bumbu <em>base genep</em>,
               lalu dipanggang sambil diputar di atas bara api hingga matang merata. Menjadi bagian
               dari upacara adat, ritual keagamaan, hingga perayaan besar masyarakat Bali.
             </p>
-
-            <div className="banner-widgets">
-              {widgets.map((w) => (
-                <a
-                  key={w.label}
-                  href={w.href}
-                  className={"widget-btn" + (w.highlight ? " widget-highlight" : "")}
-                >
-                  <i className={w.icon}></i> {w.label}
-                </a>
-              ))}
-            </div>
           </div>
 
           <div className="col-lg-5 text-center">
