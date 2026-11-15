@@ -869,7 +869,8 @@ h3 {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   margin-bottom: 1rem;
   color: var(--text-soft);
   font-size: 0.88rem;
