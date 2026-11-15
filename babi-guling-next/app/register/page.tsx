@@ -10,34 +10,33 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleRegister(e: React.FormEvent<HTMLFormElement>) {
+  async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    const accounts = JSON.parse(
-      localStorage.getItem("accounts") || "[]"
-    );
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    if (email.toLowerCase() === "admin@babiguling.com") {
-      setError("Email tersebut tidak bisa digunakan.");
-      return;
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error);
+        return;
+      }
+
+      router.push("/login");
+    } catch {
+      setError("Terjadi kesalahan, coba lagi.");
+    } finally {
+      setLoading(false);
     }
-
-    if (
-      accounts.some(
-        (account: { email: string }) =>
-          account.email.toLowerCase() === email.toLowerCase()
-      )
-    ) {
-      setError("Email sudah terdaftar.");
-      return;
-    }
-
-    accounts.push({ name, email, password });
-
-    localStorage.setItem("accounts", JSON.stringify(accounts));
-
-    router.push("/login");
   }
 
   return (
@@ -84,12 +83,10 @@ export default function RegisterPage() {
                 />
               </div>
 
-              {error && (
-                <p className="text-danger">{error}</p>
-              )}
+              {error && <p className="text-danger">{error}</p>}
 
-              <button className="btn btn-danger w-100">
-                Daftar
+              <button className="btn btn-danger w-100" disabled={loading}>
+                {loading ? "Mendaftar..." : "Daftar"}
               </button>
             </form>
 
