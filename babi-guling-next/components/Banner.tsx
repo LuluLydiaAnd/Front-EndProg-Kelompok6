@@ -8,10 +8,8 @@ type Widget = {
 };
 
 const widgets: Widget[] = [
-  { label: "Galeri Foto", href: "#galeri", icon: "bx bx-image-alt" },
-  { label: "Info & Resep", href: "#tabNav", icon: "bx bx-book-open" },
-  { label: "Artikel & Info", href: "#postingan", icon: "bx bx-news" },
-  { label: "Resto Favorit", href: "#resto", icon: "bx bxs-store-alt", highlight: true },
+  { label: "FAQ", href: "#faq", icon: "bx bx-help-circle" },
+  { label: "Contact", href: "#contact", icon: "bx bx-envelope", highlight: true },
 ];
 
 export default function Banner() {
