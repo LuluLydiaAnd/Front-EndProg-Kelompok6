@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { mkdir, writeFile, unlink } from "fs/promises";
@@ -35,7 +34,7 @@ function validasiKategori(
   return daftarKategori.includes(kategori as KategoriPostingan);
 }
 
-// Menyimpan foto ke folder uploads
+
 async function uploadFoto(file: File): Promise<string> {
   const extension = ALLOWED_TYPES[file.type];
 
@@ -63,7 +62,7 @@ async function uploadFoto(file: File): Promise<string> {
   return `/uploads/postingan/${fileName}`;
 }
 
-// Menghapus foto lama dari folder uploads
+
 async function hapusFoto(image: string) {
   if (!image.startsWith("/uploads/postingan/")) {
     return;
@@ -79,7 +78,7 @@ async function hapusFoto(image: string) {
   }
 }
 
-// GET: Mengambil semua postingan
+//GET
 export async function GET() {
   try {
     const postingan = await prisma.konten.findMany({
@@ -102,7 +101,7 @@ export async function GET() {
   }
 }
 
-// POST: Menambahkan postingan baru
+//POST
 export async function POST(request: Request) {
   let uploadedImage = "";
 
@@ -126,7 +125,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Jika kategori belum dikirim, gunakan Informasi sebagai default
+  
     let kategori: KategoriPostingan = "Informations";
 
     if (kategoriForm !== null) {
@@ -218,7 +217,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Jika kategori tidak dikirim, pertahankan kategori sebelumnya
     let kategori: KategoriPostingan = existingPost.kategori;
 
     if (kategoriForm !== null) {
@@ -235,7 +233,7 @@ export async function PUT(request: Request) {
       kategori = kategoriForm;
     }
 
-    // Jika admin memilih foto baru
+
     if (imageFile && typeof imageFile !== "string") {
       uploadedImage = await uploadFoto(imageFile);
     }
@@ -248,12 +246,12 @@ export async function PUT(request: Request) {
         title: title.trim(),
         description: description.trim(),
         kategori,
-        // Jika tidak ada foto baru, gunakan foto lama
+   
         image: uploadedImage || existingPost.image,
       },
     });
 
-    // Hapus foto lama setelah database berhasil diperbarui
+
     if (uploadedImage && existingPost.image) {
       await hapusFoto(existingPost.image);
     }
@@ -278,7 +276,7 @@ export async function PUT(request: Request) {
   }
 }
 
-// DELETE: Menghapus postingan
+//DELETE
 export async function DELETE(request: Request) {
   try {
     const body = await request.json();
