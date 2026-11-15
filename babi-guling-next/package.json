@@ -12,6 +12,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
+    "bcryptjs": "^3.0.3",
     "bootstrap": "^5.3.8",
     "boxicons": "^2.1.4",
     "dotenv": "^18.0.10",
