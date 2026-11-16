@@ -1,0 +1,128 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--heading);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.pill i {
+  font-size: 1.1rem;
+}
+
+.pill:hover {
+  border-color: var(--caramel);
+  background: var(--cream);
+}
+
+.pill:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.liked {
+  color: #C0392B;
+  border-color: #C0392B;
+  background: #FFF3F1;
+}
+
+.favorited {
+  color: var(--caramel);
+  border-color: var(--caramel);
+  background: #FFF4E5;
+}
+
+.komentarBox {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.komentarForm {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.komentarForm input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 0.88rem;
+}
+
+.komentarForm input:focus {
+  outline: none;
+  border-color: var(--caramel);
+}
+
+.komentarForm button {
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--caramel);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.komentarList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 220px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.komentarItem {
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  background: var(--cream);
+  font-size: 0.86rem;
+}
+
+.komentarItem strong {
+  display: block;
+  color: var(--heading);
+  font-size: 0.82rem;
+}
+
+.komentarItem p {
+  margin: 0;
+  color: var(--text);
+}
+
+.kosong {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.loginNote {
+  margin-bottom: 0.8rem;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.loginNote a {
+  color: var(--caramel);
+  font-weight: 600;
+}

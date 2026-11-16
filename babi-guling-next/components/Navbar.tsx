@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -23,11 +23,23 @@ const adminMenu: MenuItem[] = [
   { label: "Kelola Resto", href: "/admin/resto" },
 ];
 
+function subscribe() {
+  return () => {};
+}
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const isAdmin = pathname.startsWith("/admin");
+
+  // Cek siapa yang sedang login (dari sessionStorage)
+  const raw = useSyncExternalStore(
+    subscribe,
+    () => sessionStorage.getItem("user"),
+    () => null
+  );
+  const user = raw ? (JSON.parse(raw) as { name: string | null; role: string }) : null;
 
   function handleLogout() {
     sessionStorage.removeItem("user");
@@ -35,6 +47,9 @@ export default function Navbar() {
   }
 
   const menus = isAdmin ? adminMenu : publicMenu;
+
+  // Halaman user (/user/...) punya sidebar sendiri, jadi navbar tidak ditampilkan
+  if (pathname.startsWith("/user")) return null;
 
   return (
     <nav className="navbar navbar-expand-lg bg-brand-nav">
@@ -76,7 +91,20 @@ export default function Navbar() {
                   Logout
                 </button>
               </li>
+            ) : user ? (
+              // Sudah login: tampilkan tombol ke dashboard
+              <li className="nav-item">
+                <Link
+                  className="nav-link login-link"
+                  href={user.role === "admin" ? "/admin" : "/user/dashboard"}
+                  onClick={() => setOpen(false)}
+                >
+                  <i className="bx bx-user me-1"></i>
+                  {user.role === "admin" ? "Dashboard Admin" : "Dashboard Saya"}
+                </Link>
+              </li>
             ) : (
+              // Belum login
               <li className="nav-item">
                 <Link
                   className="nav-link login-link"

@@ -161,3 +161,10 @@
     height: 220px;
   }
 }
+
+.articleActions {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #eee6da;
+  line-clamp: 3;
+}

@@ -88,6 +88,9 @@ export async function GET() {
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        _count: { select: { likes: true, komentar: true } },
+      },
     });
 
     return NextResponse.json(postingan);

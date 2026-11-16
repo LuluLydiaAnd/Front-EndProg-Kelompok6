@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import InteraksiButtons from "@/components/InteraksiButtons";
 import styles from "./ArtikelInfo.module.css";
 
 type KategoriPostingan =
   | "Promotions"
-  | "Recommendation"
+  | "Reccomendation"
   | "Informations"
   | "Other";
 
@@ -17,6 +18,7 @@ type Postingan = {
   image: string;
   kategori: KategoriPostingan;
   createdAt: string;
+  _count?: { likes: number; komentar: number };
 };
 
 export default function ArtikelInfo() {
@@ -60,7 +62,7 @@ export default function ArtikelInfo() {
   function formatKategori(kategori: KategoriPostingan) {
     const namaKategori: Record<KategoriPostingan, string> = {
       Promotions: "Promosi",
-      Recommendation: "Rekomendasi",
+      Reccomendation: "Rekomendasi",
       Informations: "Informasi",
       Other: "Lainnya",
     };
@@ -85,13 +87,9 @@ export default function ArtikelInfo() {
         </div>
 
         {loading ? (
-          <div className={styles.message}>
-            Memuat artikel
-          </div>
+          <div className={styles.message}>Memuat artikel</div>
         ) : error ? (
-          <div className={styles.message}>
-            {error}
-          </div>
+          <div className={styles.message}>{error}</div>
         ) : postingan.length === 0 ? (
           <div className={styles.message}>
             Belum ada artikel atau informasi yang tersedia.
@@ -130,13 +128,19 @@ export default function ArtikelInfo() {
                     </p>
                   </div>
 
-                  <h3 className={styles.articleTitle}>
-                    {post.title}
-                  </h3>
+                  <h3 className={styles.articleTitle}>{post.title}</h3>
 
                   <p className={styles.articleDescription}>
                     {post.description}
                   </p>
+
+                  <div className={styles.articleActions}>
+                    <InteraksiButtons
+                      target={{ kontenId: post.id }}
+                      initialLikes={post._count?.likes ?? 0}
+                      initialKomentar={post._count?.komentar ?? 0}
+                    />
+                  </div>
                 </div>
               </article>
             ))}
