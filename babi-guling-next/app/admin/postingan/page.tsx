@@ -1,17 +1,17 @@
 import AdminCrud from "@/components/AdminCrud";
 
-export default function KelolaPostinganPage() {
+export default function AdminPostinganPage() {
   return (
     <AdminCrud
-      storageKey="babi-guling-postingan"
-      apiEndpoint="/api/konten"
+      storageKey="postingan"
+      apiEndpoint="/api/konten?jenis=postingan"
       title="Kelola Postingan"
-      description="Kelola artikel dan informasi kuliner Bali."
+      description="Tambah, perbarui, dan kelompokkan artikel atau informasi babi guling sesuai kategori."
       titleLabel="Judul Postingan"
       descriptionLabel="Isi Postingan"
+      imageLabel="Gambar Postingan"
       showImage={true}
       uploadImage={true}
-      imageLabel="Foto Postingan"
       showCategory={true}
     />
   );

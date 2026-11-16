@@ -1,327 +1,164 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { mkdir, writeFile, unlink } from "fs/promises";
-import path from "path";
-import { randomUUID } from "crypto";
+import prisma from "@/lib/prisma";
 
-const UPLOAD_DIR = path.join(
-  process.cwd(),
-  "public",
-  "uploads",
-  "postingan"
-);
+type Jenis = "galeri" | "postingan" | "resto";
+type KategoriPostingan = "Promotions" | "Reccomendation" | "Informations" | "Other";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-const ALLOWED_TYPES: Record<string, string> = {
-  "image/jpeg": ".jpg",
-  "image/png": ".png",
-  "image/webp": ".webp",
-};
-
-const daftarKategori = [
-  "Promotions",
-  "Reccomendation",
-  "Informations",
-  "Other",
-] as const;
-
-type KategoriPostingan = (typeof daftarKategori)[number];
-
-function validasiKategori(
-  kategori: string
-): kategori is KategoriPostingan {
-  return daftarKategori.includes(kategori as KategoriPostingan);
+async function fileToDataUrl(file: File): Promise<string> {
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+  return `data:${file.type};base64,${buffer.toString("base64")}`;
 }
 
-
-async function uploadFoto(file: File): Promise<string> {
-  const extension = ALLOWED_TYPES[file.type];
-
-  if (!extension) {
-    throw new Error("Format foto harus JPG, PNG, atau WebP.");
-  }
-
-  if (file.size > MAX_FILE_SIZE) {
-    throw new Error("Ukuran foto maksimal 5 MB.");
-  }
-
-  if (file.size === 0) {
-    throw new Error("File foto kosong.");
-  }
-
-  await mkdir(UPLOAD_DIR, { recursive: true });
-
-  const fileName = `${randomUUID()}${extension}`;
-  const filePath = path.join(UPLOAD_DIR, fileName);
-
-  const buffer = Buffer.from(await file.arrayBuffer());
-
-  await writeFile(filePath, buffer);
-
-  return `/uploads/postingan/${fileName}`;
-}
-
-
-async function hapusFoto(image: string) {
-  if (!image.startsWith("/uploads/postingan/")) {
-    return;
-  }
-
-  const fileName = path.basename(image);
-  const filePath = path.join(UPLOAD_DIR, fileName);
-
+export async function GET(req: Request) {
   try {
-    await unlink(filePath);
-  } catch (error) {
-    console.error("Gagal menghapus file foto:", error);
-  }
-}
+    const { searchParams } = new URL(req.url);
+    const jenis = searchParams.get("jenis") as Jenis | null;
+    const kategori = searchParams.get("kategori") as KategoriPostingan | null;
 
-//GET
-export async function GET() {
-  try {
-    const postingan = await prisma.konten.findMany({
+    const data = await prisma.konten.findMany({
       where: {
-        jenis: "postingan",
+        ...(jenis ? { jenis } : {}),
+        ...(kategori ? { kategori } : {}),
       },
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(postingan);
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("Gagal mengambil postingan:", error);
-
-    return NextResponse.json(
-      { message: "Gagal mengambil data postingan" },
-      { status: 500 }
-    );
+    console.error("GET Error:", error);
+    return NextResponse.json({ message: "Gagal mengambil data" }, { status: 500 });
   }
 }
 
-//POST
-export async function POST(request: Request) {
-  let uploadedImage = "";
-
+export async function POST(req: Request) {
   try {
-    const formData = await request.formData();
+    const { searchParams } = new URL(req.url);
+    const jenisUrl = (searchParams.get("jenis") as Jenis) || "postingan";
+    const contentType = req.headers.get("content-type") || "";
 
-    const title = formData.get("title");
-    const description = formData.get("description");
-    const kategoriForm = formData.get("kategori");
-    const imageFile = formData.get("imageFile");
-
-    if (
-      typeof title !== "string" ||
-      typeof description !== "string" ||
-      !title.trim() ||
-      !description.trim()
-    ) {
-      return NextResponse.json(
-        { message: "Judul dan isi postingan wajib diisi" },
-        { status: 400 }
-      );
-    }
-
-  
+    let title = "";
+    let description = "";
+    let image = "";
+    let jenis: Jenis = jenisUrl;
     let kategori: KategoriPostingan = "Informations";
 
-    if (kategoriForm !== null) {
-      if (
-        typeof kategoriForm !== "string" ||
-        !validasiKategori(kategoriForm)
-      ) {
-        return NextResponse.json(
-          { message: "Kategori postingan tidak valid" },
-          { status: 400 }
-        );
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await req.formData();
+      title = String(formData.get("title") || "");
+      description = String(formData.get("description") || "");
+      kategori = (formData.get("kategori") as KategoriPostingan) || "Informations";
+      const imageFile = formData.get("imageFile") as File | null;
+      if (imageFile && imageFile.size > 0) {
+        image = await fileToDataUrl(imageFile);
       }
-
-      kategori = kategoriForm;
+    } else {
+      const body = await req.json();
+      title = body.title || "";
+      description = body.description || "";
+      image = body.image || "";
+      jenis = (body.jenis as Jenis) || jenisUrl;
+      kategori = (body.kategori as KategoriPostingan) || "Informations";
     }
 
-    if (imageFile && typeof imageFile !== "string") {
-      uploadedImage = await uploadFoto(imageFile);
-    }
-
-    const postingan = await prisma.konten.create({
-      data: {
-        jenis: "postingan",
-        title: title.trim(),
-        description: description.trim(),
-        kategori,
-        image: uploadedImage,
-      },
-    });
-
-    return NextResponse.json(postingan, { status: 201 });
-  } catch (error) {
-    if (uploadedImage) {
-      await hapusFoto(uploadedImage);
-    }
-
-    console.error("Gagal menambahkan postingan:", error);
-
-    return NextResponse.json(
-      {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Gagal menambahkan postingan",
-      },
-      { status: 500 }
-    );
-  }
-}
-
-// PUT: Mengedit postingan
-export async function PUT(request: Request) {
-  let uploadedImage = "";
-
-  try {
-    const formData = await request.formData();
-
-    const id = Number(formData.get("id"));
-    const title = formData.get("title");
-    const description = formData.get("description");
-    const kategoriForm = formData.get("kategori");
-    const imageFile = formData.get("imageFile");
-
-    if (
-      !Number.isInteger(id) ||
-      id <= 0 ||
-      typeof title !== "string" ||
-      typeof description !== "string" ||
-      !title.trim() ||
-      !description.trim()
-    ) {
+    if (!title || !description) {
       return NextResponse.json(
-        { message: "Data postingan tidak lengkap atau tidak valid" },
+        { message: "Judul dan deskripsi wajib diisi" },
         { status: 400 }
       );
     }
 
-    const existingPost = await prisma.konten.findFirst({
-      where: {
-        id,
-        jenis: "postingan",
-      },
-    });
-
-    if (!existingPost) {
-      return NextResponse.json(
-        { message: "Postingan tidak ditemukan" },
-        { status: 404 }
-      );
-    }
-
-    let kategori: KategoriPostingan = existingPost.kategori;
-
-    if (kategoriForm !== null) {
-      if (
-        typeof kategoriForm !== "string" ||
-        !validasiKategori(kategoriForm)
-      ) {
-        return NextResponse.json(
-          { message: "Kategori postingan tidak valid" },
-          { status: 400 }
-        );
-      }
-
-      kategori = kategoriForm;
-    }
-
-
-    if (imageFile && typeof imageFile !== "string") {
-      uploadedImage = await uploadFoto(imageFile);
-    }
-
-    const postingan = await prisma.konten.update({
-      where: {
-        id,
-      },
+    const baru = await prisma.konten.create({
       data: {
-        title: title.trim(),
-        description: description.trim(),
+        title,
+        description,
+        image,
+        jenis,
         kategori,
-   
-        image: uploadedImage || existingPost.image,
       },
     });
 
-
-    if (uploadedImage && existingPost.image) {
-      await hapusFoto(existingPost.image);
-    }
-
-    return NextResponse.json(postingan);
+    return NextResponse.json(baru, { status: 201 });
   } catch (error) {
-    if (uploadedImage) {
-      await hapusFoto(uploadedImage);
-    }
-
-    console.error("Gagal mengedit postingan:", error);
-
-    return NextResponse.json(
-      {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Gagal mengedit postingan",
-      },
-      { status: 500 }
-    );
+    console.error("POST Error:", error);
+    return NextResponse.json({ message: "Gagal menyimpan data" }, { status: 500 });
   }
 }
 
-//DELETE
-export async function DELETE(request: Request) {
+export async function PUT(req: Request) {
   try {
-    const body = await request.json();
-    const id = Number(body.id);
+    const contentType = req.headers.get("content-type") || "";
 
-    if (!Number.isInteger(id) || id <= 0) {
-      return NextResponse.json(
-        { message: "ID postingan tidak valid" },
-        { status: 400 }
-      );
+    let id = 0;
+    let title = "";
+    let description = "";
+    let image: string | undefined = undefined;
+    let kategori: KategoriPostingan | undefined = undefined;
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await req.formData();
+      id = Number(formData.get("id"));
+      title = String(formData.get("title") || "");
+      description = String(formData.get("description") || "");
+      const kat = formData.get("kategori") as KategoriPostingan | null;
+      if (kat) kategori = kat;
+
+      const imageFile = formData.get("imageFile") as File | null;
+      if (imageFile && imageFile.size > 0) {
+        image = await fileToDataUrl(imageFile);
+      }
+    } else {
+      const body = await req.json();
+      id = Number(body.id);
+      title = body.title;
+      description = body.description;
+      if (body.image !== undefined) image = body.image;
+      if (body.kategori) kategori = body.kategori as KategoriPostingan;
     }
 
-    const postingan = await prisma.konten.findFirst({
-      where: {
-        id,
-        jenis: "postingan",
+    if (!id) {
+      return NextResponse.json({ message: "ID tidak valid" }, { status: 400 });
+    }
+
+    const updated = await prisma.konten.update({
+      where: { id },
+      data: {
+        title,
+        description,
+        ...(image !== undefined ? { image } : {}),
+        ...(kategori !== undefined ? { kategori } : {}),
       },
     });
 
-    if (!postingan) {
-      return NextResponse.json(
-        { message: "Postingan tidak ditemukan" },
-        { status: 404 }
-      );
+    return NextResponse.json(updated);
+  } catch (error) {
+    console.error("PUT Error:", error);
+    return NextResponse.json({ message: "Gagal memperbarui data" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    let id = Number(searchParams.get("id"));
+
+    if (!id) {
+      const body = await req.json();
+      id = Number(body.id);
+    }
+
+    if (!id) {
+      return NextResponse.json({ message: "ID wajib disertakan" }, { status: 400 });
     }
 
     await prisma.konten.delete({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
-    if (postingan.image) {
-      await hapusFoto(postingan.image);
-    }
-
-    return NextResponse.json({
-      message: "Postingan berhasil dihapus",
-    });
+    return NextResponse.json({ message: "Berhasil dihapus" });
   } catch (error) {
-    console.error("Gagal menghapus postingan:", error);
-
-    return NextResponse.json(
-      { message: "Gagal menghapus postingan" },
-      { status: 500 }
-    );
+    console.error("DELETE Error:", error);
+    return NextResponse.json({ message: "Gagal menghapus data" }, { status: 500 });
   }
 }
