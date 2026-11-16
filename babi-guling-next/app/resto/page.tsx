@@ -15,7 +15,6 @@ export default async function RestoPage() {
       { rating: 'desc' },
     ],
   });
-
   return (
     <main className={styles.container}>
       <div className={styles.wrapper}>
