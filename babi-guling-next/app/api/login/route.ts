@@ -4,12 +4,26 @@ import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
   const { email, password } = await req.json();
-  const emailBersih = String(email).toLowerCase().trim();
+  const cleanEmail = String(email).toLowerCase().trim();
 
-  const user = await prisma.user.findUnique({ where: { email: emailBersih } });
+  const user = await prisma.user.findUnique({
+    where: { email: cleanEmail },
+  });
 
-  if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
-    return NextResponse.json({ error: "Email atau password salah." }, { status: 401 });
+  if (!user || !user.password) {
+    return NextResponse.json(
+      { error: "Email atau password salah." },
+      { status: 401 }
+    );
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    return NextResponse.json(
+      { error: "Email atau password salah." },
+      { status: 401 }
+    );
   }
 
   return NextResponse.json({

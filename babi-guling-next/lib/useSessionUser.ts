@@ -11,12 +11,12 @@ function subscribe() {
   return () => {};
 }
 
-// Mengambil data user yang sedang login dari sessionStorage
 export function useSessionUser(): SessionUser | null {
-  const raw = useSyncExternalStore(
+  const data = useSyncExternalStore(
     subscribe,
     () => sessionStorage.getItem("user"),
     () => null
   );
-  return raw ? (JSON.parse(raw) as SessionUser) : null;
+
+  return data ? JSON.parse(data) : null;
 }

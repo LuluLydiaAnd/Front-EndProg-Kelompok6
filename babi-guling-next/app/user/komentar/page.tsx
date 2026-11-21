@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getKomentarUser, hapusKomentarUser } from "@/app/actions/user";
+import { deleteUserComment, getUserComments } from "@/app/actions/user";
 import { useSessionUser } from "@/lib/useSessionUser";
 import styles from "../user.module.css";
 
-type KomentarItem = {
+type Comment = {
   id: number;
   isi: string;
   createdAt: Date;
@@ -13,30 +13,30 @@ type KomentarItem = {
   konten: { title: string } | null;
 };
 
-export default function KomentarSayaPage() {
+export default function UserCommentsPage() {
   const user = useSessionUser();
   const userId = user?.id;
-  const [daftar, setDaftar] = useState<KomentarItem[] | null>(null);
+  const [comments, setComments] = useState<Comment[] | null>(null);
 
   useEffect(() => {
     if (!userId) return;
-    let aktif = true;
+    let active = true;
 
-    getKomentarUser(userId).then((data) => {
-      if (aktif) setDaftar(data);
+    getUserComments(userId).then((data) => {
+      if (active) setComments(data);
     });
 
     return () => {
-      aktif = false;
+      active = false;
     };
   }, [userId]);
 
-  async function handleHapus(id: number) {
+  async function handleDelete(id: number) {
     if (!userId || !window.confirm("Hapus komentar ini?")) return;
 
     try {
-      await hapusKomentarUser(userId, id);
-      setDaftar((list) => list?.filter((k) => k.id !== id) ?? null);
+      await deleteUserComment(userId, id);
+      setComments(comments?.filter((comment) => comment.id !== id) ?? null);
     } catch (error) {
       alert(error instanceof Error ? error.message : "Gagal menghapus komentar.");
     }
@@ -55,40 +55,34 @@ export default function KomentarSayaPage() {
       </header>
 
       <section className={styles.panel}>
-        {!daftar ? (
+        {!comments || comments.length === 0 ? (
           <div className={styles.empty}>
             <i className="bx bx-message-square"></i>
-            <p>Memuat komentar...</p>
-          </div>
-        ) : daftar.length === 0 ? (
-          <div className={styles.empty}>
-            <i className="bx bx-message-square"></i>
-            <p>Kamu belum menulis komentar.</p>
+            <p>{comments ? "Kamu belum menulis komentar." : "Memuat..."}</p>
           </div>
         ) : (
-          <ul className={styles.activityList}>
-            {daftar.map((k) => (
-              <li key={k.id} className={styles.activityItem}>
-                <div className={styles.activityIcon}>
+          <ul className={styles.list}>
+            {comments.map((comment) => (
+              <li key={comment.id} className={styles.listItem}>
+                <div className={styles.listIcon}>
                   <i className="bx bx-message-square"></i>
                 </div>
 
-                <div className={styles.activityText}>
+                <div className={styles.listText}>
                   <p>
-                    Di{" "}
-                    <strong>{k.restoran?.nama ?? k.konten?.title ?? "-"}</strong>
+                    Di <strong>{comment.restoran?.nama ?? comment.konten?.title ?? "-"}</strong>
                     <span className={styles.badge}>
-                      {k.restoran ? "Resto" : "Postingan"}
+                      {comment.restoran ? "Resto" : "Postingan"}
                     </span>
                   </p>
-                  <span className={styles.activityQuote}>&ldquo;{k.isi}&rdquo;</span>
-                  <small>{new Date(k.createdAt).toLocaleString("id-ID")}</small>
+                  <span className={styles.quote}>&ldquo;{comment.isi}&rdquo;</span>
+                  <small>{new Date(comment.createdAt).toLocaleString("id-ID")}</small>
                 </div>
 
                 <button
                   type="button"
-                  className={styles.deleteBtn}
-                  onClick={() => handleHapus(k.id)}
+                  className={styles.deleteButton}
+                  onClick={() => handleDelete(comment.id)}
                   title="Hapus komentar"
                 >
                   <i className="bx bx-trash"></i>

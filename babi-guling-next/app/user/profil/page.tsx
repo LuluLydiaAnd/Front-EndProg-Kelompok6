@@ -1,32 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getProfilUser } from "@/app/actions/user";
+import { getUserProfile } from "@/app/actions/user";
 import { useSessionUser } from "@/lib/useSessionUser";
 import styles from "../user.module.css";
 
-type Profil = {
+type Profile = {
   name: string | null;
   email: string;
   createdAt: Date;
   _count: { likes: number; komentar: number; favorit: number };
 };
 
-export default function ProfilPage() {
+export default function UserProfilePage() {
   const user = useSessionUser();
   const userId = user?.id;
-  const [profil, setProfil] = useState<Profil | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     if (!userId) return;
-    let aktif = true;
+    let active = true;
 
-    getProfilUser(userId).then((data) => {
-      if (aktif) setProfil(data);
+    getUserProfile(userId).then((data) => {
+      if (active) setProfile(data);
     });
 
     return () => {
-      aktif = false;
+      active = false;
     };
   }, [userId]);
 
@@ -36,17 +36,17 @@ export default function ProfilPage() {
     <>
       <header className={styles.header}>
         <div>
-          <p className={styles.greeting}>Akun kamu</p>
+          <p className={styles.greeting}>Akun</p>
           <h1 className={styles.title}>Profil Saya</h1>
           <p className={styles.subtitle}>Informasi akun yang terdaftar.</p>
         </div>
       </header>
 
       <section className={styles.panel}>
-        {!profil ? (
+        {!profile ? (
           <div className={styles.empty}>
             <i className="bx bx-user"></i>
-            <p>Memuat profil...</p>
+            <p>Memuat...</p>
           </div>
         ) : (
           <div className={styles.profileCard}>
@@ -55,13 +55,13 @@ export default function ProfilPage() {
             </div>
 
             <div className={styles.profileInfo}>
-              <h2>{profil.name}</h2>
-              <span>@{profil.email.split("@")[0]}</span>
+              <h2>{profile.name}</h2>
+              <span>@{profile.email.split("@")[0]}</span>
 
               <dl className={styles.profileList}>
                 <div>
                   <dt>Email</dt>
-                  <dd>{profil.email}</dd>
+                  <dd>{profile.email}</dd>
                 </div>
                 <div>
                   <dt>Status</dt>
@@ -70,7 +70,7 @@ export default function ProfilPage() {
                 <div>
                   <dt>Bergabung</dt>
                   <dd>
-                    {new Date(profil.createdAt).toLocaleDateString("id-ID", {
+                    {new Date(profile.createdAt).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
@@ -80,8 +80,8 @@ export default function ProfilPage() {
                 <div>
                   <dt>Aktivitas</dt>
                   <dd>
-                    {profil._count.likes} suka · {profil._count.komentar} komentar ·{" "}
-                    {profil._count.favorit} favorit
+                    {profile._count.likes} suka, {profile._count.komentar} komentar,{" "}
+                    {profile._count.favorit} favorit
                   </dd>
                 </div>
               </dl>

@@ -4,31 +4,31 @@
   gap: 0.6rem;
 }
 
-.pill {
+.button {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.8rem;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: #fff;
   color: var(--heading);
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s ease;
 }
 
-.pill i {
+.button i {
   font-size: 1.1rem;
 }
 
-.pill:hover {
+.button:hover {
   border-color: var(--caramel);
   background: var(--cream);
 }
 
-.pill:disabled {
+.button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -45,19 +45,19 @@
   background: #FFF4E5;
 }
 
-.komentarBox {
+.commentBox {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--line);
 }
 
-.komentarForm {
+.commentForm {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.8rem;
 }
 
-.komentarForm input {
+.commentForm input {
   flex: 1;
   min-width: 0;
   padding: 0.55rem 0.8rem;
@@ -66,12 +66,12 @@
   font-size: 0.88rem;
 }
 
-.komentarForm input:focus {
+.commentForm input:focus {
   outline: none;
   border-color: var(--caramel);
 }
 
-.komentarForm button {
+.commentForm button {
   padding: 0.55rem 1rem;
   border: none;
   border-radius: 10px;
@@ -81,7 +81,7 @@
   font-weight: 600;
 }
 
-.komentarList {
+.commentList {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -92,25 +92,25 @@
   list-style: none;
 }
 
-.komentarItem {
+.commentItem {
   padding: 0.6rem 0.8rem;
   border-radius: 10px;
   background: var(--cream);
   font-size: 0.86rem;
 }
 
-.komentarItem strong {
+.commentItem strong {
   display: block;
   color: var(--heading);
   font-size: 0.82rem;
 }
 
-.komentarItem p {
+.commentItem p {
   margin: 0;
   color: var(--text);
 }
 
-.kosong {
+.emptyText {
   margin: 0;
   color: var(--text-soft);
   font-size: 0.85rem;

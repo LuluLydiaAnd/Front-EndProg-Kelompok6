@@ -1,7 +1,10 @@
-/*sidebar */
+/* ==============================
+   LAYOUT & SIDEBAR
+============================== */
+
 .shell {
-  --user-sidebar: #3E2415;
-  --user-accent: #8B5A2B;
+  --sidebar-bg: #3E2415;
+  --accent: #8B5A2B;
 
   display: flex;
   min-height: 100vh;
@@ -16,7 +19,7 @@
   flex-shrink: 0;
   width: 260px;
   height: 100vh;
-  background: var(--user-sidebar);
+  background: var(--sidebar-bg);
   color: #fff;
   transition: width 0.25s ease;
 }
@@ -78,7 +81,7 @@
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .menuItem i {
@@ -93,7 +96,7 @@
 
 .active,
 .active:hover {
-  background: var(--user-accent);
+  background: var(--accent);
   color: #fff;
 }
 
@@ -109,7 +112,7 @@
   color: #fff;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .logout:hover {
@@ -120,7 +123,6 @@
   font-size: 1.25rem;
 }
 
-/* Sidebar diciutkan */
 .collapsed .sidebar {
   width: 84px;
 }
@@ -147,7 +149,9 @@
   padding: 2.5rem clamp(1.2rem, 4vw, 3rem);
 }
 
-/* dashboard */
+/* ==============================
+   HEADER
+============================== */
 
 .header {
   display: flex;
@@ -193,7 +197,7 @@
   height: 46px;
   border-radius: 50%;
   background: var(--cream-warm);
-  color: var(--user-accent);
+  color: var(--accent);
   font-size: 1.4rem;
 }
 
@@ -207,6 +211,19 @@
 .userChip small {
   color: var(--text-soft);
 }
+
+.warning {
+  margin-bottom: 1.2rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  background: #FFF4E5;
+  color: var(--caramel-dark);
+  font-size: 0.9rem;
+}
+
+/* ==============================
+   STAT CARD
+============================== */
 
 .stats {
   display: grid;
@@ -235,7 +252,7 @@
   height: 56px;
   border-radius: 14px;
   background: var(--cream-warm);
-  color: var(--user-accent);
+  color: var(--accent);
   font-size: 1.6rem;
 }
 
@@ -259,6 +276,10 @@
   color: var(--text-soft);
   font-size: 0.82rem;
 }
+
+/* ==============================
+   PANEL & LIST
+============================== */
 
 .panel {
   padding: 1.8rem;
@@ -288,9 +309,32 @@
   font-size: 0.88rem;
 }
 
-.panelHeader > i {
-  color: var(--user-accent);
-  font-size: 1.6rem;
+.refreshButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--accent);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.refreshButton:hover {
+  background: var(--cream-warm);
+}
+
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .empty {
@@ -306,40 +350,7 @@
   font-size: 3.2rem;
 }
 
-@media (max-width: 991.98px) {
-  .stats {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .sidebar {
-    width: 84px;
-  }
-
-  .profile strong,
-  .profile span,
-  .menuItem span,
-  .logout span,
-  .toggle {
-    display: none;
-  }
-
-  .profile {
-    min-height: 86px;
-  }
-
-  .menuItem,
-  .logout {
-    justify-content: center;
-  }
-
-  .header {
-    flex-direction: column;
-  }
-}
-
-.activityList {
+.list {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -348,7 +359,7 @@
   list-style: none;
 }
 
-.activityItem {
+.listItem {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
@@ -358,7 +369,7 @@
   background: var(--surface);
 }
 
-.activityIcon {
+.listIcon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -367,82 +378,38 @@
   height: 40px;
   border-radius: 12px;
   background: var(--cream-warm);
-  color: var(--user-accent);
+  color: var(--accent);
   font-size: 1.2rem;
 }
 
-.activityText {
+.listText {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   min-width: 0;
 }
 
-.activityText p {
+.listText p {
   margin: 0;
   color: var(--text);
   font-size: 0.92rem;
 }
 
-.activityText strong {
+.listText strong {
   color: var(--heading);
 }
 
-.activityQuote {
+.listText small {
+  color: var(--text-soft);
+  font-size: 0.78rem;
+}
+
+.quote {
   color: var(--text-soft);
   font-size: 0.86rem;
   font-style: italic;
   overflow-wrap: anywhere;
 }
-
-.activityText small {
-  color: var(--text-soft);
-  font-size: 0.78rem;
-}
-
-.warning {
-  margin-bottom: 1.2rem;
-  padding: 0.8rem 1rem;
-  border-radius: 12px;
-  background: #FFF4E5;
-  color: var(--caramel-dark);
-  font-size: 0.9rem;
-}
-
-.refreshBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #fff;
-  color: var(--user-accent);
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.refreshBtn:hover {
-  background: var(--cream-warm);
-}
-
-.refreshBtn:disabled {
-  cursor: wait;
-}
-
-.spin {
-  animation: putar 0.8s linear infinite;
-}
-
-@keyframes putar {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* komen & favorit */
 
 .badge {
   display: inline-block;
@@ -450,13 +417,13 @@
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
   background: var(--cream-warm);
-  color: var(--user-accent);
+  color: var(--accent);
   font-size: 0.72rem;
   font-weight: 700;
   vertical-align: middle;
 }
 
-.deleteBtn {
+.deleteButton {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -473,18 +440,81 @@
   transition: 0.2s ease;
 }
 
-.deleteBtn:hover {
+.deleteButton:hover {
   background: #C0392B;
   color: #fff;
 }
 
-.favGrid {
+/* ==============================
+   FILTER TAB
+============================== */
+
+.tabs {
+  display: inline-flex;
+  gap: 0.4rem;
+  margin-bottom: 1.4rem;
+  padding: 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tab i {
+  font-size: 1.1rem;
+}
+
+.tab:hover {
+  background: var(--cream);
+}
+
+.tabActive,
+.tabActive:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.tabCount {
+  min-width: 22px;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: var(--cream-warm);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.tabActive .tabCount {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+/* ==============================
+   CARD (LIKE & FAVORIT)
+============================== */
+
+.cardGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.2rem;
 }
 
-.favCard {
+.card {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -495,23 +525,23 @@
   box-shadow: 0 6px 18px rgba(62, 36, 21, 0.05);
 }
 
-.favTop {
+.cardTop {
   display: flex;
   align-items: center;
   margin-bottom: 0.4rem;
 }
 
-.favTop .badge {
+.cardTop .badge {
   margin-left: 0;
 }
 
-.favCard h3 {
+.card h3 {
   margin: 0;
   font-size: 1.1rem;
   overflow-wrap: anywhere;
 }
 
-.favCard p {
+.card p {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -520,7 +550,7 @@
   font-size: 0.88rem;
 }
 
-.favDesc {
+.cardDesc {
   display: -webkit-box !important;
   overflow: hidden;
   -webkit-box-orient: vertical;
@@ -528,7 +558,7 @@
   line-clamp: 2;
 }
 
-.favLink {
+.cardLink {
   display: inline-flex;
   align-items: center;
   gap: 0.2rem;
@@ -540,7 +570,9 @@
   text-decoration: none;
 }
 
-/*profil*/
+/* ==============================
+   PROFIL
+============================== */
 
 .profileCard {
   display: flex;
@@ -557,7 +589,7 @@
   height: 90px;
   border-radius: 50%;
   background: var(--cream-warm);
-  color: var(--user-accent);
+  color: var(--accent);
   font-size: 2.6rem;
 }
 
@@ -594,8 +626,8 @@
   color: var(--text-soft);
   font-size: 0.78rem;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .profileList dd {
@@ -605,14 +637,49 @@
   overflow-wrap: anywhere;
 }
 
+/* ==============================
+   RESPONSIVE
+============================== */
+
 @media (max-width: 991.98px) {
-  .favGrid {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .cardGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
+@media (max-width: 767.98px) {
+  .sidebar {
+    width: 84px;
+  }
+
+  .profile strong,
+  .profile span,
+  .menuItem span,
+  .logout span,
+  .toggle {
+    display: none;
+  }
+
+  .profile {
+    min-height: 86px;
+  }
+
+  .menuItem,
+  .logout {
+    justify-content: center;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 575.98px) {
-  .favGrid,
+  .cardGrid,
   .profileList {
     grid-template-columns: 1fr;
   }

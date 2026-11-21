@@ -1,33 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getRingkasanUser } from "@/app/actions/interaksi";
+import { getUserSummary } from "@/app/actions/interactions";
 import { useSessionUser } from "@/lib/useSessionUser";
 import styles from "../user.module.css";
 
-type Aktivitas = {
+type Activity = {
   id: string;
-  jenis: "suka" | "komentar" | "favorit";
-  judul: string;
-  isi: string;
+  type: "like" | "comment" | "favorite";
+  title: string;
+  content: string;
   createdAt: Date;
 };
 
-type Ringkasan = {
-  jumlahSuka: number;
-  jumlahKomentar: number;
-  jumlahFavorit: number;
-  aktivitas: Aktivitas[];
+type Summary = {
+  likeCount: number;
+  commentCount: number;
+  favoriteCount: number;
+  activities: Activity[];
 };
 
-const keteranganAktivitas = {
-  suka: { icon: "bx bxs-heart", teks: "Kamu menyukai" },
-  komentar: { icon: "bx bx-message-square", teks: "Kamu berkomentar di" },
-  favorit: { icon: "bx bxs-bookmark", teks: "Kamu memfavoritkan" },
+const activityLabels = {
+  like: { icon: "bx bxs-heart", text: "Kamu menyukai" },
+  comment: { icon: "bx bx-message-square", text: "Kamu berkomentar di" },
+  favorite: { icon: "bx bxs-bookmark", text: "Kamu memfavoritkan" },
 };
 
-function formatWaktu(tanggal: Date) {
-  return new Date(tanggal).toLocaleString("id-ID", {
+function formatDate(date: Date) {
+  return new Date(date).toLocaleString("id-ID", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -40,49 +40,48 @@ export default function UserDashboardPage() {
   const user = useSessionUser();
   const userId = user?.id;
 
-  const [ringkasan, setRingkasan] = useState<Ringkasan | null>(null);
-  const [muatUlang, setMuatUlang] = useState(0);
-  const [memuat, setMemuat] = useState(false);
+  const [summary, setSummary] = useState<Summary | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  // Ambil data dari database. Jalan lagi setiap tombol refresh ditekan.
   useEffect(() => {
     if (!userId) return;
-    let aktif = true;
+    let active = true;
 
-    getRingkasanUser(userId)
+    getUserSummary(userId)
       .then((data) => {
-        if (aktif) setRingkasan(data);
+        if (active) setSummary(data);
       })
       .finally(() => {
-        if (aktif) setMemuat(false);
+        if (active) setLoading(false);
       });
 
     return () => {
-      aktif = false;
+      active = false;
     };
-  }, [userId, muatUlang]);
+  }, [userId, reloadKey]);
 
   function handleRefresh() {
-    setMemuat(true);
-    setMuatUlang((n) => n + 1);
+    setLoading(true);
+    setReloadKey(reloadKey + 1);
   }
 
   if (!user) return null;
 
   const stats = [
-    { label: "Suka", value: ringkasan?.jumlahSuka ?? 0, desc: "Total suka kamu", icon: "bx bxs-heart" },
-    { label: "Komentar", value: ringkasan?.jumlahKomentar ?? 0, desc: "Total komentar kamu", icon: "bx bx-message-square" },
-    { label: "Favorit", value: ringkasan?.jumlahFavorit ?? 0, desc: "Total favorit kamu", icon: "bx bxs-bookmark" },
+    { label: "Like", value: summary?.likeCount ?? 0, desc: "Total like kamu", icon: "bx bxs-heart" },
+    { label: "Komentar", value: summary?.commentCount ?? 0, desc: "Total komentar kamu", icon: "bx bx-message-square" },
+    { label: "Favorit", value: summary?.favoriteCount ?? 0, desc: "Total favorit kamu", icon: "bx bxs-bookmark" },
   ];
 
   return (
     <>
       <header className={styles.header}>
         <div>
-          <p className={styles.greeting}>Halo, selamat datang 👋</p>
+          <p className={styles.greeting}>Selamat datang kembali</p>
           <h1 className={styles.title}>Halo, {user.name}</h1>
           <p className={styles.subtitle}>
-            Kelola aktivitas, favorit, dan komentar kamu di sini.
+            Lihat aktivitas, favorit, dan komentar kamu di sini.
           </p>
         </div>
 
@@ -104,15 +103,15 @@ export default function UserDashboardPage() {
       )}
 
       <section className={styles.stats}>
-        {stats.map((item) => (
-          <div key={item.label} className={styles.statCard}>
+        {stats.map((stat) => (
+          <div key={stat.label} className={styles.statCard}>
             <div className={styles.statIcon}>
-              <i className={item.icon}></i>
+              <i className={stat.icon}></i>
             </div>
             <div>
-              <p className={styles.statLabel}>{item.label}</p>
-              <p className={styles.statValue}>{item.value}</p>
-              <p className={styles.statDesc}>{item.desc}</p>
+              <p className={styles.statLabel}>{stat.label}</p>
+              <p className={styles.statValue}>{stat.value}</p>
+              <p className={styles.statDesc}>{stat.desc}</p>
             </div>
           </div>
         ))}
@@ -126,33 +125,35 @@ export default function UserDashboardPage() {
           </div>
           <button
             type="button"
-            className={styles.refreshBtn}
+            className={styles.refreshButton}
             onClick={handleRefresh}
-            disabled={memuat}
-            title="Muat ulang aktivitas"
+            disabled={loading}
+            title="Muat ulang"
           >
-            <i className={`bx bx-revision ${memuat ? styles.spin : ""}`}></i>
+            <i className={`bx bx-revision ${loading ? styles.spin : ""}`}></i>
           </button>
         </div>
 
-        {!ringkasan || ringkasan.aktivitas.length === 0 ? (
+        {!summary || summary.activities.length === 0 ? (
           <div className={styles.empty}>
             <i className="bx bx-history"></i>
-            <p>{ringkasan ? "Belum ada aktivitas." : "Memuat aktivitas..."}</p>
+            <p>{summary ? "Belum ada aktivitas." : "Memuat..."}</p>
           </div>
         ) : (
-          <ul className={styles.activityList}>
-            {ringkasan.aktivitas.map((a) => (
-              <li key={a.id} className={styles.activityItem}>
-                <div className={styles.activityIcon}>
-                  <i className={keteranganAktivitas[a.jenis].icon}></i>
+          <ul className={styles.list}>
+            {summary.activities.map((activity) => (
+              <li key={activity.id} className={styles.listItem}>
+                <div className={styles.listIcon}>
+                  <i className={activityLabels[activity.type].icon}></i>
                 </div>
-                <div className={styles.activityText}>
+                <div className={styles.listText}>
                   <p>
-                    {keteranganAktivitas[a.jenis].teks} <strong>{a.judul}</strong>
+                    {activityLabels[activity.type].text} <strong>{activity.title}</strong>
                   </p>
-                  {a.isi && <span className={styles.activityQuote}>&ldquo;{a.isi}&rdquo;</span>}
-                  <small>{formatWaktu(a.createdAt)}</small>
+                  {activity.content && (
+                    <span className={styles.quote}>&ldquo;{activity.content}&rdquo;</span>
+                  )}
+                  <small>{formatDate(activity.createdAt)}</small>
                 </div>
               </li>
             ))}
