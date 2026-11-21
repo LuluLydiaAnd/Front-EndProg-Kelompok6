@@ -20,6 +20,7 @@ const menu = [
   { href: "/user/dashboard", label: "Dashboard", icon: "bx bxs-dashboard" },
   { href: "/user/profil", label: "Profil Saya", icon: "bx bx-user-circle" },
   { href: "/user/komentar", label: "Komentar Saya", icon: "bx bx-message-square-detail" },
+  { href: "/user/like", label: "Like Saya", icon: "bx bxs-heart" },
   { href: "/user/favorit", label: "Favorit Saya", icon: "bx bxs-bookmark" },
   { href: "/", label: "Lihat Situs", icon: "bx bx-home-alt" },
 ];

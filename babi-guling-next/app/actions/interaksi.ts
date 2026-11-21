@@ -1,11 +1,9 @@
 "use server";
-
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 
 type Target = { restoranId?: number; kontenId?: number };
 
-// Pastikan target-nya salah satu: restoran ATAU postingan
+// Pastikan antara salah satu: restoran ATAU postingan
 function cekTarget(target: Target) {
   const adaResto = typeof target.restoranId === "number";
   const adaKonten = typeof target.kontenId === "number";
@@ -19,13 +17,7 @@ function cekTarget(target: Target) {
     : { kontenId: target.kontenId };
 }
 
-function refreshHalaman() {
-  revalidatePath("/resto");
-  revalidatePath("/postingan");
-  revalidatePath("/user/dashboard");
-}
-
-// Cek apakah user ini sudah like / favorit target tertentu
+// Cek apakah user ini sudah like/favorit
 export async function getStatusUser(userId: number, target: Target) {
   const t = cekTarget(target);
 
@@ -37,7 +29,7 @@ export async function getStatusUser(userId: number, target: Target) {
   return { liked: !!like, favorited: !!favorit };
 }
 
-// Klik pertama = like, klik kedua = batal like
+// Klik sekali buat like atau favorit, kalau mau batal klik sekali lagi
 export async function toggleLike(userId: number, target: Target) {
   const t = cekTarget(target);
   const sudahAda = await prisma.like.findFirst({ where: { userId, ...t } });
@@ -48,11 +40,9 @@ export async function toggleLike(userId: number, target: Target) {
     await prisma.like.create({ data: { userId, ...t } });
   }
 
-  refreshHalaman();
-  return !sudahAda; // true = sekarang disukai
+  return !sudahAda;
 }
 
-// Klik pertama = favorit, klik kedua = batal favorit
 export async function toggleFavorit(userId: number, target: Target) {
   const t = cekTarget(target);
   const sudahAda = await prisma.favorit.findFirst({ where: { userId, ...t } });
@@ -63,11 +53,9 @@ export async function toggleFavorit(userId: number, target: Target) {
     await prisma.favorit.create({ data: { userId, ...t } });
   }
 
-  refreshHalaman();
   return !sudahAda;
 }
 
-// Ambil semua komentar untuk satu resto / postingan
 export async function getKomentar(target: Target) {
   const t = cekTarget(target);
 
@@ -89,7 +77,7 @@ export async function tambahKomentar(userId: number, isi: string, target: Target
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) throw new Error("User tidak ditemukan.");
 
-  const komentar = await prisma.komentar.create({
+  return prisma.komentar.create({
     data: {
       isi: isiBersih,
       namaUser: user.name ?? user.email,
@@ -98,12 +86,9 @@ export async function tambahKomentar(userId: number, isi: string, target: Target
     },
     select: { id: true, namaUser: true, isi: true, createdAt: true },
   });
-
-  refreshHalaman();
-  return komentar;
 }
 
-// Ringkasan untuk dashboard user: jumlah + aktivitas terbaru
+// Kumpulan aktivitas user : like, komen, fav
 export async function getRingkasanUser(userId: number) {
   const target = {
     restoran: { select: { nama: true } },
@@ -135,7 +120,7 @@ export async function getRingkasanUser(userId: number) {
       }),
     ]);
 
-  // Gabungkan semua aktivitas, urutkan dari yang terbaru
+  // Urutan aktivitas user dari yang terbaru
   const aktivitas = [
     ...likes.map((l) => ({
       id: `suka-${l.id}`,

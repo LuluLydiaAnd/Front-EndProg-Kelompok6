@@ -1,16 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 
-function refreshHalaman() {
-  revalidatePath("/resto");
-  revalidatePath("/postingan");
-  revalidatePath("/user/dashboard");
-}
-
-// Data profil + jumlah interaksi
-export async function getProfilUser(userId: number) {
+export async function getUserProfile(userId: number) {
   return prisma.user.findUnique({
     where: { id: userId },
     select: {
@@ -22,8 +14,7 @@ export async function getProfilUser(userId: number) {
   });
 }
 
-// Semua komentar milik user
-export async function getKomentarUser(userId: number) {
+export async function getUserComments(userId: number) {
   return prisma.komentar.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
@@ -37,19 +28,40 @@ export async function getKomentarUser(userId: number) {
   });
 }
 
-// Hapus komentar (hanya boleh komentar milik sendiri)
-export async function hapusKomentarUser(userId: number, komentarId: number) {
-  const komentar = await prisma.komentar.findUnique({ where: { id: komentarId } });
-  if (!komentar || komentar.userId !== userId) {
+export async function deleteUserComment(userId: number, commentId: number) {
+  const comment = await prisma.komentar.findUnique({ where: { id: commentId } });
+
+  if (!comment || comment.userId !== userId) {
     throw new Error("Komentar tidak ditemukan.");
   }
 
-  await prisma.komentar.delete({ where: { id: komentarId } });
-  refreshHalaman();
+  await prisma.komentar.delete({ where: { id: commentId } });
 }
 
-// Semua favorit milik user
-export async function getFavoritUser(userId: number) {
+export async function getUserLikes(userId: number) {
+  return prisma.like.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      createdAt: true,
+      restoran: { select: { nama: true, alamat: true, rating: true } },
+      konten: { select: { title: true, description: true } },
+    },
+  });
+}
+
+export async function deleteUserLike(userId: number, likeId: number) {
+  const like = await prisma.like.findUnique({ where: { id: likeId } });
+
+  if (!like || like.userId !== userId) {
+    throw new Error("Data like tidak ditemukan.");
+  }
+
+  await prisma.like.delete({ where: { id: likeId } });
+}
+
+export async function getUserFavorites(userId: number) {
   return prisma.favorit.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
@@ -62,13 +74,12 @@ export async function getFavoritUser(userId: number) {
   });
 }
 
-// Hapus dari favorit (hanya boleh milik sendiri)
-export async function hapusFavoritUser(userId: number, favoritId: number) {
-  const favorit = await prisma.favorit.findUnique({ where: { id: favoritId } });
-  if (!favorit || favorit.userId !== userId) {
+export async function deleteUserFavorite(userId: number, favoriteId: number) {
+  const favorite = await prisma.favorit.findUnique({ where: { id: favoriteId } });
+
+  if (!favorite || favorite.userId !== userId) {
     throw new Error("Favorit tidak ditemukan.");
   }
 
-  await prisma.favorit.delete({ where: { id: favoritId } });
-  refreshHalaman();
+  await prisma.favorit.delete({ where: { id: favoriteId } });
 }

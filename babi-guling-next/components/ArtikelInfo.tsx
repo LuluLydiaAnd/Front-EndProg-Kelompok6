@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import InteraksiButtons from "@/components/InteraksiButtons";
+import InteractionButtons from "@/components/InteractionButtons";
 import styles from "./ArtikelInfo.module.css";
 
 type KategoriPostingan =
@@ -135,10 +135,10 @@ export default function ArtikelInfo() {
                   </p>
 
                   <div className={styles.articleActions}>
-                    <InteraksiButtons
+                    <InteractionButtons
                       target={{ kontenId: post.id }}
-                      initialLikes={post._count?.likes ?? 0}
-                      initialKomentar={post._count?.komentar ?? 0}
+                      likeCount={post._count?.likes ?? 0}
+                      commentCount={post._count?.komentar ?? 0}
                     />
                   </div>
                 </div>

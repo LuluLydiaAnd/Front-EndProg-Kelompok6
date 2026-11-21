@@ -4,6 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+const ADMIN_EMAIL = "admin@babiguling.com";
+const ADMIN_PASSWORD = "admin123";
+
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -15,7 +18,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
 
-    if (email === "admin@babiguling.com" && password === "admin123") {
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       sessionStorage.setItem(
         "user",
         JSON.stringify({ name: "Admin", email, role: "admin" })
@@ -25,6 +28,7 @@ export default function LoginPage() {
     }
 
     setLoading(true);
+
     try {
       const res = await fetch("/api/login", {
         method: "POST",
@@ -89,8 +93,7 @@ export default function LoginPage() {
             </form>
 
             <p className="text-center mt-3 mb-0">
-              Belum punya akun?{" "}
-              <Link href="/register">Daftar</Link>
+              Belum punya akun? <Link href="/register">Daftar</Link>
             </p>
           </div>
         </div>

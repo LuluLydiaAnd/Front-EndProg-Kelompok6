@@ -2,28 +2,48 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+const ADMIN_EMAIL = "admin@babiguling.com";
+
 export async function POST(req: Request) {
   const { name, email, password } = await req.json();
 
   if (!email || !password) {
-    return NextResponse.json({ error: "Email dan password wajib diisi." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Email dan password wajib diisi." },
+      { status: 400 }
+    );
   }
 
-  const emailBersih = String(email).toLowerCase().trim();
+  const cleanEmail = String(email).toLowerCase().trim();
 
-  if (emailBersih === "admin@babiguling.com") {
-    return NextResponse.json({ error: "Email tersebut tidak bisa digunakan." }, { status: 400 });
+  if (cleanEmail === ADMIN_EMAIL) {
+    return NextResponse.json(
+      { error: "Email tersebut tidak bisa digunakan." },
+      { status: 400 }
+    );
   }
 
-  const sudahAda = await prisma.user.findUnique({ where: { email: emailBersih } });
-  if (sudahAda) {
-    return NextResponse.json({ error: "Email sudah terdaftar." }, { status: 400 });
-  }
-
-  const hash = await bcrypt.hash(password, 10);
-  await prisma.user.create({
-    data: { name, email: emailBersih, password: hash, role: "USER" },
+  const existingUser = await prisma.user.findUnique({
+    where: { email: cleanEmail },
   });
 
-  return NextResponse.json({ message: "Berhasil daftar" }, { status: 201 });
+  if (existingUser) {
+    return NextResponse.json(
+      { error: "Email sudah terdaftar." },
+      { status: 400 }
+    );
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await prisma.user.create({
+    data: {
+      name,
+      email: cleanEmail,
+      password: hashedPassword,
+      role: "USER",
+    },
+  });
+
+  return NextResponse.json({ message: "Registrasi berhasil." }, { status: 201 });
 }
