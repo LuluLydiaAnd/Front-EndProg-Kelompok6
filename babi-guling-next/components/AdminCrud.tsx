@@ -5,6 +5,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { fotoGaleriAwal, type KategoriGaleri } from "@/lib/galeriData";
 
 // tipe kategori yang tersedia untuk postingan
 type KategoriPostingan =
@@ -19,7 +20,7 @@ type Item = {
   title: string;
   description: string;
   image: string;
-  kategori?: KategoriPostingan;
+  kategori?: KategoriPostingan | KategoriGaleri;
 };
 
 // properti yang bisa diatur saat menggunakan komponen
@@ -79,9 +80,26 @@ export default function AdminCrud({
     if (typeof window === "undefined" || apiEndpoint) return [];
 
     try {
-      return JSON.parse(
-        localStorage.getItem(storageKey) || "[]"
-      ) as Item[];
+      const dataTersimpan = localStorage.getItem(storageKey);
+
+      if (dataTersimpan !== null) {
+        const data = JSON.parse(dataTersimpan) as Item[];
+
+        if (data.length > 0 || storageKey !== "babi-guling-galeri") {
+          return data;
+        }
+      }
+
+      if (storageKey === "babi-guling-galeri") {
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify(fotoGaleriAwal)
+        );
+
+        return fotoGaleriAwal;
+      }
+
+      return [];
     } catch {
       return [];
     }
@@ -106,11 +124,16 @@ export default function AdminCrud({
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
   // menyimpan nilai input pada form
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    title: string;
+    description: string;
+    image: string;
+    kategori: KategoriPostingan | KategoriGaleri;
+  }>({
     title: "",
     description: "",
     image: "",
-    kategori: "Informations" as KategoriPostingan,
+    kategori: "Informations",
   });
 
   // memeriksa hak akses admin

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./Gallery.module.css";
+import { fotoGaleriAwal } from "@/lib/galeriData";
 
 // tipe kategori foto yang tersedia di galeri
 type Kategori = "proses" | "sajian" | "upacara";
@@ -14,20 +15,26 @@ type Foto = {
 };
 
 // daftar foto beserta judul, lokasi file, dan kategorinya
-const fotoList: Foto[] = [
-  { src: "/galeri/sejarah-babi-guling-1.jpeg", judul: "Pemanggangan babi di atas bara api", kategori: "proses" },
-  { src: "/galeri/base-genep-final.jpg", judul: "Bumbu base genep", kategori: "proses" },
-  { src: "/galeri/lengkap1.jpg", judul: "Sajian lengkap babi guling", kategori: "sajian" },
-  { src: "/galeri/upacara.jpg", judul: "Upacara adat Bali", kategori: "upacara" },
-  { src: "/galeri/babipiring.jpg", judul: "Irisan babi guling di piring", kategori: "proses" },
-  { src: "/galeri/dishfull.jpg", judul: "Nasi campur babi guling", kategori: "sajian" },
-  { src: "/galeri/babimatah.jpg", judul: "Babi guling dengan sambal matah", kategori: "sajian" },
-  { src: "/galeri/persembahanbabi.jpg", judul: "Persembahan tradisi Ngusaba Sumbu", kategori: "upacara" },
-  { src: "/galeri/usabasumbu.jpeg", judul: "Ritual Usaba Sumbu", kategori: "upacara" },
-  { src: "/galeri/anekasam.jpg", judul: "Babi guling & aneka sambal", kategori: "sajian" },
-  { src: "/galeri/lawarkrispi.jpg", judul: "Kulit krispi, lawar, & sate", kategori: "sajian" },
-  { src: "/galeri/nascam.jpg", judul: "Nasi campur khas Bali", kategori: "sajian" },
-];
+// const fotoList: Foto[] = [
+//   { src: "/galeri/sejarah-babi-guling-1.jpeg", judul: "Pemanggangan babi di atas bara api", kategori: "proses" },
+//   { src: "/galeri/base-genep-final.jpg", judul: "Bumbu base genep", kategori: "proses" },
+//   { src: "/galeri/lengkap1.jpg", judul: "Sajian lengkap babi guling", kategori: "sajian" },
+//   { src: "/galeri/upacara.jpg", judul: "Upacara adat Bali", kategori: "upacara" },
+//   { src: "/galeri/babipiring.jpg", judul: "Irisan babi guling di piring", kategori: "proses" },
+//   { src: "/galeri/dishfull.jpg", judul: "Nasi campur babi guling", kategori: "sajian" },
+//   { src: "/galeri/babimatah.jpg", judul: "Babi guling dengan sambal matah", kategori: "sajian" },
+//   { src: "/galeri/persembahanbabi.jpg", judul: "Persembahan tradisi Ngusaba Sumbu", kategori: "upacara" },
+//   { src: "/galeri/usabasumbu.jpeg", judul: "Ritual Usaba Sumbu", kategori: "upacara" },
+//   { src: "/galeri/anekasam.jpg", judul: "Babi guling & aneka sambal", kategori: "sajian" },
+//   { src: "/galeri/lawarkrispi.jpg", judul: "Kulit krispi, lawar, & sate", kategori: "sajian" },
+//   { src: "/galeri/nascam.jpg", judul: "Nasi campur khas Bali", kategori: "sajian" },
+// ];
+
+const fotoList: Foto[] = fotoGaleriAwal.map((foto) => ({
+  src: foto.image,
+  judul: foto.title,
+  kategori: foto.kategori,
+}));
 
 // daftar pilihan filter untuk menampilkan foto berdasarkan kategori
 const filterList: { label: string; value: Kategori | "semua" }[] = [
@@ -41,6 +48,45 @@ export default function Gallery() {
   // menyimpan kategori filter yang dipilih dan posisi foto yang sedang dibuka
   const [filter, setFilter] = useState<Kategori | "semua">("semua");
   const [aktif, setAktif] = useState<number | null>(null);
+  const [sudahDimuat, setSudahDimuat] = useState(false);
+  const [fotoList, setFotoList] = useState<Foto[]>(() =>
+    fotoGaleriAwal.map((foto) => ({
+      src: foto.image,
+      judul: foto.title,
+      kategori: foto.kategori,
+    }))
+  );
+
+  // mengambil data galeri terbaru dari admin
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const dataTersimpan = localStorage.getItem("babi-guling-galeri");
+
+      if (dataTersimpan !== null) {
+        try {
+          const data = JSON.parse(dataTersimpan);
+
+          setFotoList(
+            data.map((foto: {
+              image: string;
+              title: string;
+              kategori: Kategori;
+            }) => ({
+              src: foto.image,
+              judul: foto.title,
+              kategori: foto.kategori,
+            }))
+          );
+        } catch {
+          console.error("Data galeri tidak berhasil dibaca.");
+        }
+      }
+
+      setSudahDimuat(true);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   // menampilkan semua foto atau hanya foto sesuai kategori yang dipilih
   const fotoTampil = filter === "semua" ? fotoList : fotoList.filter((f) => f.kategori === filter);
@@ -55,21 +101,38 @@ export default function Gallery() {
     setAktif((aktif + arah + fotoTampil.length) % fotoTampil.length);
   };
 
-  // mengatur tombol keyboard dan mencegah halaman ikut bergulir saat lightbox terbuka
+  // mengatur tombol keyboard saat lightbox terbuka
   useEffect(() => {
     if (aktif === null) return;
+
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setAktif(null);
-      if (e.key === "ArrowRight") geser(1);
-      if (e.key === "ArrowLeft") geser(-1);
+      if (e.key === "Escape") {
+        setAktif(null);
+      }
+
+      if (e.key === "ArrowRight") {
+        setAktif((prev) =>
+          prev === null ? null : (prev + 1) % fotoTampil.length
+        );
+      }
+
+      if (e.key === "ArrowLeft") {
+        setAktif((prev) =>
+          prev === null
+            ? null
+            : (prev - 1 + fotoTampil.length) % fotoTampil.length
+        );
+      }
     };
+
     window.addEventListener("keydown", handleKey);
     document.body.style.overflow = "hidden";
+
     return () => {
       window.removeEventListener("keydown", handleKey);
       document.body.style.overflow = "";
     };
-  });
+  }, [aktif, fotoTampil.length]);
 
   return (
     // bagian utama halaman galeri
