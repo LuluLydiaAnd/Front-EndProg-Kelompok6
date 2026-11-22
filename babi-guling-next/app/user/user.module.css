@@ -1,6 +1,4 @@
-/* ==============================
-   LAYOUT & SIDEBAR
-============================== */
+/*LAYOUT & SIDEBAR */
 
 .shell {
   --sidebar-bg: #3E2415;
@@ -103,6 +101,7 @@
 .logout {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   gap: 0.8rem;
   margin: 0 0.9rem 1.2rem;
   padding: 0.85rem 1rem;
@@ -110,7 +109,9 @@
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
   color: #fff;
+  font-size: 0.95rem;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
   transition: 0.2s ease;
 }
@@ -120,6 +121,7 @@
 }
 
 .logout i {
+  flex-shrink: 0;
   font-size: 1.25rem;
 }
 
@@ -149,9 +151,7 @@
   padding: 2.5rem clamp(1.2rem, 4vw, 3rem);
 }
 
-/* ==============================
-   HEADER
-============================== */
+/* HEADER */
 
 .header {
   display: flex;
@@ -221,9 +221,7 @@
   font-size: 0.9rem;
 }
 
-/* ==============================
-   STAT CARD
-============================== */
+/*STAT CARD*/
 
 .stats {
   display: grid;
@@ -277,9 +275,7 @@
   font-size: 0.82rem;
 }
 
-/* ==============================
-   PANEL & LIST
-============================== */
+/*PANEL & LIST*/
 
 .panel {
   padding: 1.8rem;
@@ -445,9 +441,7 @@
   color: #fff;
 }
 
-/* ==============================
-   FILTER TAB
-============================== */
+/*FILTER TAB= */
 
 .tabs {
   display: inline-flex;
@@ -504,9 +498,7 @@
   color: #fff;
 }
 
-/* ==============================
-   CARD (LIKE & FAVORIT)
-============================== */
+/* CARD (LIKE & FAVORIT)*/
 
 .cardGrid {
   display: grid;
@@ -570,9 +562,7 @@
   text-decoration: none;
 }
 
-/* ==============================
-   PROFIL
-============================== */
+/*PROFIL*/
 
 .profileCard {
   display: flex;
@@ -637,9 +627,7 @@
   overflow-wrap: anywhere;
 }
 
-/* ==============================
-   RESPONSIVE
-============================== */
+/*RESPONSIVE */
 
 @media (max-width: 991.98px) {
   .stats {

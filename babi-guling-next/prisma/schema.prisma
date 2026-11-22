@@ -126,3 +126,24 @@ model Favorit {
   @@unique([userId, restoranId])
   @@unique([userId, kontenId])
 }
+
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+model FaqFeedback {
+  id         Int      @id @default(autoincrement())
+  faqId      Int
+  pertanyaan String
+  membantu   Boolean
+  alasan     String   @default("")
+  createdAt  DateTime @default(now())
+
+  @@index([faqId])
+}
