@@ -3,12 +3,13 @@
 // import hook react, komponen gambar, dan file css module
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import InteractionButtons from "@/components/InteractionButtons";
 import styles from "./ArtikelInfo.module.css";
 
 // tipe kategori yang digunakan pada postingan
 type KategoriPostingan =
   | "Promotions"
-  | "Recommendation"
+  | "Reccomendation"
   | "Informations"
   | "Other";
 
@@ -20,6 +21,7 @@ type Postingan = {
   image: string;
   kategori: KategoriPostingan;
   createdAt: string;
+  _count?: { likes: number; komentar: number };
 };
 
 // komponen untuk menampilkan daftar artikel dan informasi
@@ -69,7 +71,7 @@ export default function ArtikelInfo() {
   function formatKategori(kategori: KategoriPostingan) {
     const namaKategori: Record<KategoriPostingan, string> = {
       Promotions: "Promosi",
-      Recommendation: "Rekomendasi",
+      Reccomendation: "Rekomendasi",
       Informations: "Informasi",
       Other: "Lainnya",
     };
@@ -97,13 +99,9 @@ export default function ArtikelInfo() {
 
         {/* menampilkan kondisi sesuai status pengambilan data */}
         {loading ? (
-          <div className={styles.message}>
-            Memuat artikel
-          </div>
+          <div className={styles.message}>Memuat artikel</div>
         ) : error ? (
-          <div className={styles.message}>
-            {error}
-          </div>
+          <div className={styles.message}>{error}</div>
         ) : postingan.length === 0 ? (
           <div className={styles.message}>
             Belum ada artikel atau informasi yang tersedia.
@@ -145,13 +143,19 @@ export default function ArtikelInfo() {
                     </p>
                   </div>
 
-                  <h3 className={styles.articleTitle}>
-                    {post.title}
-                  </h3>
+                  <h3 className={styles.articleTitle}>{post.title}</h3>
 
                   <p className={styles.articleDescription}>
                     {post.description}
                   </p>
+
+                  <div className={styles.articleActions}>
+                    <InteractionButtons
+                      target={{ kontenId: post.id }}
+                      likeCount={post._count?.likes ?? 0}
+                      commentCount={post._count?.komentar ?? 0}
+                    />
+                  </div>
                 </div>
               </article>
             ))}

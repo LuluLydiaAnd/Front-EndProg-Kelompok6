@@ -52,9 +52,7 @@ export default function RegisterPage() {
         <div className="col-md-6 col-lg-4">
           <div className="card shadow-sm border-0 p-4 auth-card">
             <h2 className="text-center mb-2">Register</h2>
-            <p className="text-center text-muted mb-4">
-              Buat akun baru
-            </p>
+            <p className="text-center text-muted mb-4">Buat akun baru</p>
 
             {/* form untuk memasukkan data akun baru */}
             <form onSubmit={handleRegister}>
@@ -101,8 +99,7 @@ export default function RegisterPage() {
 
             {/* menyediakan link ke halaman login */}
             <p className="text-center mt-3 mb-0">
-              Sudah punya akun?{" "}
-              <Link href="/login">Login</Link>
+              Sudah punya akun? <Link href="/login">Login</Link>
             </p>
           </div>
         </div>

@@ -15,7 +15,7 @@ type Restoran = {
   nama: string;
   alamat: string;
   rating: number;
-  likesCount: number;
+  _count: { likes: number; komentar: number };
 };
 
 // jenis popup yang bisa ditampilin
@@ -286,6 +286,7 @@ export default function RestoClient({
                   <th>Alamat</th>
                   <th>Rating</th>
                   <th>Likes</th>
+                  <th>Komentar</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -309,7 +310,9 @@ export default function RestoClient({
                       </span>
                     </td>
 
-                    <td>{resto.likesCount}</td>
+                    <td>{resto._count.likes}</td>
+
+                    <td>{resto._count.komentar}</td>
 
                     <td>
                       <div className={styles.actionGroup}>

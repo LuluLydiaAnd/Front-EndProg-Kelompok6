@@ -3,20 +3,25 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 // memproses pendaftaran akun baru
+const ADMIN_EMAIL = "admin@babiguling.com";
+
 export async function POST(req: Request) {
   // mengambil nama, email, dan password dari request
   const { name, email, password } = await req.json();
 
   // memastikan email dan password sudah diisi
   if (!email || !password) {
-    return NextResponse.json({ error: "Email dan password wajib diisi." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Email dan password wajib diisi." },
+      { status: 400 }
+    );
   }
 
   // membersihkan email agar formatnya konsisten
   const emailBersih = String(email).toLowerCase().trim();
 
   // mencegah pengguna memakai email khusus admin
-  if (emailBersih === "admin@babiguling.com") {
+ if (emailBersih === ADMIN_EMAIL)  {
     return NextResponse.json({ error: "Email tersebut tidak bisa digunakan." }, { status: 400 });
   }
 

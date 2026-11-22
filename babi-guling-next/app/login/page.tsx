@@ -4,6 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+const ADMIN_EMAIL = "admin@babiguling.com";
+const ADMIN_PASSWORD = "admin123";
+
 export default function LoginPage() {
   const router = useRouter();
 
@@ -19,7 +22,7 @@ export default function LoginPage() {
     setError("");
 
     // mengecek login admin dengan akun khusus
-    if (email === "admin@babiguling.com" && password === "admin123") {
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       sessionStorage.setItem(
         "user",
         JSON.stringify({ name: "Admin", email, role: "admin" })
@@ -29,6 +32,7 @@ export default function LoginPage() {
     }
 
     setLoading(true);
+
     try {
       // mengirim email dan password ke api login
       const res = await fetch("/api/login", {
@@ -100,8 +104,7 @@ export default function LoginPage() {
 
             {/* menyediakan link ke halaman pendaftaran */}
             <p className="text-center mt-3 mb-0">
-              Belum punya akun?{" "}
-              <Link href="/register">Daftar</Link>
+              Belum punya akun? <Link href="/register">Daftar</Link>
             </p>
           </div>
         </div>
