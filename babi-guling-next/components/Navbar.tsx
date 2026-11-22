@@ -22,6 +22,7 @@ const adminMenu: MenuItem[] = [
   { label: "Kelola Galeri", href: "/admin/galeri", icon: "bx-image" },
   { label: "Kelola Postingan", href: "/admin/postingan", icon: "bx-news" },
   { label: "Kelola Resto", href: "/admin/resto", icon: "bx-restaurant" },
+  { label: "Feedback FAQ", href: "/admin/faq", icon: "bx-message-square-check" },
 ];
 
 function subscribe() {
