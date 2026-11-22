@@ -21,6 +21,7 @@ const adminMenu: MenuItem[] = [
   { label: "Kelola Galeri", href: "/admin/galeri" },
   { label: "Kelola Postingan", href: "/admin/postingan" },
   { label: "Kelola Resto", href: "/admin/resto" },
+  { label: "Feedback FAQ", href: "/admin/faq" },
 ];
 
 function subscribe() {

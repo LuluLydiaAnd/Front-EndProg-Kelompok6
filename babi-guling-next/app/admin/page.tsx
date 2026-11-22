@@ -26,6 +26,13 @@ const menus = [
     href: "/admin/resto",
     number: "03",
   },
+  {
+    title: "Feedback FAQ",
+    description: "Lihat hasil vote \"Jawaban ini membantu?\" dari pengunjung.",
+    icon: "bx-message-square-check",
+    href: "/admin/faq",
+    number: "04",
+  },
 ];
 
 export default function AdminPage() {
@@ -70,12 +77,12 @@ export default function AdminPage() {
               Pilih bagian yang ingin kamu kelola.
             </p>
           </div>
-          <span className="admin-total-menu">3 Menu</span>
+          <span className="admin-total-menu">{menus.length} Menu</span>
         </div>
 
         <div className="row g-4">
           {menus.map((menu) => (
-            <div className="col-md-6 col-xl-4" key={menu.href}>
+            <div className="col-md-6 col-xl-3" key={menu.href}>
               <Link href={menu.href} className="admin-menu-card">
                 <div className="admin-card-top">
                   <div className="admin-menu-icon">
