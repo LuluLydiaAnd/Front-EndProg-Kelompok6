@@ -30,12 +30,6 @@ type Foto = {
 //   { src: "/galeri/nascam.jpg", judul: "Nasi campur khas Bali", kategori: "sajian" },
 // ];
 
-const fotoList: Foto[] = fotoGaleriAwal.map((foto) => ({
-  src: foto.image,
-  judul: foto.title,
-  kategori: foto.kategori,
-}));
-
 // daftar pilihan filter untuk menampilkan foto berdasarkan kategori
 const filterList: { label: string; value: Kategori | "semua" }[] = [
   { label: "Semua", value: "semua" },
@@ -48,7 +42,6 @@ export default function Gallery() {
   // menyimpan kategori filter yang dipilih dan posisi foto yang sedang dibuka
   const [filter, setFilter] = useState<Kategori | "semua">("semua");
   const [aktif, setAktif] = useState<number | null>(null);
-  const [sudahDimuat, setSudahDimuat] = useState(false);
   const [fotoList, setFotoList] = useState<Foto[]>(() =>
     fotoGaleriAwal.map((foto) => ({
       src: foto.image,
@@ -81,8 +74,6 @@ export default function Gallery() {
           console.error("Data galeri tidak berhasil dibaca.");
         }
       }
-
-      setSudahDimuat(true);
     });
 
     return () => cancelAnimationFrame(frame);
