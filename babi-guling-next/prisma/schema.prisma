@@ -126,3 +126,14 @@ model Favorit {
   @@unique([userId, restoranId])
   @@unique([userId, kontenId])
 }
+
+model FaqFeedback {
+  id         Int      @id @default(autoincrement())
+  faqId      Int // id pertanyaan di lib/faqData.ts
+  pertanyaan String // disimpan juga teksnya, biar admin tetap bisa baca walau FAQ diubah
+  membantu   Boolean // true = "Ya", false = "Belum"
+  alasan     String   @default("") // opsional, diisi kalau pilih "Belum"
+  createdAt  DateTime @default(now())
+
+  @@index([faqId])
+}

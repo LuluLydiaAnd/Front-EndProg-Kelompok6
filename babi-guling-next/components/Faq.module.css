@@ -320,6 +320,56 @@
   color: var(--leaf);
 }
 
+.helpful button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.alasanBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: muncul 0.35s ease;
+}
+
+.alasanBox label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.alasanBox textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.alasanBox textarea:focus {
+  border-color: var(--leaf);
+}
+
+.alasanAksi {
+  display: flex;
+  gap: 8px;
+}
+
+.helpful .kirimBtn {
+  background: var(--leaf);
+  border-color: var(--leaf);
+  color: #fff;
+}
+
+.helpful .kirimBtn:hover {
+  color: #fff;
+  opacity: 0.9;
+}
+
 .thanks {
   display: inline-flex;
   align-items: center;
