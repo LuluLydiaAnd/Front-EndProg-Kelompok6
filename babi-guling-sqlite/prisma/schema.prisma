@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Jenis {
+  galeri
+  postingan
+  resto
+}
+
+enum KategoriPostingan {
+  Promotions
+  Reccomendation
+  Informations
+  Other
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Konten {
+  id          Int               @id @default(autoincrement())
+  jenis       Jenis
+  title       String
+  description String
+  image       String            @default("")
+  kategori    KategoriPostingan @default(Informations)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  likes    Like[]
+  favorit  Favorit[]
+  komentar Komentar[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique
+  password  String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+
+  likes    Like[]
+  favorit  Favorit[]
+  komentar Komentar[]
+}
+
+model Restoran {
+  id         Int      @id @default(autoincrement())
+  nama       String
+  alamat     String
+  deskripsi  String   @default("")
+  rating     Float    @default(4.5)
+  likesCount Int      @default(0) // lama, tidak dipakai lagi
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  likes    Like[]
+  favorit  Favorit[]
+  komentar Komentar[]
+}
+
+model Komentar {
+  id        Int      @id @default(autoincrement())
+  namaUser  String
+  isi       String
+  createdAt DateTime @default(now())
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  restoranId Int?
+  restoran   Restoran? @relation(fields: [restoranId], references: [id], onDelete: Cascade)
+
+  kontenId Int?
+  konten   Konten? @relation(fields: [kontenId], references: [id], onDelete: Cascade)
+
+  @@index([restoranId])
+  @@index([kontenId])
+  @@index([userId])
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  restoranId Int?
+  restoran   Restoran? @relation(fields: [restoranId], references: [id], onDelete: Cascade)
+
+  kontenId Int?
+  konten   Konten? @relation(fields: [kontenId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, restoranId]) // 1 user hanya bisa like 1 resto sekali
+  @@unique([userId, kontenId])   // 1 user hanya bisa like 1 postingan sekali
+}
+
+model Favorit {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  restoranId Int?
+  restoran   Restoran? @relation(fields: [restoranId], references: [id], onDelete: Cascade)
+
+  kontenId Int?
+  konten   Konten? @relation(fields: [kontenId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, restoranId])
+  @@unique([userId, kontenId])
+}
+
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+model FaqFeedback {
+  id         Int      @id @default(autoincrement())
+  faqId      Int // id pertanyaan di lib/faqData.ts
+  pertanyaan String // disimpan juga teksnya, biar admin tetap bisa baca walau FAQ diubah
+  membantu   Boolean // true = "Ya", false = "Belum"
+  alasan     String   @default("") // opsional, diisi kalau pilih "Belum"
+  createdAt  DateTime @default(now())
+
+  @@index([faqId])
+}

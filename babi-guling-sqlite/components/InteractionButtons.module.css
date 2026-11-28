@@ -1,0 +1,128 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--heading);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.button i {
+  font-size: 1.1rem;
+}
+
+.button:hover {
+  border-color: var(--caramel);
+  background: var(--cream);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.liked {
+  color: #C0392B;
+  border-color: #C0392B;
+  background: #FFF3F1;
+}
+
+.favorited {
+  color: var(--caramel);
+  border-color: var(--caramel);
+  background: #FFF4E5;
+}
+
+.commentBox {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.commentForm {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.commentForm input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 0.88rem;
+}
+
+.commentForm input:focus {
+  outline: none;
+  border-color: var(--caramel);
+}
+
+.commentForm button {
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--caramel);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 220px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.commentItem {
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  background: var(--cream);
+  font-size: 0.86rem;
+}
+
+.commentItem strong {
+  display: block;
+  color: var(--heading);
+  font-size: 0.82rem;
+}
+
+.commentItem p {
+  margin: 0;
+  color: var(--text);
+}
+
+.emptyText {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.loginNote {
+  margin-bottom: 0.8rem;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.loginNote a {
+  color: var(--caramel);
+  font-weight: 600;
+}

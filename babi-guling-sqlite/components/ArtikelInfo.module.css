@@ -1,0 +1,195 @@
+/* mengatur section artikel */
+.artikelSection {
+  padding: 90px 0;
+  background-color: #faf7f0;
+}
+
+/* mengatur posisi judul dan deskripsi section */
+.sectionHeader {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 45px;
+}
+
+/* teks kecil di atas judul utama */
+.eyebrow {
+  color: #a36b36;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+/* mengatur tampilan judul section */
+.sectionTitle {
+  color: #382719;
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+/* memberi gaya khusus pada teks yang dicetak miring di judul */
+.sectionTitle em {
+  color: #a36b36;
+  font-family: Georgia, serif;
+}
+
+/* mengatur tampilan deskripsi section */
+.sectionDescription {
+  color: #776d62;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+/* menyusun kartu artikel dalam bentuk grid */
+.articleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+/* mengatur tampilan dasar kartu artikel */
+.articleCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eee6da;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* memberi efek saat kursor berada di atas kartu */
+.articleCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(56, 39, 25, 0.1);
+}
+
+/* mengatur ukuran dan posisi area gambar */
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background-color: #eee8df;
+  overflow: hidden;
+}
+
+/* membuat gambar memenuhi area tanpa mengubah proporsinya */
+.articleImage {
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* memberi efek zoom pada gambar saat kartu diarahkan kursor */
+.articleCard:hover .articleImage {
+  transform: scale(1.05);
+}
+
+/* tampilan pengganti ketika gambar tidak tersedia */
+.noImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #9b8c7b;
+  gap: 8px;
+}
+
+/* mengatur ukuran ikon pengganti gambar */
+.noImage i {
+  font-size: 38px;
+}
+
+/* mengatur ukuran teks pengganti gambar */
+.noImage span {
+  font-size: 13px;
+}
+
+/* mengatur jarak isi kartu dari tepi */
+.articleContent {
+  padding: 22px;
+}
+
+/* mengatur tampilan tanggal artikel */
+.articleDate {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #a36b36;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+/* mengatur ukuran ikon tanggal */
+.articleDate i {
+  font-size: 16px;
+}
+
+/* mengatur judul pada setiap kartu artikel */
+.articleTitle {
+  color: #382719;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+/* membatasi deskripsi agar maksimal tiga baris */
+.articleDescription {
+  color: #776d62;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 0;
+
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* mengatur tampilan pesan ketika artikel tidak tersedia */
+.message {
+  text-align: center;
+  padding: 45px 20px;
+  color: #776d62;
+  background-color: #ffffff;
+  border: 1px solid #eee6da;
+  border-radius: 12px;
+}
+
+/* menyesuaikan grid untuk tablet */
+@media (max-width: 991px) {
+  .articleGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* menyesuaikan tampilan untuk layar ponsel */
+@media (max-width: 576px) {
+  .artikelSection {
+    padding: 65px 0;
+  }
+
+  .sectionTitle {
+    font-size: 30px;
+  }
+
+  .articleGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .imageWrapper {
+    height: 220px;
+  }
+}
+
+.articleActions {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #eee6da;
+  line-clamp: 3;
+}
+

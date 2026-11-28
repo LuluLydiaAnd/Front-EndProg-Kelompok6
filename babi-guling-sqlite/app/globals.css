@@ -1,0 +1,1473 @@
+/*global dan color palette */
+
+/* reset margin, padding, dan ukuran elemen */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* kumpulan warna utama website */
+:root {
+  --cream: #FBF4E8;
+  --cream-warm: #F3E6D0;
+  --surface: #FFFAF2;
+  --caramel: #B5541C;
+  --caramel-dark: #8E3F12;
+  --heading: #3E2415;
+  --text: #6B4A35;
+  --text-soft: #8A6A52;
+  --kunyit: #D98E04;
+  --leaf: #5E7D3A;
+  --line: #E2CBAA;
+
+  /* alias warna untuk menyesuaikan bagian lain */
+  --bg-dark: var(--cream);
+  --bg-darker: var(--cream-warm);
+  --red: var(--caramel);
+  --red-dark: var(--caramel-dark);
+  --red-light: var(--caramel);
+  --pink: var(--leaf);
+  --text-light: var(--text);
+  --text-muted: var(--text-soft);
+  --border: var(--line);
+  --glass: rgba(181, 84, 28, 0.08);
+}
+
+/* membuat perpindahan ke bagian halaman lebih halus */
+html {
+  scroll-behavior: smooth;
+}
+
+/* mencegah halaman melebar secara horizontal */
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* pengaturan dasar tampilan halaman */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* font dan warna untuk judul utama */
+h1,
+h2,
+h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--heading);
+}
+
+/*navbar*/
+/* mengatur navbar agar tetap berada di atas saat halaman digulir */
+.bg-brand-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0.9rem 0;
+  background: rgba(251, 244, 232, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+/* nama atau logo website pada navbar */
+.bg-brand-nav .navbar-brand {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: var(--heading);
+}
+
+/* warna logo saat disentuh kursor */
+.bg-brand-nav .navbar-brand:hover {
+  color: var(--caramel);
+}
+
+/* jarak antar menu navbar */
+.bg-brand-nav .navbar-nav {
+  gap: 4px;
+}
+
+/* tampilan dasar setiap menu navbar */
+.bg-brand-nav .navbar-nav .nav-link {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text) !important;
+  padding: 0.45rem 1rem !important;
+  border-radius: 30px;
+  transition: 0.25s ease;
+}
+
+/* efek hover pada menu navbar */
+.bg-brand-nav .navbar-nav .nav-link:hover {
+  color: var(--heading) !important;
+  background: var(--glass);
+}
+
+/* penanda menu yang sedang aktif */
+.bg-brand-nav .navbar-nav .nav-link.active {
+  color: var(--caramel) !important;
+  font-weight: 600;
+}
+
+/* tampilan khusus tombol login */
+.bg-brand-nav .navbar-nav .nav-link.login-link {
+  color: #fff !important;
+  font-weight: 600;
+  background: var(--caramel);
+  margin-left: 0.5rem;
+  box-shadow: 0 6px 16px rgba(181, 84, 28, 0.18);
+}
+
+/* warna tombol login saat disentuh kursor */
+.bg-brand-nav .navbar-nav .nav-link.login-link:hover {
+  background: var(--caramel-dark);
+}
+
+/* tombol pembuka menu navbar pada layar kecil */
+.bg-brand-nav .navbar-toggler {
+  border: none;
+  font-size: 1.6rem;
+  color: var(--heading);
+  padding: 0.2rem 0.4rem;
+}
+
+/* menghilangkan bayangan fokus tombol menu */
+.bg-brand-nav .navbar-toggler:focus {
+  box-shadow: none;
+}
+
+/* penyesuaian navbar untuk tablet dan layar lebih kecil */
+@media (max-width: 991.98px) {
+  .bg-brand-nav .navbar-collapse {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    margin-top: 0.7rem;
+    padding: 0.8rem;
+    border-radius: 16px;
+  }
+
+  .bg-brand-nav .navbar-nav .nav-link {
+    padding: 0.7rem 1rem !important;
+  }
+
+  .bg-brand-nav .navbar-nav .nav-link.login-link {
+    margin: 0.4rem 0 0;
+    text-align: center;
+  }
+}
+
+/*home dan banner*/
+/* bagian banner utama pada halaman beranda */
+.banner-section {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--cream-warm) 0%, var(--cream) 100%);
+  padding: 5rem 0 5.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ornamen lingkaran di belakang banner */
+.banner-section::before {
+  content: "";
+  position: absolute;
+  top: -150px;
+  left: -150px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 142, 4, 0.18), transparent 70%);
+  pointer-events: none;
+}
+
+/* menjaga konten banner berada di atas ornamen */
+.banner-section .container {
+  position: relative;
+}
+
+/* teks kecil di atas judul banner */
+.banner-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--leaf);
+  margin-bottom: 1rem;
+}
+
+/* judul utama banner */
+.banner-title {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--heading);
+  margin-bottom: 1.3rem;
+}
+
+/* warna teks yang diberi penekanan pada judul */
+.banner-title em {
+  color: var(--caramel);
+  font-style: italic;
+}
+
+/* deskripsi singkat pada banner */
+.banner-lead {
+  font-size: 0.98rem;
+  color: var(--text);
+  line-height: 1.8;
+  max-width: 540px;
+  margin-bottom: 1.6rem;
+}
+
+/* warna teks penekanan pada deskripsi */
+.banner-lead em {
+  color: var(--caramel);
+}
+
+/* gambar utama banner */
+.banner-img {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  box-shadow: 0 0 0 8px var(--surface), 0 20px 45px rgba(62, 36, 21, 0.12);
+  transform: rotate(2deg);
+  transition: transform 0.5s ease;
+}
+
+/* efek gambar saat disentuh kursor */
+.banner-img:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* wadah tombol atau tautan pada banner */
+.banner-widgets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+/* tampilan dasar tombol banner */
+.widget-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  color: var(--heading);
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 30px;
+  border: 1px solid var(--line);
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+/* efek hover tombol banner */
+.widget-btn:hover {
+  background: var(--cream-warm);
+  border-color: #D4B48A;
+  color: var(--heading);
+  transform: translateY(-2px);
+}
+
+/* tombol banner yang menjadi sorotan utama */
+.widget-highlight {
+  background: var(--caramel);
+  border-color: var(--caramel);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(181, 84, 28, 0.2);
+}
+
+/* efek hover tombol utama banner */
+.widget-highlight:hover {
+  background: var(--caramel-dark);
+  border-color: var(--caramel-dark);
+  color: #fff;
+}
+
+/*login dan register */
+/* mengatur posisi halaman autentikasi */
+.auth-page {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  position: relative;
+  isolation: isolate;
+  background: var(--cream);
+}
+
+/* ornamen lingkaran di belakang form autentikasi */
+.auth-page::before {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 142, 4, 0.15), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* memastikan baris form menggunakan lebar penuh */
+.auth-page > .row {
+  width: 100%;
+}
+
+/* kotak utama form login dan register */
+.auth-card {
+  width: 100%;
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 22px !important;
+  padding: 2rem !important;
+  color: var(--text);
+  box-shadow: 0 15px 40px rgba(62, 36, 21, 0.08) !important;
+}
+
+/* judul pada form autentikasi */
+.auth-card h2 {
+  color: var(--heading);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* teks deskripsi pada form autentikasi */
+.auth-card p {
+  color: var(--text-soft);
+}
+
+/* label setiap kolom input */
+.auth-card .form-label {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* tampilan kolom input */
+.auth-card .form-control {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--heading);
+  padding: 0.75rem 0.9rem;
+}
+
+/* tampilan input saat dipilih */
+.auth-card .form-control:focus {
+  background: #fff;
+  border-color: var(--caramel);
+  color: var(--heading);
+  box-shadow: 0 0 0 3px rgba(181, 84, 28, 0.12);
+}
+
+/* warna teks petunjuk di dalam input */
+.auth-card .form-control::placeholder {
+  color: #B49B85;
+}
+
+/* tampilan tombol utama form autentikasi */
+.auth-card .btn-danger {
+  background: var(--caramel);
+  border-color: var(--caramel);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-weight: 600;
+  transition: 0.25s ease;
+}
+
+/* efek hover tombol autentikasi */
+.auth-card .btn-danger:hover {
+  background: var(--caramel-dark);
+  border-color: var(--caramel-dark);
+  transform: translateY(-1px);
+}
+
+/* tampilan tautan pada form autentikasi */
+.auth-card a {
+  color: var(--caramel);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* efek hover tautan autentikasi */
+.auth-card a:hover {
+  color: var(--leaf);
+  text-decoration: underline;
+}
+
+/* garis pemisah pada form */
+.auth-card hr {
+  border-color: var(--line);
+  opacity: 1;
+}
+
+/* teks tambahan di bawah form */
+.auth-card small {
+  color: var(--text-soft) !important;
+  line-height: 1.8;
+}
+
+/* teks pesan kesalahan pada form */
+.auth-card .text-danger {
+  color: #C0392B !important;
+  font-size: 0.9rem;
+}
+
+/*admin dashboard*/
+/* area utama halaman dashboard admin */
+.admin-page {
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  margin: 0;
+  padding-top: 3.5rem !important;
+  padding-bottom: 4rem !important;
+  background: var(--cream);
+}
+
+/* judul utama dashboard admin */
+.admin-page h1 {
+  color: var(--heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* judul bagian pada dashboard admin */
+.admin-page h5 {
+  color: var(--heading);
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+/* warna teks deskripsi dashboard */
+.admin-page p {
+  color: var(--text-soft) !important;
+}
+
+/* kotak sambutan admin */
+.admin-welcome {
+  padding: 2.8rem;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: linear-gradient(120deg, var(--cream-warm), #FBEBDD, #F7DCC5);
+  box-shadow: 0 10px 30px rgba(91, 49, 25, 0.06);
+}
+
+/* label kecil di atas judul sambutan */
+.admin-eyebrow {
+  display: inline-block;
+  color: var(--leaf);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 0.8rem;
+}
+
+/* judul pada kotak sambutan admin */
+.admin-welcome h1 {
+  color: var(--heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+/* deskripsi sambutan dan deskripsi bagian admin */
+.admin-welcome p,
+.admin-section-desc {
+  color: var(--text-soft) !important;
+  margin-bottom: 0;
+}
+
+/* judul setiap bagian dashboard */
+.admin-section-title {
+  color: var(--heading);
+  font-size: 1.6rem;
+  margin-bottom: 0.4rem;
+}
+
+/* kartu menu untuk navigasi fitur admin */
+.admin-menu-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 245px;
+  padding: 1.7rem;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--heading);
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(91, 49, 25, 0.05);
+  transition: all 0.3s ease;
+}
+
+/* efek hover pada kartu menu admin */
+.admin-menu-card:hover {
+  transform: translateY(-6px);
+  background: #FFF4E5;
+  border-color: var(--caramel);
+  box-shadow: 0 14px 30px rgba(181, 84, 28, 0.12);
+  color: var(--heading);
+}
+
+/* kotak ikon pada kartu menu admin */
+.admin-menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 1.3rem;
+  border-radius: 15px;
+  background: var(--cream-warm);
+  color: var(--caramel);
+  font-size: 1.8rem;
+}
+
+/* judul kartu menu admin */
+.admin-menu-card h3 {
+  color: var(--heading);
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+}
+
+/* deskripsi kartu menu admin */
+.admin-menu-card p {
+  color: var(--text-soft) !important;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  margin-bottom: 1.4rem;
+}
+
+/* tautan untuk membuka fitur admin */
+.admin-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  color: var(--caramel);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ikon panah pada tautan menu */
+.admin-menu-link i {
+  font-size: 1.2rem;
+  transition: transform 0.25s ease;
+}
+
+/* menggeser ikon panah saat kartu disentuh kursor */
+.admin-menu-card:hover .admin-menu-link i {
+  transform: translateX(5px);
+}
+
+/* mengatur posisi isi navbar pada halaman admin */
+.bg-brand-nav:has(+ .admin-page) .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* tampilan tombol outline pada navbar admin */
+.bg-brand-nav:has(+ .admin-page) .btn-outline-danger {
+  border-color: var(--caramel);
+  color: var(--caramel);
+  border-radius: 10px;
+  padding: 0.6rem 1.1rem;
+}
+
+/* efek hover tombol outline pada navbar admin */
+.bg-brand-nav:has(+ .admin-page) .btn-outline-danger:hover {
+  background: var(--caramel);
+  border-color: var(--caramel);
+  color: #fff;
+}
+
+/*admin crud page*/
+/* mengatur jarak halaman kelola data */
+.admin-crud-page {
+  padding: 2.5rem clamp(1.2rem, 5vw, 5rem) 4rem !important;
+}
+
+/* jarak tombol kembali dari bagian berikutnya */
+.admin-crud-back {
+  margin-bottom: 1.3rem;
+}
+
+/* kotak sambutan pada halaman kelola data */
+.admin-crud-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem 2.5rem;
+  margin-bottom: 1.8rem !important;
+  border-radius: 20px;
+}
+
+/* ukuran judul pada kotak sambutan crud */
+.admin-crud-welcome h1 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  margin-bottom: 0.4rem;
+}
+
+/* menghilangkan margin deskripsi sambutan */
+.admin-crud-welcome p {
+  margin: 0;
+}
+
+/* ikon sambutan dan ikon form kelola data */
+.admin-crud-welcome-icon,
+.admin-crud-form-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: var(--cream);
+  color: var(--caramel);
+  font-size: 2rem;
+}
+
+/*form crud */
+
+/* panel utama untuk menambah atau mengedit data */
+.admin-crud-panel {
+  padding: 2rem 2.2rem;
+  margin-bottom: 2.8rem !important;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+/* baris judul dan ikon form */
+.admin-crud-form-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.7rem;
+}
+
+/* mengatur jarak label kecil pada judul form */
+.admin-crud-form-heading .admin-eyebrow {
+  margin-bottom: 0.3rem;
+}
+
+/* judul panel form */
+.admin-crud-panel h2 {
+  margin: 0;
+  color: var(--heading);
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* deskripsi singkat form */
+.admin-crud-form-heading p {
+  margin: 0.3rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+}
+
+/* menyusun kolom input menjadi dua kolom */
+.admin-crud-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem 1.5rem;
+}
+
+/* mencegah kolom form melebar berlebihan */
+.admin-crud-field {
+  min-width: 0;
+}
+
+/* membuat kolom tertentu memenuhi satu baris */
+.admin-crud-field-wide {
+  grid-column: 1 / -1;
+}
+
+/* tampilan label input form crud */
+.admin-crud-field .form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* tampilan input teks dan pilihan pada form */
+.admin-crud-panel .form-control,
+.admin-crud-panel .form-select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--heading);
+  font-size: 0.9rem;
+}
+
+/* mengatur tinggi awal kolom teks panjang */
+.admin-crud-panel textarea.form-control {
+  min-height: 115px;
+  resize: vertical;
+}
+
+/* efek fokus pada input dan pilihan */
+.admin-crud-panel .form-control:focus,
+.admin-crud-panel .form-select:focus {
+  border-color: var(--caramel);
+  box-shadow: 0 0 0 3px rgba(181, 84, 28, 0.12);
+}
+
+/* warna teks petunjuk pada input form crud */
+.admin-crud-panel .form-control::placeholder {
+  color: var(--text-soft);
+}
+
+/* area untuk mengunggah file */
+.admin-crud-upload {
+  padding: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: var(--cream);
+}
+
+/* latar input di area unggah file */
+.admin-crud-upload .form-control {
+  background: var(--surface);
+}
+
+/* informasi nama file yang dipilih */
+.admin-crud-file-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.8rem 0 0;
+  color: var(--leaf);
+  font-size: 0.88rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* menata gambar yang sedang digunakan pada data */
+.admin-crud-current-image {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* ukuran dan bentuk pratinjau gambar saat ini */
+.admin-crud-current-image img {
+  width: 110px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 9px;
+}
+
+/* menyusun keterangan gambar secara vertikal */
+.admin-crud-current-image div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* judul informasi gambar saat ini */
+.admin-crud-current-image strong {
+  color: var(--heading);
+  font-size: 0.9rem;
+}
+
+/* teks tambahan informasi gambar */
+.admin-crud-current-image small {
+  color: var(--text-soft);
+}
+
+/* area tombol aksi di bagian bawah form */
+.admin-crud-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.6rem;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--line);
+}
+
+/* menyamakan tata letak tombol form */
+.admin-crud-form-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 42px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* tombol utama untuk menyimpan data */
+.admin-crud-panel .btn-danger {
+  background: var(--caramel);
+  border-color: var(--caramel);
+  color: #fff;
+}
+
+/* efek hover tombol simpan */
+.admin-crud-panel .btn-danger:hover {
+  background: var(--caramel-dark);
+  border-color: var(--caramel-dark);
+}
+
+/* tampilan tombol alternatif pada form */
+.admin-crud-panel .btn-outline-light {
+  color: var(--caramel-dark);
+  border-color: var(--caramel);
+}
+
+/* efek hover tombol alternatif pada form */
+.admin-crud-panel .btn-outline-light:hover {
+  color: #fff;
+  background: var(--caramel);
+  border-color: var(--caramel);
+}
+
+/*daftar data crud*/
+
+/* judul dan jumlah data yang ditampilkan */
+.admin-crud-list-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+/* jarak label kecil di atas judul daftar */
+.admin-crud-list-heading .admin-eyebrow {
+  margin-bottom: 0.2rem;
+}
+
+/* judul bagian daftar data */
+.admin-crud-list-heading .admin-section-title {
+  margin: 0;
+  font-size: 1.55rem;
+}
+
+/* label jumlah data */
+.admin-count {
+  flex-shrink: 0;
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  background: var(--cream-warm);
+  color: var(--leaf);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* menyusun kartu data menjadi tiga kolom */
+.admin-crud-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+/* kartu untuk setiap data */
+.admin-crud-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 4px 14px rgba(62, 36, 21, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* efek hover pada kartu data */
+.admin-crud-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(62, 36, 21, 0.09);
+}
+
+/* wadah gambar pada kartu data */
+.admin-crud-image-wrapper {
+  width: 100%;
+  height: 190px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border-radius: 11px;
+  background: var(--cream-warm);
+}
+
+/* gambar pada kartu data */
+.admin-crud-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* efek zoom gambar saat kartu disentuh kursor */
+.admin-crud-item:hover .admin-crud-image {
+  transform: scale(1.04);
+}
+
+/* area judul dan deskripsi kartu */
+.admin-crud-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* label kategori pada kartu data */
+.admin-crud-category {
+  display: inline-block;
+  margin-bottom: 0.7rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* judul pada setiap kartu data */
+.admin-crud-item h3 {
+  margin-bottom: 0.5rem;
+  color: var(--heading);
+  font-family: inherit;
+  font-size: 1.08rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* membatasi deskripsi kartu menjadi dua baris */
+.admin-crud-item p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  margin-bottom: 1rem;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+/* tombol aksi pada setiap kartu data */
+.admin-crud-card-actions {
+  display: flex;
+  gap: 0.6rem;
+  padding-top: 1rem;
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+}
+
+/* menyamakan ukuran tombol aksi kartu */
+.admin-crud-card-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* tampilan tombol edit pada kartu */
+.admin-crud-item .btn-outline-light {
+  color: var(--caramel-dark);
+  border-color: var(--caramel);
+}
+
+/* efek hover tombol edit */
+.admin-crud-item .btn-outline-light:hover {
+  color: #fff;
+  background: var(--caramel);
+  border-color: var(--caramel);
+}
+
+/* tampilan tombol hapus pada kartu */
+.admin-crud-item .btn-outline-danger {
+  color: #C0392B;
+  border-color: #C0392B;
+}
+
+/* efek hover tombol hapus */
+.admin-crud-item .btn-outline-danger:hover {
+  color: #fff;
+  background: #C0392B;
+}
+
+/* tampilan ketika belum ada data */
+.admin-crud-empty {
+  padding: 3rem 1rem;
+  background: var(--surface);
+}
+
+/* ikon pada tampilan data kosong */
+.admin-crud-empty > i {
+  display: block;
+  margin-bottom: 0.7rem;
+  color: var(--caramel);
+  font-size: 2.5rem;
+}
+
+/* judul ketika daftar data masih kosong */
+.admin-crud-empty h3 {
+  margin-bottom: 0.3rem;
+  color: var(--heading);
+  font-family: inherit;
+  font-size: 1.1rem;
+}
+
+/* deskripsi ketika daftar data masih kosong */
+.admin-crud-empty p {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+/*responsive crud*/
+/* mengubah jumlah kolom kartu pada tablet */
+@media (max-width: 991.98px) {
+  .admin-crud-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* penyesuaian form dan kartu pada layar ponsel */
+@media (max-width: 575.98px) {
+  .admin-crud-page {
+    padding-top: 1.5rem !important;
+  }
+
+  .admin-crud-welcome {
+    padding: 1.4rem;
+  }
+
+  .admin-crud-welcome-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1.6rem;
+  }
+
+  .admin-crud-panel {
+    padding: 1.3rem;
+  }
+
+  .admin-crud-fields {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .admin-crud-field-wide {
+    grid-column: auto;
+  }
+
+  .admin-crud-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .admin-crud-image-wrapper {
+    height: 210px;
+  }
+
+  .admin-crud-list-heading .admin-section-title {
+    font-size: 1.3rem;
+  }
+}
+
+/*responsive umum*/
+
+/* penyesuaian banner pada tablet dan layar lebih kecil */
+@media (max-width: 991.98px) {
+  .banner-section {
+    padding: 3.5rem 0;
+    text-align: center;
+  }
+
+  .banner-title {
+    font-size: 2.2rem;
+  }
+
+  .banner-lead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .banner-widgets {
+    justify-content: center;
+  }
+
+  .banner-img {
+    max-width: 260px;
+    margin-top: 1.5rem;
+  }
+}
+
+/* penyesuaian tampilan halaman pada ponsel */
+@media (max-width: 575.98px) {
+  .auth-card {
+    padding: 1.5rem !important;
+  }
+
+  .admin-page h1 {
+    font-size: 1.9rem;
+  }
+
+  .admin-page .d-flex.justify-content-between {
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+
+  .admin-welcome {
+    padding: 1.5rem;
+  }
+
+  .admin-menu-card {
+    min-height: 220px;
+  }
+
+  .admin-crud-panel {
+    padding: 1.2rem;
+  }
+}
+
+/*popup alert admin */
+
+/* lapisan gelap di belakang popup */
+.admin-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+}
+
+/* kotak utama popup */
+.admin-popup {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  border-radius: 16px;
+  background: #fff;
+  color: #212529;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* lingkaran ikon pada popup */
+.admin-popup-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--bs-danger);
+  font-size: 32px;
+}
+
+/* judul popup */
+.admin-popup h3 {
+  margin-bottom: 8px;
+}
+
+/* deskripsi atau pesan popup */
+.admin-popup p {
+  margin-bottom: 20px;
+  color: #6c757d;
+}
+
+/* tombol utama popup */
+.admin-popup button {
+  min-width: 100px;
+  padding: 9px 24px;
+  border: none;
+  border-radius: 8px;
+  background: var(--bs-danger);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ikon popup ketika proses berhasil */
+.admin-popup.success .admin-popup-icon {
+  background: rgba(25, 135, 84, 0.12);
+  color: #198754;
+}
+
+/* tombol popup ketika proses berhasil */
+.admin-popup.success button {
+  background: #198754;
+}
+
+/* ikon popup untuk konfirmasi penghapusan */
+.admin-popup.delete .admin-popup-icon {
+  background: rgba(220, 53, 69, 0.12);
+  color: #dc3545;
+}
+
+/* tombol popup untuk konfirmasi penghapusan */
+.admin-popup.delete button {
+  background: #dc3545;
+}
+
+/* wadah tombol aksi pada popup */
+.admin-popup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* menyamakan ukuran tombol aksi popup */
+.admin-popup-actions button {
+  min-width: 125px;
+  border-radius: 10px;
+}
+
+
+/* SIDEBAR ADMIN */
+
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 303px;
+  height: 100vh;
+  background: #3e2415;
+  color: white;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+}
+
+.admin-sidebar.collapsed {
+  width: 98px;
+}
+
+/* Header profil */
+
+.admin-sidebar-header {
+  min-height: 116px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.admin-avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #8e5a2b;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-profile-info strong {
+  color: white;
+  font-size: 16px;
+}
+
+.admin-profile-info span {
+  color: #d8c0ad;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tombol kecilkan sidebar */
+
+.admin-sidebar-toggle {
+  position: absolute;
+  top: 30px;
+  right: -18px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  color: #3e2415;
+  font-size: 22px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Menu sidebar */
+
+.admin-sidebar-menu {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-sidebar-link {
+  min-height: 57px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  white-space: nowrap;
+}
+
+.admin-sidebar-link i {
+  font-size: 23px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.admin-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.admin-sidebar-link.active {
+  background: #8e5a2b;
+  color: white;
+}
+
+/* Bagian logout */
+
+.admin-sidebar-bottom {
+  margin-top: auto;
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-logout {
+  width: 100%;
+  text-align: left;
+}
+
+.admin-logout:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Sidebar dalam keadaan kecil */
+
+.admin-sidebar.collapsed .admin-sidebar-header {
+  justify-content: center;
+  padding: 20px 10px;
+}
+
+.admin-sidebar.collapsed .admin-profile {
+  justify-content: center;
+}
+
+.admin-sidebar.collapsed .admin-sidebar-menu {
+  padding: 24px 16px;
+}
+
+.admin-sidebar.collapsed .admin-sidebar-link {
+  justify-content: center;
+  padding: 12px;
+}
+
+.admin-sidebar.collapsed .admin-sidebar-bottom {
+  padding: 16px;
+}
+
+/* Menggeser konten admin agar tidak tertutup sidebar */
+
+body:has(.admin-sidebar) {
+  padding-left: 303px;
+  transition: padding-left 0.3s ease;
+}
+
+body:has(.admin-sidebar.collapsed) {
+  padding-left: 98px;
+}
+
+/* Tampilan layar kecil */
+
+@media (max-width: 768px) {
+  body:has(.admin-sidebar) {
+    padding-left: 0;
+  }
+
+  .admin-sidebar {
+    width: 98px;
+  }
+
+  .admin-sidebar .admin-profile-info,
+  .admin-sidebar:not(.collapsed) .admin-profile-info {
+    display: none;
+  }
+
+  .admin-sidebar .admin-sidebar-header {
+    justify-content: center;
+    padding: 20px 10px;
+  }
+
+  .admin-sidebar .admin-sidebar-link {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .admin-sidebar .admin-sidebar-link span {
+    display: none;
+  }
+}

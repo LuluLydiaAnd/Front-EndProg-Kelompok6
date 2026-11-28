@@ -1,0 +1,368 @@
+.restoPage {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100vh - 70px);
+  padding: 3rem clamp(1.2rem, 5vw, 5rem) 4rem;
+  background: #FBF8F1;
+  color: #52634A;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 1.5rem;
+  color: #B5541C;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.backLink:hover {
+  color: #8E3F12;
+  transform: translateX(-3px);
+}
+
+.backLink i {
+  font-size: 1.2rem;
+}
+
+/* bagian awal atau welcome */
+.welcome {
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #E2CBAA;
+  border-radius: 20px;
+  background: linear-gradient(120deg, #F3E6D0, #FBEBDD, #F7DCC5);
+}
+
+.eyebrow,
+.sectionLabel {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: #5E7D3A;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.welcome h1 {
+  margin-bottom: 0.5rem;
+  color: #3E2415;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+}
+
+.welcome p {
+  margin: 0;
+  color: #8A6A52;
+  font-size: 0.95rem;
+}
+
+/* Bagian form */
+.formPanel {
+  padding: 2rem;
+  margin-bottom: 3rem;
+  border: 1px solid #E2CBAA;
+  border-radius: 18px;
+  background: #FFFAF2;
+}
+
+.formHeading,
+.listHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.formHeading h2,
+.listHeading h2 {
+  margin: 0;
+  color: #3E2415;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.formIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #F3E6D0;
+  color: #B5541C;
+  font-size: 1.7rem;
+}
+
+.formGroup {
+  margin-bottom: 1.3rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #6B4A35;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #E2CBAA;
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: #3E2415;
+  font-size: 0.92rem;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: #B39A85;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  border-color: #B5541C;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(181, 84, 28, 0.12);
+}
+
+.formGroup textarea {
+  resize: vertical;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+}
+
+.submitBtn,
+.cancelBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 9px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.submitBtn {
+  border: 1px solid #B5541C;
+  background: #B5541C;
+  color: #FFFFFF;
+}
+
+.submitBtn:hover {
+  border-color: #8E3F12;
+  background: #8E3F12;
+}
+
+.cancelBtn {
+  border: 1px solid #B5541C;
+  background: transparent;
+  color: #8E3F12;
+}
+
+.cancelBtn:hover {
+  background: #F3E6D0;
+}
+
+.submitBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* bagian daftar restoran */
+.listSection {
+  margin-top: 1rem;
+}
+
+.listHeading {
+  margin-bottom: 1.2rem;
+}
+
+.listHeading h2 {
+  font-size: 1.5rem;
+}
+
+.count {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  background: #F3E6D0;
+  color: #5E7D3A;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* tabel restoran */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #E2CBAA;
+  border-radius: 14px;
+  background: #FFFAF2;
+}
+
+.table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid #EDE0CE;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+.table th {
+  background: #F3E6D0;
+  color: #6B4A35;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: #FFF4E5;
+}
+
+.restaurantName {
+  color: #3E2415;
+  font-weight: 700;
+}
+
+.address {
+  max-width: 300px;
+  color: #8A6A52;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #B5541C;
+  font-weight: 600;
+}
+
+.rating i {
+  color: #D98E04;
+  font-size: 1rem;
+}
+
+/* button buat action */
+.actionGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editBtn,
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0.45rem 0.75rem;
+  border-radius: 7px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.editBtn {
+  border: 1px solid #D7A45B;
+  background: #FFF3D9;
+  color: #875719;
+}
+
+.editBtn:hover {
+  background: #F5E0B8;
+}
+
+.deleteBtn {
+  border: 1px solid #DCA39A;
+  background: #FCEAE6;
+  color: #A93226;
+}
+
+.deleteBtn:hover {
+  background: #F5D5CE;
+}
+
+.editBtn:disabled,
+.deleteBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* tampilan pas data kosong */
+.emptyState {
+  padding: 3rem 1rem;
+  border: 1px dashed #D9BE9B;
+  border-radius: 14px;
+  background: #FFFAF2;
+  text-align: center;
+}
+
+.emptyState > i {
+  color: #B5541C;
+  font-size: 2.5rem;
+}
+
+.emptyState h3 {
+  margin: 0.7rem 0 0.3rem;
+  color: #3E2415;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.emptyState p {
+  margin: 0;
+  color: #8A6A52;
+  font-size: 0.9rem;
+}
+
+/* tampilan buat layar HP */
+@media (max-width: 767px) {
+  .restoPage {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .welcome {
+    padding: 1.6rem;
+  }
+
+  .formPanel {
+    padding: 1.3rem;
+  }
+
+  .formHeading h2,
+  .listHeading h2 {
+    font-size: 1.2rem;
+  }
+}

@@ -1,0 +1,654 @@
+/* mengatur tampilan utama section faq */
+.section {
+  position: relative;
+  background: var(--cream);
+  color: var(--text);
+  padding: 5rem 0 5.5rem;
+  overflow: hidden;
+}
+
+/* dekorasi lingkaran gradasi di bagian kiri bawah */
+.section::before {
+  content: "";
+  position: absolute;
+  bottom: -160px;
+  left: -140px;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 142, 4, 0.14), transparent 70%);
+  pointer-events: none;
+}
+
+/* mengatur posisi judul dan deskripsi faq */
+.head {
+  position: relative;
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 2rem;
+}
+
+/* label kecil di atas judul */
+.label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--leaf);
+  margin-bottom: 0.6rem;
+}
+
+/* judul utama faq */
+.title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 0.8rem;
+  color: var(--heading);
+}
+
+/* memberi warna dan gaya miring pada sebagian judul */
+.title span {
+  color: var(--caramel);
+  font-style: italic;
+}
+
+/* deskripsi singkat di bawah judul */
+.desc {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0 0 1.6rem;
+}
+
+/* bagian kolom pencarian faq */
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 40px;
+  padding: 0.35rem 0.5rem 0.35rem 1.2rem;
+  box-shadow: 0 8px 24px rgba(62, 36, 21, 0.06);
+  transition: 0.25s ease;
+}
+
+/* memberi efek saat kolom pencarian aktif */
+.search:focus-within {
+  border-color: var(--caramel);
+  box-shadow: 0 8px 24px rgba(181, 84, 28, 0.15);
+}
+
+/* ikon pencarian */
+.search > i {
+  font-size: 1.2rem;
+  color: var(--text-soft);
+}
+
+/* input untuk mengetik kata kunci pencarian */
+.search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--heading);
+  font-size: 0.95rem;
+  padding: 0.55rem 0;
+}
+
+/* warna teks petunjuk pada kolom pencarian */
+.search input::placeholder {
+  color: var(--text-soft);
+  opacity: 0.8;
+}
+
+/* tombol untuk menghapus kata kunci pencarian */
+.clear {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--glass);
+  color: var(--caramel);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* daftar tombol filter kategori faq */
+.chips {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 2.5rem;
+}
+
+/* tampilan dasar tombol kategori */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+/* efek saat tombol kategori diarahkan kursor */
+.chip:hover {
+  border-color: var(--caramel);
+  color: var(--heading);
+  transform: translateY(-2px);
+}
+
+/* tampilan kategori yang sedang dipilih */
+.chipActive,
+.chipActive:hover {
+  background: var(--caramel);
+  border-color: var(--caramel);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(181, 84, 28, 0.25);
+}
+
+/* angka jumlah faq pada kategori */
+.badge {
+  font-size: 0.7rem;
+  background: rgba(181, 84, 28, 0.12);
+  padding: 1px 8px;
+  border-radius: 20px;
+}
+
+/* mengubah latar angka pada kategori aktif */
+.chipActive .badge {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* bagian judul dan kontrol daftar faq */
+.listHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+}
+
+/* menghapus jarak bawaan paragraf pada bagian daftar */
+.listHead p {
+  margin: 0;
+}
+
+/* memberi warna pada teks yang ditebalkan */
+.listHead b {
+  color: var(--caramel);
+}
+
+/* tombol untuk membuka atau menutup semua faq */
+.toggleAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--caramel);
+  font-weight: 600;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+/* efek hover pada tombol buka-tutup semua */
+.toggleAll:hover {
+  color: var(--caramel-dark);
+}
+
+/* menyusun daftar faq secara vertikal */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* kartu untuk setiap pertanyaan faq */
+.item {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  animation: muncul 0.45s ease both;
+}
+
+/* efek bayangan saat kartu faq diarahkan kursor */
+.item:hover {
+  box-shadow: 0 8px 22px rgba(62, 36, 21, 0.08);
+}
+
+/* tampilan kartu faq yang sedang terbuka */
+.itemOpen {
+  border-left-color: var(--caramel);
+  box-shadow: 0 10px 26px rgba(62, 36, 21, 0.1);
+}
+
+/* tombol pertanyaan yang bisa diklik */
+.question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 1.1rem 1.2rem;
+  cursor: pointer;
+}
+
+/* nomor urut pertanyaan */
+.no {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--kunyit);
+  min-width: 22px;
+}
+
+/* teks pertanyaan faq */
+.qText {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--heading);
+}
+
+/* tombol ikon untuk membuka jawaban */
+.icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--cream-warm);
+  color: var(--caramel);
+  font-size: 1.1rem;
+  transition: 0.35s ease;
+}
+
+/* mengubah tampilan ikon saat faq terbuka */
+.itemOpen .icon {
+  background: var(--caramel);
+  color: #fff;
+  transform: rotate(135deg);
+}
+
+/* animasi buka-tutup jawaban menggunakan grid */
+.answerWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease;
+}
+
+/* menampilkan ruang jawaban saat faq terbuka */
+.itemOpen .answerWrap {
+  grid-template-rows: 1fr;
+}
+
+/* membungkus isi jawaban agar mengikuti animasi */
+.answer {
+  overflow: hidden;
+  padding: 0 1.2rem 0 3.4rem;
+}
+
+/* mengatur teks jawaban faq */
+.answer p {
+  margin: 0 0 1rem;
+  font-size: 0.93rem;
+  line-height: 1.75;
+}
+
+/* menandai kata atau teks tertentu dalam jawaban */
+.mark {
+  background: rgba(217, 142, 4, 0.3);
+  color: var(--heading);
+  padding: 0 2px;
+  border-radius: 4px;
+}
+
+/* bagian untuk menilai apakah jawaban membantu */
+.helpful {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 0.8rem 0 1.1rem;
+  border-top: 1px dashed var(--line);
+  font-size: 0.82rem;
+  color: var(--text-soft);
+}
+
+/* tombol penilaian jawaban */
+.helpful button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.8rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* efek hover pada tombol penilaian */
+.helpful button:hover {
+  border-color: var(--leaf);
+  color: var(--leaf);
+}
+
+/* tombol penilaian saat sedang mengirim feedback */
+.helpful button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* kotak untuk mengisi alasan feedback */
+.alasanBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: muncul 0.35s ease;
+}
+
+.alasanBox label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.alasanBox textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.alasanBox textarea:focus {
+  border-color: var(--leaf);
+}
+
+/* tombol kirim dan batal pada form alasan */
+.alasanAksi {
+  display: flex;
+  gap: 8px;
+}
+
+.helpful .kirimBtn {
+  background: var(--leaf);
+  border-color: var(--leaf);
+  color: #fff;
+}
+
+.helpful .kirimBtn:hover {
+  color: #fff;
+  opacity: 0.9;
+}
+
+/* pesan terima kasih setelah jawaban dinilai */
+.thanks {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--leaf);
+  font-weight: 600;
+  animation: muncul 0.35s ease;
+}
+
+/* tampilan saat pencarian tidak menemukan hasil */
+.kosong {
+  text-align: center;
+  background: var(--surface);
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  padding: 3rem 1.5rem;
+}
+
+/* ikon pada tampilan hasil kosong */
+.kosong > i {
+  font-size: 2.6rem;
+  color: var(--kunyit);
+}
+
+/* judul saat tidak ada hasil */
+.kosong h3 {
+  font-size: 1.3rem;
+  margin: 0.6rem 0 0.4rem;
+}
+
+/* deskripsi saat tidak ada hasil */
+.kosong p {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* tombol untuk mengatur ulang pencarian atau filter */
+.kosong button {
+  background: var(--caramel);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  font-size: 0.86rem;
+  padding: 0.55rem 1.3rem;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+/* sidebar informasi tambahan yang tetap terlihat saat digulir */
+.side {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 2.6rem;
+}
+
+/* kartu fakta menarik */
+.factCard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 1.4rem;
+}
+
+/* judul dan tombol pada kartu fakta */
+.factHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+/* label kategori fakta menarik */
+.factHead span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--kunyit);
+}
+
+/* ikon pada label fakta */
+.factHead span i {
+  font-size: 1.1rem;
+}
+
+/* tombol untuk mengganti fakta yang ditampilkan */
+.factHead button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--caramel);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: transform 0.5s ease;
+}
+
+/* memutar tombol saat diarahkan kursor */
+.factHead button:hover {
+  transform: rotate(180deg);
+}
+
+/* teks fakta yang sedang ditampilkan */
+.factText {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--heading);
+  min-height: 100px;
+  margin: 0 0 1rem;
+  animation: muncul 0.4s ease;
+}
+
+/* indikator posisi fakta yang sedang ditampilkan */
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+/* bentuk dasar indikator fakta */
+.dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 10px;
+  background: var(--line);
+  transition: 0.3s ease;
+}
+
+/* menandai indikator fakta yang aktif */
+.dots .dotActive {
+  width: 22px;
+  background: var(--kunyit);
+}
+
+/* kartu ajakan untuk mengirim pertanyaan */
+.askCard {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, var(--caramel) 0%, var(--caramel-dark) 100%);
+  color: #fff;
+  border-radius: 20px;
+  padding: 1.6rem 1.4rem;
+}
+
+/* ikon dekoratif pada kartu ajakan */
+.askIcon {
+  position: absolute;
+  right: -14px;
+  bottom: -18px;
+  font-size: 7rem;
+  opacity: 0.12;
+}
+
+/* judul kartu ajakan */
+.askCard h3 {
+  color: #fff;
+  font-size: 1.3rem;
+  margin: 0 0 0.4rem;
+}
+
+/* deskripsi kartu ajakan */
+.askCard p {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 1.1rem;
+}
+
+/* tombol menuju halaman atau bagian untuk bertanya */
+.askBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cream);
+  color: var(--caramel-dark);
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 0.55rem 1.2rem;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+/* memperlebar jarak ikon saat tombol diarahkan kursor */
+.askBtn:hover {
+  color: var(--caramel-dark);
+  gap: 10px;
+}
+
+/* animasi elemen muncul dari bawah */
+@keyframes muncul {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* menyesuaikan sidebar untuk layar tablet */
+@media (max-width: 991.98px) {
+  .side {
+    position: static;
+    margin-top: 0.5rem;
+  }
+}
+
+/* menyesuaikan ukuran dan jarak pada layar ponsel */
+@media (max-width: 575.98px) {
+  .section {
+    padding: 3.5rem 0 4rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .question {
+    padding: 1rem;
+    gap: 10px;
+  }
+
+  .qText {
+    font-size: 0.93rem;
+  }
+
+  .answer {
+    padding: 0 1rem;
+  }
+}
